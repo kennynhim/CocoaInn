@@ -2,12 +2,16 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
-		<title>CocoaHotel</title>
+		<title>Cocoa Inn</title>
 		<link href="css.css" rel="stylesheet" type="text/css">
 	</head>
 
 	<body style="background-color: black">
 		<div class="homePage">
+			<!--ROW1: The menu bar: Home, Reserve, Dine, Spa, Golf, Contact -->
+			<!--Note: Each row has a width of 12 units. An element with col-2, for example, is a column with a size of 2 unit. -->
+			<!--The columns must add to 12 units in total. -->
+			<!--To create a row, specify a new "div" element. Then create children div elements of that parent div element. Give the children div elements a "class=col-x", with x representing the width for that particular element -->
 			<div class="row1" style="color: white">
 				<div class="col-2" style="background-color: transparent"><h1 style="text-align: center; background-color: transparent">Home</h1></div>
 				<div class="col-2"><h1 style="text-align: center">Reserve</h1></div>
@@ -17,6 +21,9 @@
 				<div class="col-2"><h1 style="text-align: center">Contact</h1></div>
 			</div>
 			
+			<!--ROW2: The welcome message, opening text/description, and image -->
+			<!--Note how the text element takes up 4 columns, and the image takes up 8 columns, for a total of 12 -->
+			<!--The "br" tags represent a line break in an attempt to align the text with the image -->
 			<div class="row2" style="color: white">
 				<div class="col-4">
 					<br><br><br><br><br><br><br><br><p style="font-size: 50pt; text-align: center">Welcome to the Cocoa Inn</p>
