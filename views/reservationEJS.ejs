@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Reservations</title>
+<link href="/public/css.css" rel="stylesheet" type="text/css">
+</head>
+
+<body style="background-color: black">
+	<div class="reservationsPage">
+			<div class="row1" style="color: beige">
+				<div class="col-2"><a href="index.html" style="font-size: 35pt; color: beige">Home</a></div>
+				<div class="col-2"><a href="Reservation.html" style="font-size: 35pt; color: beige">Reserve</a></div>
+				<div class="col-2"><h1 style="text-align: center">Dine</h1></div>
+				<div class="col-2"><h1 style="text-align: center">Spa</h1></div>
+				<div class="col-2"><h1 style="text-align: center">Golf</h1></div>
+				<div class="col-2"><h1 style="text-align: center">Contact</h1></div>
+			</div>
+		
+		<div class="row2" style="color: beige">
+			<div class="col-4">
+				<form class="reservationInfo" action="booking.html" method="post">
+					<h2 style="text-align: center; font-size: 30pt">Your Stay</h2>
+					<label for="checkIn" style="font-size: 20pt">Check In:</label>
+					<br>
+					<input class="checkInDate" type="date" name="checkIn">
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<label for="checkOut" style ="font-size:20pt">Check Out:</label>
+					<br>
+					<input class="checkOutDate" type="date" name="checkOut">
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<label for="numRooms" style="font-size:20pt">Rooms:</label>
+					<br>
+					<input class="numRooms" type="number" placeholder="Number of Rooms" name="numRooms">
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<label for="numAdults" style="font-size: 20pt">Adults</label>
+           			<br>
+           			<input class="numAdults" type="number" placeholder="Adults" name ="numAdults">
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<label for="numChildren">Children</label>
+            		<br>
+            		<input class="numChildren" type="number" placeholder="Children" name="numChildren">
+					<br>
+					<br>
+					<button class="bookButton" type="button">Search Rooms</button>
+				</form>
+			</div>
+			
+			<!-- Dynamically add elements using jquery -->
+			<!-- Anytime the user clicks on the Search Rooms button, a server-side request is made -->
+			<!-- After the server side has fetched data from database, relay the info to client-side JavaScript-->
+			<!-- We use jquery to serve as the bridge between server and client-->
+			
+			<!--To DO:
+				1. Handle the Search Room Button - query results from MongoDB with Node JS
+					a. Create a "Rooms" table in MongoDB, and populate it with Rooms with attributes
+					b. Query: Select * from Rooms where [reservation parameters] - should only return rooms that are available for the specified check in and check out dates
+					c. Store the results into variables
+				2. Use jquery.empty() or detach() to remove any child elements in the rooms list on the reservations page
+				3. Use jquery.append() to construct new elements with the variables updated from the database (room image, description, price, etc.)
+			-->
+			<div class="col-8">
+				<script src="jquery.js"></script>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
