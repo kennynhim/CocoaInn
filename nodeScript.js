@@ -1,3 +1,4 @@
+const alert = require('alert');
 const ejs = require('ejs');
 const express  = require("express");
 const app = express(); 
@@ -8,14 +9,14 @@ var multer = require('multer');
 var upload = multer();
 const port = 3000;
 
+//for parsing application/xwww-
+app.use(bodyParser.urlencoded({extended: true}));
 //for prarsing application/json
 app.use(bodyParser.json());
 
-//for parsing application/xwww-
-app.use(bodyParser.urlencoded({extended: true}));
-
 //for parsing multipart/form-data
-app.use(upload.array());
+//app.use(upload.array());
+
 app.use('/public', express.static('public'));
 
 app.set ("view engine", "ejs");
@@ -40,3 +41,87 @@ app.get("/index.html", function(req,res){
 app.get("/Reservation.html", function(req,res){
 	res.render("reservationEJS");
 });
+
+//When a user clicks on the "Search Rooms" button in Reservations.html
+//Query the database for a list of rooms with the selected reservation parameters
+app.post("/Reservation.html", function(req,res){
+	//First, store the reservation parameters into variables
+	let checkIn = req.body.checkIn;
+	let checkOut = req.body.checkOut;
+	let numRooms = Number(req.body.numRooms);
+	let numAdults = Number(req.body.numAdults);
+	let numChildren = Number(req.body.numChildren);
+
+	//Validate input
+	if (!validate(checkIn, checkOut, numRooms, numAdults, numChildren))
+		return;
+		
+	//Now connect to database and query
+	MongoClient.connect(dbURL, function(err, db){
+		if (err)
+			throw err;
+		console.log("Successfully connected with CocoaInn DB");
+		
+		//Retrieve all rooms first into an array
+		//Then sort out the rooms where our check in and check out dates do not cooperate
+		var dbo = db.db("CocoaInn");
+		dbo.collection("room").find({}).toArray(function(err, result){
+			if (err)
+				throw err;
+			console.log(result);
+			
+			//TODO:
+			//Loop through result array
+			//Loop through reservedDates array for each room
+			//Compare requested checkIn and checkOut with result[x].reservedDates[y].checkIn
+			//and result[x].reservedDates[y].checkOut
+			db.close();
+		})
+	})
+});
+
+//Validates inputs for reservation parameters
+function validate(checkIn, checkOut, numRooms, numAdults, numChildren){
+	if (numRooms <= 0){
+		alert("Number of rooms must be > 0");
+		return false;
+	}
+
+	if (numAdults <= 0){
+		alert("Number of adults must be > 0");
+		return false;
+	}
+
+	if (numChildren < 0){
+		alert("Number of children must be >= 0");
+		return false;
+	}
+
+	let checkInYear = Number(checkIn.substring(0, 4));
+	let checkInMonth = Number(checkIn.substring(5,7));
+	let checkInDay = Number(checkIn.substring(8,checkIn.length))
+	let checkOutYear = Number(checkOut.substring(0,4));
+	let checkOutMonth =  Number(checkOut.substring(5,7));
+	let checkOutDay = Number(checkOut.substring(8,checkOut.length))
+
+	//Check In must come before Check Out
+	//Check In cannot be the same day as Check Out
+	if (checkInYear === checkOutYear){
+		if (checkInMonth === checkOutMonth){
+			if (checkInDay >= checkOutDay){
+				alert("Check In date must come before Check Out date.");
+				return false;
+			}
+		}
+		else if (checkInMonth > checkOutMonth){
+			alert("Check In date must come before Check Out date.");
+			return false;
+		}
+	}
+	else if (checkInYear > checkOutYear){
+		alert("Check In date must come before Check Out date.");
+		return false;		
+	}
+	
+	return true;
+}
