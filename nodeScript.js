@@ -2,6 +2,8 @@ const ejs = require('ejs');
 const express  = require("express");
 const app = express(); 
 const bodyParser = require('body-parser');
+const MongoClient = require('mongodb').MongoClient;
+const dbURL = "mongodb+srv://group7:group7Pass@cmpsc487gr7.0naf3.mongodb.net/CocoaInn?retryWrites=true&w=majority"
 var multer = require('multer');
 var upload = multer();
 const port = 3000;
