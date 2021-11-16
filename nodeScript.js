@@ -68,13 +68,18 @@ app.post("/Reservation.html", function(req,res){
 		dbo.collection("room").find({}).toArray(function(err, result){
 			if (err)
 				throw err;
-			console.log(result);
 			
-			//TODO:
-			//Loop through result array
-			//Loop through reservedDates array for each room
-			//Compare requested checkIn and checkOut with result[x].reservedDates[y].checkIn
-			//and result[x].reservedDates[y].checkOut
+			for (let x = 0; x < result.length; x++){
+				for (let y = 0; y < result[x].reservedDates.length; y++){
+					let honoredCheckIn = result[x].reservedDates[y].checkIn;
+					let honoredCheckOut = result[x].reservedDates[y].checkOut;
+					//TODO
+					//Compare the honored reservation dates of this room with the requested reservation
+					//If they conflict, ignore this room and do nothing
+					//Otherwise, show the room as available to the user- display the room's info on reservations.html along with a Book Now button
+				}
+			}
+			
 			db.close();
 		})
 	})
@@ -96,16 +101,21 @@ function validate(checkIn, checkOut, numRooms, numAdults, numChildren){
 		alert("Number of children must be >= 0");
 		return false;
 	}
+	return validateDate(checkIn, checkOut);
+}
 
-	let checkInYear = Number(checkIn.substring(0, 4));
-	let checkInMonth = Number(checkIn.substring(5,7));
-	let checkInDay = Number(checkIn.substring(8,checkIn.length))
-	let checkOutYear = Number(checkOut.substring(0,4));
-	let checkOutMonth =  Number(checkOut.substring(5,7));
-	let checkOutDay = Number(checkOut.substring(8,checkOut.length))
-
-	//Check In must come before Check Out
-	//Check In cannot be the same day as Check Out
+//Validates the dates for a single reservation
+//Returns false if check in comes on or after check out
+//Otherwise returns true if valid
+function validateDate(checkIn, checkOut){
+	let checkInYear = getYear(checkIn);
+	let checkInMonth = getMonth(checkIn);
+	let checkInDay = getDay(checkIn);
+	
+	let checkOutYear = getYear(checkOut);
+	let checkOutMonth = getMonth(checkOut);
+	let checkOutDay = getDay(checkOut);
+	
 	if (checkInYear === checkOutYear){
 		if (checkInMonth === checkOutMonth){
 			if (checkInDay >= checkOutDay){
@@ -123,5 +133,41 @@ function validate(checkIn, checkOut, numRooms, numAdults, numChildren){
 		return false;		
 	}
 	
+	return true;	
+}
+
+//Checks if two different reservations conflict, ie they share the same room and the reservation dates overlap
+function validateReservationConflict(reqCheckIn, reqCheckOut, honoredCheckIn, honoredCheckOut){
+	//First, validate the requested check in and check out dates
+	if (!validateDate(reqCheckIn, reqCheckOut))
+		return false;
+	var reqCheckInDate = new Date(getYear(reqCheckIn), getMonth(reqCheckIn)-1, getDay(reqCheckIn));
+	var reqCheckOutDate = new Date(getYear(reqCheckOut), getMonth(reqCheckOut)-1, getDay(reqCheckOut));
+	var honoredCheckInDate = new Date(getYear(honoredCheckIn), getMonth(honoredCheckIn) - 1, getDay(honoredCheckIn));
+	var honoredCheckOutDate = new Date(getYear(honoredCheckOut), getMonth(honoredCheckOut) -1, getDay(honoredCheckOut));
+	
+	if (reqCheckInDate.getTime() < honoredCheckInDate.getTime()){
+		if (!reqCheckOutDate.getTime() <= honoredCheckInDate.getTime()){
+			return false;
+		}
+	}
+	else if (reqCheckInDate.getTime() === honoredCheckInDate.getTime())
+		return false;
+	else{
+		if (reqCheckInDate.getTime() < honoredCheckOutDate.getTime())
+			return false;
+	}
 	return true;
+}
+
+function getYear(date){
+	return Number(date.substring(0,4));
+}
+
+function getMonth(date){
+	return Number(date.substring(5,7));
+}
+
+function getDay(date){
+	return Number(date.substring(8, date.length));
 }
