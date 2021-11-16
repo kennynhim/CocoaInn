@@ -1,24 +1,43 @@
-const alert = require('alert');
-const ejs = require('ejs');
-const express  = require("express");
+/*	This is a JavaScript file, executed on the Node JS Framework
+**	Normally, JavaScript is executed on the client-side
+**	Node JS is executed server side and allows us to connect to a database
+**	Node JS also allows us to "serve" HTML files to the client and respond to HTTP GET and POST requests
+**	Therefore, this is the main file from which we launch our website
+**	To execute this file, you must have Node JS installed: https://nodejs.org/en/
+**	Once installed, along with the required libraries listed below, open a command prompt/terminal and change directory(CD) to the location of this file
+**	Then run the command: node nodeScript.js
+**	Open a browser(only tested with Chrome), and enter in the address bar: localhost:3000
+*/
+
+/*	REQUIRED LIBRARIES
+**	The section below is a declaration of external libraries and API's
+**	These must be downloaded for this script to compile and execute
+**	Open a command prompt or terminal, and run the commands to install these libraries
+**	An associated link is provided where these commands can be found, along with their documentation
+*/
+const alert = require('alert'); //https://www.npmjs.com/package/alert-node
+const ejs = require('ejs'); //https://ejs.co/
+const express  = require("express"); //https://expressjs.com/
 const app = express(); 
-const bodyParser = require('body-parser');
-const MongoClient = require('mongodb').MongoClient;
+const bodyParser = require('body-parser');	//https://www.npmjs.com/package/body-parser
+const MongoClient = require('mongodb').MongoClient;	//Terminal command: npm install mongodb
 const dbURL = "mongodb+srv://group7:group7Pass@cmpsc487gr7.0naf3.mongodb.net/CocoaInn?retryWrites=true&w=majority"
-var multer = require('multer');
+var multer = require('multer'); //https://www.npmjs.com/package/multer
 var upload = multer();
 const port = 3000;
 
 //for parsing application/xwww-
 app.use(bodyParser.urlencoded({extended: true}));
+
 //for prarsing application/json
 app.use(bodyParser.json());
 
-//for parsing multipart/form-data
-//app.use(upload.array());
-
+//Allows our css styling file to be located and used
 app.use('/public', express.static('public'));
 
+//For serving and rendering HTML files
+//Instead of using HTML directly, we use ejs files
+//The contents of the ejs file is a direct copy of the HTML file
 app.set ("view engine", "ejs");
 
 //Creates the connection to the client
