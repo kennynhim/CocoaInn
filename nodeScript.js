@@ -24,6 +24,8 @@ const MongoClient = require('mongodb').MongoClient;	//Terminal command: npm inst
 const dbURL = "mongodb+srv://group7:group7Pass@cmpsc487gr7.0naf3.mongodb.net/CocoaInn?retryWrites=true&w=majority"
 var multer = require('multer'); //https://www.npmjs.com/package/multer
 var upload = multer();
+const htmlParser = require('node-html-parser');	//https://github.com/taoqf/node-html-parser
+
 const port = 3000;
 
 //for parsing application/xwww-
@@ -82,22 +84,40 @@ app.post("/Reservation.html", function(req,res){
 		console.log("Successfully connected with CocoaInn DB");
 		
 		//Retrieve all rooms first into an array
-		//Then sort out the rooms where our check in and check out dates do not cooperate
 		var dbo = db.db("CocoaInn");
 		dbo.collection("room").find({}).toArray(function(err, result){
 			if (err)
 				throw err;
 			
+			//From the list of retrieved rooms we got from the database, sort out the ones with a reservation conflict
+			//Insert the available rooms into its own array
+			let availableRooms = [];
 			for (let x = 0; x < result.length; x++){
+				if (!validateOccupancy(numAdults+numChildren), result[x].maxOccupancy)
+					continue;
+				
+				let bRoomAvailable = true;
 				for (let y = 0; y < result[x].reservedDates.length; y++){
+					
 					let honoredCheckIn = result[x].reservedDates[y].checkIn;
 					let honoredCheckOut = result[x].reservedDates[y].checkOut;
-					//TODO
-					//Compare the honored reservation dates of this room with the requested reservation
-					//If they conflict, ignore this room and do nothing
-					//Otherwise, show the room as available to the user- display the room's info on reservations.html along with a Book Now button
+					if (!validateReservationConflict(checkIn, checkOut, honoredCheckIn, honoredCheckOut)){
+						bRoomAvailable = false;
+						break;
+					}
 				}
+				if (bRoomAvailable)
+					availableRooms.push(result[x]);
 			}
+			console.log("Available Rooms:");
+			console.log(availableRooms);
+			//We now have an array of available rooms
+			//Show these rooms to the user
+			const root = htmlParser.parse('<div class="col-8" id = "availRoomList"></div>');
+			for (let x = 0; x < availableRooms.length; x++){
+				//TODO
+			}
+			
 			
 			db.close();
 		})
@@ -151,13 +171,13 @@ function validateDate(checkIn, checkOut){
 		alert("Check In date must come before Check Out date.");
 		return false;		
 	}
-	
-	return true;	
+	return true;
 }
 
 //Checks if two different reservations conflict, ie they share the same room and the reservation dates overlap
 function validateReservationConflict(reqCheckIn, reqCheckOut, honoredCheckIn, honoredCheckOut){
 	//First, validate the requested check in and check out dates
+	
 	if (!validateDate(reqCheckIn, reqCheckOut))
 		return false;
 	var reqCheckInDate = new Date(getYear(reqCheckIn), getMonth(reqCheckIn)-1, getDay(reqCheckIn));
@@ -166,7 +186,7 @@ function validateReservationConflict(reqCheckIn, reqCheckOut, honoredCheckIn, ho
 	var honoredCheckOutDate = new Date(getYear(honoredCheckOut), getMonth(honoredCheckOut) -1, getDay(honoredCheckOut));
 	
 	if (reqCheckInDate.getTime() < honoredCheckInDate.getTime()){
-		if (!reqCheckOutDate.getTime() <= honoredCheckInDate.getTime()){
+		if (reqCheckOutDate.getTime() > honoredCheckInDate.getTime()){
 			return false;
 		}
 	}
@@ -189,4 +209,8 @@ function getMonth(date){
 
 function getDay(date){
 	return Number(date.substring(8, date.length));
+}
+
+function validateOccupancy(numGuests, maxOccupancy){
+	return numGuests <= maxOccupancy;
 }
