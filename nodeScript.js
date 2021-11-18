@@ -22,11 +22,6 @@ const app = express();
 const bodyParser = require('body-parser');	//https://www.npmjs.com/package/body-parser
 const MongoClient = require('mongodb').MongoClient;	//Terminal command: npm install mongodb
 const dbURL = "mongodb+srv://group7:group7Pass@cmpsc487gr7.0naf3.mongodb.net/CocoaInn?retryWrites=true&w=majority"
-const { JSDOM } = require("jsdom");	//npm install jsdom
-const { window } = new JSDOM( "" );
-const { document } = (new JSDOM('')).window;
-global.document = document;
-const $ = jQuery = require( "jquery" )( window );	//npm install jquery
 
 
 const port = 3000;
