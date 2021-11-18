@@ -18,4 +18,6 @@
    Adding elements to an EJS file:
     * use a for loop
     * everything inside the for loop gets appended in the element where it is specified
+    * code:
+    < div class="col-8"
 */
