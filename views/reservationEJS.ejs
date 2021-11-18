@@ -39,7 +39,7 @@
 					<br>
 					<label for="numRooms" style="font-size:20pt">Rooms:</label>
 					<br>
-					<input class="numRooms" type="number" placeholder="Number of Rooms" name="numRooms">
+					<input class="numRooms" id="numRoomsID" type="number" placeholder="Number of Rooms" name="numRooms">
 					<br>
 					<br>
 					<br>
@@ -62,20 +62,18 @@
 				</form>
 			</div>
 			
-			<!-- Dynamically add elements using jquery -->
-			<!-- Anytime the user clicks on the Search Rooms button, a server-side request is made -->
-			<!-- After the server side has fetched data from database, relay the info to client-side JavaScript-->
-			<!-- We use jquery to serve as the bridge between server and client-->
-			
-			<!--To DO:
-				1. Handle the Search Room Button - query results from MongoDB with Node JS
-					a. Create a "Rooms" table in MongoDB, and populate it with Rooms with attributes
-					b. Query: Select * from Rooms where [reservation parameters] - should only return rooms that are available for the specified check in and check out dates
-					c. Store the results into variables
-				2. Use jquery.empty() or detach() to remove any child elements in the rooms list on the reservations page
-				3. Use jquery.append() to construct new elements with the variables updated from the database (room image, description, price, etc.)
-			-->
 			<div class="col-8" id = "availRoomList">
+				<% if (bInit) { %>
+					<% for(var x = 0; x < rooms.length; x++) { %>
+						<div class="col-5"><br><br><br><br><br><h1 style="text-align: center"><%= rooms[x].roomName %></h1><p style = "text-align:center">Beds: <%= rooms[x].numBeds %><br>Occupancy: <%= rooms[x].maxOccupancy %><br><%= rooms[x].description %></p></div>
+						<div class="col-7"><img src="<%= rooms[x].image %>" style="width: 100%; height: auto; margin-left: auto; margin-right: auto; display: block"></div>				
+					<% } %>
+				<% } else { %>
+						<% for(var x = 0; x < rooms.length; x++) { %>
+						<div class="col-5"><br><br><br><br><br><h1 style="text-align: center"><%= rooms[x].roomName %></h1><p style = "text-align:center">Beds: <%= rooms[x].numBeds %><br>Occupancy: <%= rooms[x].maxOccupancy %><br><%= rooms[x].description %></p></div>
+						<div class="col-5"><img src="<%= rooms[x].image %>" style="width: 100%; height: auto; margin-left: auto; margin-right: auto; display: block"></div>
+						<div class="col-2"><br><br><br><br><br><form action="booking.html" method="post"><button class="bookButton" type="submit">Book</button></form></div>
+					<% } } %>
 			</div>
 		</div>
 	</div>

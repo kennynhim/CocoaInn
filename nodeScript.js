@@ -22,9 +22,12 @@ const app = express();
 const bodyParser = require('body-parser');	//https://www.npmjs.com/package/body-parser
 const MongoClient = require('mongodb').MongoClient;	//Terminal command: npm install mongodb
 const dbURL = "mongodb+srv://group7:group7Pass@cmpsc487gr7.0naf3.mongodb.net/CocoaInn?retryWrites=true&w=majority"
-var multer = require('multer'); //https://www.npmjs.com/package/multer
-var upload = multer();
-const htmlParser = require('node-html-parser');	//https://github.com/taoqf/node-html-parser
+const { JSDOM } = require("jsdom");	//npm install jsdom
+const { window } = new JSDOM( "" );
+const { document } = (new JSDOM('')).window;
+global.document = document;
+const $ = jQuery = require( "jquery" )( window );	//npm install jquery
+
 
 const port = 3000;
 
@@ -59,8 +62,20 @@ app.get("/index.html", function(req,res){
 });
 
 //When a user clicks on the "Reserve" link in the menu bar
+//Query the database for all rooms, whether vacant or not
+//Display all of these rooms
 app.get("/Reservation.html", function(req,res){
-	res.render("reservationEJS");
+	MongoClient.connect(dbURL, function(err, db){
+		if (err)
+			throw err;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("room").find({}).toArray(function(err, result){
+			if (err)
+				throw err;
+			res.render("reservationEJS", {bInit: true , rooms : result});
+			db.close();
+		})
+	})
 });
 
 //When a user clicks on the "Search Rooms" button in Reservations.html
@@ -81,7 +96,6 @@ app.post("/Reservation.html", function(req,res){
 	MongoClient.connect(dbURL, function(err, db){
 		if (err)
 			throw err;
-		console.log("Successfully connected with CocoaInn DB");
 		
 		//Retrieve all rooms first into an array
 		var dbo = db.db("CocoaInn");
@@ -93,32 +107,23 @@ app.post("/Reservation.html", function(req,res){
 			//Insert the available rooms into its own array
 			let availableRooms = [];
 			for (let x = 0; x < result.length; x++){
-				if (!validateOccupancy(numAdults+numChildren), result[x].maxOccupancy)
-					continue;
-				
 				let bRoomAvailable = true;
-				for (let y = 0; y < result[x].reservedDates.length; y++){
-					
-					let honoredCheckIn = result[x].reservedDates[y].checkIn;
-					let honoredCheckOut = result[x].reservedDates[y].checkOut;
-					if (!validateReservationConflict(checkIn, checkOut, honoredCheckIn, honoredCheckOut)){
-						bRoomAvailable = false;
-						break;
+				if (numAdults+numChildren <= result[x].maxOccupancy){
+					for (let y = 0; y < result[x].reservedDates.length; y++){
+
+						let honoredCheckIn = result[x].reservedDates[y].checkIn;
+						let honoredCheckOut = result[x].reservedDates[y].checkOut;
+						if (!validateReservationConflict(checkIn, checkOut, honoredCheckIn, honoredCheckOut)){
+							bRoomAvailable = false;
+							break;
+						}
 					}
+					if (bRoomAvailable)
+						availableRooms.push(result[x]);
 				}
-				if (bRoomAvailable)
-					availableRooms.push(result[x]);
 			}
-			console.log("Available Rooms:");
 			console.log(availableRooms);
-			//We now have an array of available rooms
-			//Show these rooms to the user
-			const root = htmlParser.parse('<div class="col-8" id = "availRoomList"></div>');
-			for (let x = 0; x < availableRooms.length; x++){
-				//TODO
-			}
-			
-			
+			res.render("reservationEJS", {bInit : false, rooms: availableRooms});
 			db.close();
 		})
 	})
@@ -209,8 +214,4 @@ function getMonth(date){
 
 function getDay(date){
 	return Number(date.substring(8, date.length));
-}
-
-function validateOccupancy(numGuests, maxOccupancy){
-	return numGuests <= maxOccupancy;
 }
