@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Booking</title>
+<link href="/public/css.css" rel="stylesheet" type="text/css">
+</head>
+
+<body style="background-color: black">
+	<div class="bookingPage">
+		<div class="row1" style="color: beige">
+			<div class="col-2"><a href="index.html" style="font-size: 35pt; color: beige">Home</a></div>
+			<div class="col-2"><a href="Reservation.html" style="font-size: 35pt; color: beige">Reserve</a></div>
+			<div class="col-2"><h1 style="text-align: center">Dine</h1></div>
+			<div class="col-2"><h1 style="text-align: center">Spa</h1></div>
+			<div class="col-2"><h1 style="text-align: center">Golf</h1></div>
+			<div class="col-2"><h1 style="text-align: center">Contact</h1></div>
+		</div>
+		
+		<div class="row2" style="color: beige">
+			<div class="col-6" style="text-align: center">
+				<br>
+				<br>
+				<h1 style="font-size: 40pt"><%= roomName %></h1>
+				<p style="font-size: 30pt">Beds: <%= numBeds %></p>
+				<p style="font-size: 30pt">Occupancy: <%= maxOccupancy %></p>
+				<p style="font-size: 20pt"><%= description %></p>
+			</div>
+			<div class="col-6">
+				<img src="<%= image %>" style="width: 100%; height: 100%; margin-left: auto; margin-right: auto; display: block">
+			</div>
+		</div>
+		
+		<div class="row3" style="color:beige">
+			<div class="col-4">
+				<h2 style="text-align: center; font-size: 30pt">Your Stay</h2>
+				<br>
+				<h3 style="text-align: center; font-size: 25pt">Check In: <%= checkIn %></h3>
+				<br>
+				<h3 style="text-align: center; font-size: 25pt">Check Out: <%= checkOut %></h3>
+				<br>
+				<h3 style="text-align: center; font-size: 25pt">Rooms: <%= numRooms %></h3>
+				<br>
+				<h3 style="text-align: center; font-size: 25pt">Adults: <%= numAdults %></h3>
+				<br>
+				<h3 style="text-align: center; font-size: 25pt">Children: <%= numChildren %></h3>
+				<br>
+				<h3 style="text-align: center; font-size: 25pt">Total: <%= price %></h3>
+			</div>
+			
+			<div class="col-8">
+				<form action="confirmation.html" method="post">
+					<p style="text-align: center; font-size: 30pt">Booking Form</p>
+					<input name="firstName" class="firstName" type="text" placeholder="First Name" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+					<br>
+					<br>
+					<input name="lastName" class="lastName" type="text" placeholder="Last Name" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+					<br>
+					<br>
+					<input name="email" class="email" type="email" placeholder="Email" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+					<br>
+					<br>
+					<input name="phone" class="phone" type="tel" placeholder="Phone" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+					<br>
+					<br>
+					<p style="text-align: center; font-size: 30pt">Payment</p>
+					<input name="ccNum" class="ccNum" type="text" placeholder="CC Number" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on">
+					<br>
+					<br>
+					<input name="ccv" class="ccv" type="text" placeholder="CCV" style="width: 33%; padding: 12px 20px; text-align: center" autocomplete="on">
+					<input name="ccMonth" class="ccMonth" type="number" placeholder="Exp. Month" style="width: 33%; padding: 12px 20px; text-align: center" autocomplete="on" min="1" max="12">
+					<input name="ccYear" class="ccYear" type="number" placeholder="Exp. Year" style="width: 33%; padding: 12px 20px; text-align: center" autocomplete="on" min="2021" max="2026">
+					<br>
+					<br>
+					<p style="text-align: center; font-size: 15pt">Guests are required to show a photo identification and the credit card used for payment upon check-in. You may cancel free of charge until 48 hours before check-in. You will be charged 100 percent of the first night if you cancel within 48 hours of check-in. Pets are not allowed. Smoking is not allowed.</p>
+					<br>
+					<br>
+					<button class="bookButton" type="submit" style="width: 100%; padding: 16px 32px; background-color: wheat; cursor: pointer">Book Reservation</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -67,7 +67,20 @@ app.get("/Reservation.html", function(req,res){
 		dbo.collection("room").find({}).toArray(function(err, result){
 			if (err)
 				throw err;
-			res.render("reservationEJS", {bInit: true , rooms : result});
+			let prices = [];
+			for (let x = 0; x < result.length; x++)
+				prices.push(result[x].price);
+			const today = new Date();
+			const todayString = today.toISOString();
+			res.render("reservationEJS",
+					   {bInit: true,
+						rooms : result,
+						price : prices,
+						checkIn: todayString.substr(0, 10),
+						checkOut: todayString.substr(0,10),
+					   	numRooms: 1,
+					   	numAdults: 1,
+					   	numChildren: 0});
 			db.close();
 		})
 	})
@@ -75,13 +88,14 @@ app.get("/Reservation.html", function(req,res){
 
 //When a user clicks on the "Search Rooms" button in Reservations.html
 //Query the database for a list of rooms with the selected reservation parameters
+//Re-render the Reservations page with the list of available rooms
 app.post("/Reservation.html", function(req,res){
 	//First, store the reservation parameters into variables
-	let checkIn = req.body.checkIn;
-	let checkOut = req.body.checkOut;
-	let numRooms = Number(req.body.numRooms);
-	let numAdults = Number(req.body.numAdults);
-	let numChildren = Number(req.body.numChildren);
+	const checkIn = req.body.checkIn;
+	const checkOut = req.body.checkOut;
+	const numRooms = Number(req.body.numRooms);
+	const numAdults = Number(req.body.numAdults);
+	const numChildren = Number(req.body.numChildren);
 
 	//Validate input
 	if (!validate(checkIn, checkOut, numRooms, numAdults, numChildren))
@@ -101,28 +115,76 @@ app.post("/Reservation.html", function(req,res){
 			//From the list of retrieved rooms we got from the database, sort out the ones with a reservation conflict
 			//Insert the available rooms into its own array
 			let availableRooms = [];
+			let totalPrice = [];
 			for (let x = 0; x < result.length; x++){
 				let bRoomAvailable = true;
 				if (numAdults+numChildren <= result[x].maxOccupancy){
 					for (let y = 0; y < result[x].reservedDates.length; y++){
 
-						let honoredCheckIn = result[x].reservedDates[y].checkIn;
-						let honoredCheckOut = result[x].reservedDates[y].checkOut;
+						const honoredCheckIn = result[x].reservedDates[y].checkIn;
+						const honoredCheckOut = result[x].reservedDates[y].checkOut;
 						if (!validateReservationConflict(checkIn, checkOut, honoredCheckIn, honoredCheckOut)){
 							bRoomAvailable = false;
 							break;
 						}
 					}
-					if (bRoomAvailable)
+					if (bRoomAvailable){
 						availableRooms.push(result[x]);
+						totalPrice.push(getStayDuration(checkIn, checkOut)*result[x].price);
+					}
 				}
 			}
-			console.log(availableRooms);
-			res.render("reservationEJS", {bInit : false, rooms: availableRooms});
+			
+			//Re-render the Reservations page, but now with only the available rooms according to the user's reservation parameters
+			res.render("reservationEJS", {bInit : false,
+										  checkIn: checkIn,
+										  checkOut: checkOut,
+										  numRooms: numRooms,
+										  numAdults: numAdults,
+										  numChildren: numChildren,
+										  rooms: availableRooms,
+										  price: totalPrice});
 			db.close();
 		})
 	})
 });
+
+//When a user clicks on the "Book" button on the Reservations page
+app.post("/booking.html", function(req, res){
+	//Get the reservation parameters
+	//No need to validate the inputs- we should have already done on the Reservations page
+	const checkIn = req.body.checkInFinal;
+	const checkOut = req.body.checkOutFinal;
+	const numRooms = Number(req.body.numRoomsFinal);
+	const numAdults = Number(req.body.numAdultsFinal);
+	const numChildren = Number(req.body.numChildrenFinal);
+	const roomNum = Number(req.body.roomNum);
+	const roomName = req.body.roomName;
+	const maxOccupancy = Number(req.body.maxOccupancy);
+	const numBeds = Number(req.body.numBeds);
+	const description = req.body.description;
+	const image = req.body.image;
+	const price = Number(req.body.price);
+	
+	res.render("bookingEJS", {checkIn : checkIn,
+							  checkOut : checkOut,
+							  numRooms : numRooms,
+							  numAdults : numAdults,
+							  numChildren: numChildren,
+							  roomNum: roomNum,
+							  roomName: roomName,
+							  maxOccupancy: maxOccupancy,
+							  numBeds: numBeds,
+							  description: description,
+							  image: image,
+							  price : price});
+})
+
+//TODO:
+//Handle Confirmation page ( app.post("/confirmation.html") )
+//Copy over all data (reservation data and room data) from Booking page --> put into hidden form
+//Add a record to Reservation collection in database
+//Update Room collection where room numbers match: insert/push check in and check out dates (represented as objects) to reservedDates array
 
 //Validates inputs for reservation parameters
 function validate(checkIn, checkOut, numRooms, numAdults, numChildren){
@@ -209,4 +271,12 @@ function getMonth(date){
 
 function getDay(date){
 	return Number(date.substring(8, date.length));
+}
+
+function getStayDuration(checkIn, checkOut){
+	var checkInDate = new Date(getYear(checkIn), getMonth(checkIn)-1, getDay(checkIn));
+	var checkOutDate = new Date(getYear(checkOut), getMonth(checkOut)-1, getDay(checkOut));
+	
+	let elapsedTime = checkOutDate.getTime()-checkInDate.getTime();
+	return Math.floor(elapsedTime/(1000*60*60*24));
 }

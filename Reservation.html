@@ -18,7 +18,7 @@
 			</div>
 		
 		<div class="row2" style="color: beige">
-			<div class="col-4">
+			<div class="col-2">
 				<form class="reservationInfo" action="Reservation.html" method="post">
 					<h2 style="text-align: center; font-size: 30pt">Your Stay</h2>
 					<label for="checkIn" style="font-size: 20pt">Check In:</label>
@@ -62,23 +62,12 @@
 				</form>
 			</div>
 			
-			<!-- Dynamically add elements using jquery -->
-			<!-- Anytime the user clicks on the Search Rooms button, a server-side request is made -->
-			<!-- After the server side has fetched data from database, relay the info to client-side JavaScript-->
-			<!-- We use jquery to serve as the bridge between server and client-->
-			
-			<!--To DO:
-				1. Handle the Search Room Button - query results from MongoDB with Node JS
-					a. Create a "Rooms" table in MongoDB, and populate it with Rooms with attributes
-					b. Query: Select * from Rooms where [reservation parameters] - should only return rooms that are available for the specified check in and check out dates
-					c. Store the results into variables
-				2. Use jquery.empty() or detach() to remove any child elements in the rooms list on the reservations page
-				3. Use jquery.append() to construct new elements with the variables updated from the database (room image, description, price, etc.)
-			-->
-			<div class="col-8" id = "availRoomList">
-				<div class="col-5"><br><br><br><br><br><h1 style="text-align: center">Room Name</h1><p style = "text-align:center">Beds: x<br>Occupancy: x<br>Insert the room's description here. Blah blah blah blah. Yada yada yada yada.</p></div>
-				<div class="col-5"><img src="https://www.urbanpixxels.com/wp-content/uploads/22-12037-post/Bedroom-Boutique-Hotel-Room-Old-Clare-Sydney(pp_w768_h512).jpg" style="width: 100%; height: auto; margin-left: auto; margin-right: auto; display: block"></div>
-				<div class="col-2"><br><br><br><br><br><form action="booking.html" method="post"><button class="bookButton" type="submit">Book</button></form></div>
+			<div class="col-10" id = "availRoomList">
+				<div class="col-4"><br><br><br><br><br><h1 style="text-align: center">Room Name</h1><p style = "text-align:center">Beds: x<br>Occupancy: x<br>Insert the room's description here. Blah blah blah blah. Yada yada yada yada.</p></div>
+				<div class="col-6"><img src="https://www.urbanpixxels.com/wp-content/uploads/22-12037-post/Bedroom-Boutique-Hotel-Room-Old-Clare-Sydney(pp_w768_h512).jpg" style="width: 100%; height: auto; margin-left: auto; margin-right: auto; display: block"></div>
+				<div class="col-2"><br><br><br><br><br><h2 style="text-align: center">$150.00</h2><p style="text-align: center">(per night)</p>
+					<form action="booking.html" method="post"><button class="bookButton" type="submit">Book</button></form>
+				</div>
 			</div>
 		</div>
 	</div>
