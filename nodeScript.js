@@ -180,11 +180,54 @@ app.post("/booking.html", function(req, res){
 							  price : price});
 })
 
-//TODO:
-//Handle Confirmation page ( app.post("/confirmation.html") )
-//Copy over all data (reservation data and room data) from Booking page --> put into hidden form
-//Add a record to Reservation collection in database
-//Update Room collection where room numbers match: insert/push check in and check out dates (represented as objects) to reservedDates array
+//When a user clicks on the "Book Reservation" button on the Booking page
+//Adds a reservation record to the database
+app.post("/confirmation.html", function(req, response){
+	var reservation ={
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			email: req.body.email,
+			phone: req.body.phone,
+			checkIn: req.body.checkIn,
+			checkOut: req.body.checkOut,
+			numRooms: Number(req.body.numRooms),
+			adults: Number(req.body.numAdults),
+			children: Number(req.body.numChildren),
+			price: req.body.price,
+			notes: "",
+			assignedRoom: [req.body.roomNum]
+			}
+	
+	MongoClient.connect(dbURL, function(err, db){
+		if (err)
+			throw err;
+		var dbo = db.db("CocoaInn");
+		
+		//Add the reservation to the database
+		dbo.collection("reservation").insertOne(reservation, function(err, res){
+			if (err)
+				throw err;
+			
+			//Get the reservation ID so we can pass it to the confirmation page
+			const confirmationNumber = `${res.insertedId}`;
+			
+			//Now update the room table by inserting the check in/out dates on the reservedDates array
+			var dates = {checkIn: reservation.checkIn,
+						checkOut: reservation.checkOut};
+			const query = {roomNum: Number(req.body.roomNum)};
+			const update = { $push: {"reservedDates": dates} };
+			
+			dbo.collection("room").updateOne(query, update, function(err, res){
+				if (err)
+					throw err;
+				
+				//Render the confirmation page with the user's confirmation number
+				response.render("confirmationEJS", {confirmationNumber: confirmationNumber});
+			})
+		})
+		
+	})
+})
 
 //Validates inputs for reservation parameters
 function validate(checkIn, checkOut, numRooms, numAdults, numChildren){

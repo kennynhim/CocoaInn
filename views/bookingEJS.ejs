@@ -75,6 +75,13 @@
 					<p style="text-align: center; font-size: 15pt">Guests are required to show a photo identification and the credit card used for payment upon check-in. You may cancel free of charge until 48 hours before check-in. You will be charged 100 percent of the first night if you cancel within 48 hours of check-in. Pets are not allowed. Smoking is not allowed.</p>
 					<br>
 					<br>
+					<input name="checkIn" class="checkIn" type="hidden" value="<%= checkIn %>">
+					<input name="checkOut" class="checkOut" type="hidden" value=" <%= checkOut %>">
+					<input name="numRooms" class="numRooms" type="hidden" value="<%= numRooms %>">
+					<input name="numAdults" class="numAdults" type="hidden" value="<%= numAdults %>">
+					<input name="numChildren" class="numChildren" type="hidden" value="<%= numChildren %>">
+					<input name="price" class="price" type="hidden" value="<%= price %>">
+					<input name="roomNum" class="roomNum" type="hidden" value="<%= roomNum %>">
 					<button class="bookButton" type="submit" style="width: 100%; padding: 16px 32px; background-color: wheat; cursor: pointer">Book Reservation</button>
 				</form>
 			</div>
