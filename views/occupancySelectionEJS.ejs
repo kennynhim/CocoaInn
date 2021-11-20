@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Confirmation</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: black">
+		<div class="optionPage">
+			<div class="row1" style="color: beige">
+				<div class="col-2"><a href="index.html" style="font-size: 35pt; color: beige">Home</a></div>
+				<div class="col-2"><a href="Reservation.html" style="font-size: 35pt; color: beige">Reserve</a></div>
+				<div class="col-2"><h1 style="text-align: center">Dine</h1></div>
+				<div class="col-2"><h1 style="text-align: center">Spa</h1></div>
+				<div class="col-2"><h1 style="text-align: center">Golf</h1></div>
+				<div class="col-2"><h1 style="text-align: center">Contact</h1></div>
+			</div>
+			
+			<div class="row2" style="color: beige">
+				<div class="col-12">
+					<p style="text-align: center; font-size: 25pt; padding: 20px">You have selected a room with a max occupancy less than the total number of guests on your reservation.</p>
+					<p style="text-align: center; font-size: 25pt; padding: 20px">Would you like to add additional rooms to accommodate your guests?</p>
+				</div>
+			</div>
+			<div class="row3" style="color: beige">
+				<div class="col-6">
+					<form method="get" action="Reservation.html">
+						<button type="submit" style="padding: 16px 32px; width: 100%; background-color: #5C5C5C; font-size: 15pt">No, remove the current selection.</button>
+					</form>
+				</div>
+				<div class="col-6">
+					<form method="post" action="Reservation.html">
+						<input name="checkIn" class="checkIn" type="hidden" value="<%= checkIn %>">
+						<input name="checkOut" class="checkOut" type="hidden" value="<%= checkOut %>">
+						<input name="numAdults" class="numAdults" type="hidden" value="<%= numAdults %>">
+						<input name="numChildren" class="numChildren" type="hidden" value="<%= numChildren %>">
+						<button type="submit" style="padding: 16px 32px; width: 100%; background-color: wheat; font-size: 15pt">Yes, keep selection and add another room.</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

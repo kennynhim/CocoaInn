@@ -25,6 +25,14 @@ const dbURL = "mongodb+srv://group7:group7Pass@cmpsc487gr7.0naf3.mongodb.net/Coc
 
 
 const port = 3000;
+var numRooms = 0;
+var roomNames = [];
+var beds = [];
+var occupancies = [];
+var descriptions = [];
+var images = [];
+var reservedRoomNums = [];
+var totalPrices = [];
 
 //for parsing application/xwww-
 app.use(bodyParser.urlencoded({extended: true}));
@@ -60,6 +68,7 @@ app.get("/index.html", function(req,res){
 //Query the database for all rooms, whether vacant or not
 //Display all of these rooms
 app.get("/Reservation.html", function(req,res){
+	clearCart();
 	MongoClient.connect(dbURL, function(err, db){
 		if (err)
 			throw err;
@@ -67,18 +76,14 @@ app.get("/Reservation.html", function(req,res){
 		dbo.collection("room").find({}).toArray(function(err, result){
 			if (err)
 				throw err;
-			let prices = [];
-			for (let x = 0; x < result.length; x++)
-				prices.push(result[x].price);
 			const today = new Date();
 			const todayString = today.toISOString();
 			res.render("reservationEJS",
 					   {bInit: true,
+						numRooms: numRooms,
 						rooms : result,
-						price : prices,
 						checkIn: todayString.substr(0, 10),
 						checkOut: todayString.substr(0,10),
-					   	numRooms: 1,
 					   	numAdults: 1,
 					   	numChildren: 0});
 			db.close();
@@ -86,19 +91,18 @@ app.get("/Reservation.html", function(req,res){
 	})
 });
 
-//When a user clicks on the "Search Rooms" button in Reservations.html
+//When a user clicks on the "Search Rooms" button in Reservations.html, or user adds more rooms from occupancySelection
 //Query the database for a list of rooms with the selected reservation parameters
 //Re-render the Reservations page with the list of available rooms
 app.post("/Reservation.html", function(req,res){
 	//First, store the reservation parameters into variables
 	const checkIn = req.body.checkIn;
 	const checkOut = req.body.checkOut;
-	const numRooms = Number(req.body.numRooms);
 	const numAdults = Number(req.body.numAdults);
 	const numChildren = Number(req.body.numChildren);
 
 	//Validate input
-	if (!validate(checkIn, checkOut, numRooms, numAdults, numChildren))
+	if (!validate(checkIn, checkOut, numAdults, numChildren))
 		return;
 		
 	//Now connect to database and query
@@ -115,12 +119,20 @@ app.post("/Reservation.html", function(req,res){
 			//From the list of retrieved rooms we got from the database, sort out the ones with a reservation conflict
 			//Insert the available rooms into its own array
 			let availableRooms = [];
-			let totalPrice = [];
 			for (let x = 0; x < result.length; x++){
 				let bRoomAvailable = true;
-				if (numAdults+numChildren <= result[x].maxOccupancy){
+				
+				//If we already have one room in the cart, do not re-display that same room
+				if (numRooms > 0){
+					for (let z = 0; z < numRooms; z++){
+						if (reservedRoomNums[z] === result[x].roomNum){
+							bRoomAvailable = false;
+							break;
+						}
+					}
+				}
+				if (bRoomAvailable){
 					for (let y = 0; y < result[x].reservedDates.length; y++){
-
 						const honoredCheckIn = result[x].reservedDates[y].checkIn;
 						const honoredCheckOut = result[x].reservedDates[y].checkOut;
 						if (!validateReservationConflict(checkIn, checkOut, honoredCheckIn, honoredCheckOut)){
@@ -128,60 +140,83 @@ app.post("/Reservation.html", function(req,res){
 							break;
 						}
 					}
-					if (bRoomAvailable){
-						availableRooms.push(result[x]);
-						totalPrice.push(getStayDuration(checkIn, checkOut)*result[x].price);
-					}
 				}
+				
+				if (bRoomAvailable)
+					availableRooms.push(result[x]);
 			}
 			
 			//Re-render the Reservations page, but now with only the available rooms according to the user's reservation parameters
-			res.render("reservationEJS", {bInit : false,
+			res.render("reservationEJS", {bInit: false,
+										  numRooms: numRooms,
 										  checkIn: checkIn,
 										  checkOut: checkOut,
-										  numRooms: numRooms,
 										  numAdults: numAdults,
 										  numChildren: numChildren,
-										  rooms: availableRooms,
-										  price: totalPrice});
+										  rooms: availableRooms});
 			db.close();
 		})
 	})
 });
 
 //When a user clicks on the "Book" button on the Reservations page
+//Add the selected room to the cart
 app.post("/booking.html", function(req, res){
-	//Get the reservation parameters
-	//No need to validate the inputs- we should have already done on the Reservations page
 	const checkIn = req.body.checkInFinal;
 	const checkOut = req.body.checkOutFinal;
-	const numRooms = Number(req.body.numRoomsFinal);
 	const numAdults = Number(req.body.numAdultsFinal);
 	const numChildren = Number(req.body.numChildrenFinal);
-	const roomNum = Number(req.body.roomNum);
-	const roomName = req.body.roomName;
-	const maxOccupancy = Number(req.body.maxOccupancy);
-	const numBeds = Number(req.body.numBeds);
-	const description = req.body.description;
-	const image = req.body.image;
-	const price = Number(req.body.price);
+	roomNames.push(req.body.roomName);
+	beds.push(Number(req.body.numBeds));
+	descriptions.push(req.body.description);
+	images.push(req.body.image);
+	occupancies.push(Number(req.body.maxOccupancy));
+	reservedRoomNums.push(Number(req.body.roomNum));
+	totalPrices.push(Number(req.body.price));
+	numRooms++;
 	
-	res.render("bookingEJS", {checkIn : checkIn,
-							  checkOut : checkOut,
-							  numRooms : numRooms,
-							  numAdults : numAdults,
-							  numChildren: numChildren,
-							  roomNum: roomNum,
-							  roomName: roomName,
-							  maxOccupancy: maxOccupancy,
-							  numBeds: numBeds,
-							  description: description,
-							  image: image,
-							  price : price});
+	if (!assertNumRooms()){
+		console.log("ERROR: numRooms not asserted!");
+		return;
+	}
+	
+	//First, check if number of guests equals max occupancy
+	//If they are equal, allow the reservation process to continue and go straight to the booking page
+	if (numAdults + numChildren <= getCapacity()){
+		
+		let priceSum = 0;
+		for (let x = 0; x < numRooms; x++)
+			priceSum += totalPrices[x];			
+		
+		res.render("bookingEJS", {checkIn : checkIn,
+								  checkOut : checkOut,
+								  numRooms : numRooms,
+								  numAdults : numAdults,
+								  numChildren: numChildren,
+								  roomNums: reservedRoomNums,
+								  roomNames: roomNames,
+								  occupancies: occupancies,
+								  numBeds: beds,
+								  descriptions: descriptions,
+								  images: images,
+								  price : priceSum});
+	}
+	//Otherwise, if the user selects a room with an occupancy that cannot serve all of the guests
+	//Then prompt the user if they would like to reserve multiple rooms
+	//If they select no, return them to the Reservations page (cart will be cleared)
+	//If they select yes, return to the Reservations page, and have them select another room (cart will be maintained)
+	else{
+		res.render("occupancySelectionEJS", {checkIn: checkIn,
+											checkOut: checkOut,
+											numAdults: numAdults,
+											numChildren: numChildren});
+	}
 })
 
 //When a user clicks on the "Book Reservation" button on the Booking page
 //Adds a reservation record to the database
+//TODO
+//Redo the insertOne method to DB to account for booking multiple rooms
 app.post("/confirmation.html", function(req, response){
 	var reservation ={
 			firstName: req.body.firstName,
@@ -190,12 +225,12 @@ app.post("/confirmation.html", function(req, response){
 			phone: req.body.phone,
 			checkIn: req.body.checkIn,
 			checkOut: req.body.checkOut,
-			numRooms: Number(req.body.numRooms),
+			numRooms: numRooms,
 			adults: Number(req.body.numAdults),
 			children: Number(req.body.numChildren),
 			price: req.body.price,
 			notes: "",
-			assignedRoom: [req.body.roomNum]
+			assignedRoom: reservedRoomNums
 			}
 	
 	MongoClient.connect(dbURL, function(err, db){
@@ -214,28 +249,29 @@ app.post("/confirmation.html", function(req, response){
 			//Now update the room table by inserting the check in/out dates on the reservedDates array
 			var dates = {checkIn: reservation.checkIn,
 						checkOut: reservation.checkOut};
-			const query = {roomNum: Number(req.body.roomNum)};
 			const update = { $push: {"reservedDates": dates} };
 			
-			dbo.collection("room").updateOne(query, update, function(err, res){
-				if (err)
-					throw err;
-				
-				//Render the confirmation page with the user's confirmation number
-				response.render("confirmationEJS", {confirmationNumber: confirmationNumber});
-			})
+			for (let x = 0; x < numRooms; x++){
+				const query = {roomNum: reservedRoomNums[x]};
+				dbo.collection("room").updateOne(query, update, function(err, res){
+					if (err)
+						throw err;
+
+					//Render the confirmation page with the user's confirmation number
+					if (x+1 === numRooms){
+						response.render("confirmationEJS", {confirmationNumber: confirmationNumber});
+						clearCart();
+						db.close();
+					}
+				})
+			}
 		})
 		
 	})
 })
 
 //Validates inputs for reservation parameters
-function validate(checkIn, checkOut, numRooms, numAdults, numChildren){
-	if (numRooms <= 0){
-		alert("Number of rooms must be > 0");
-		return false;
-	}
-
+function validate(checkIn, checkOut, numAdults, numChildren){
 	if (numAdults <= 0){
 		alert("Number of adults must be > 0");
 		return false;
@@ -322,4 +358,34 @@ function getStayDuration(checkIn, checkOut){
 	
 	let elapsedTime = checkOutDate.getTime()-checkInDate.getTime();
 	return Math.floor(elapsedTime/(1000*60*60*24));
+}
+
+function clearCart(){
+	numRooms = 0;
+	roomNames = [];
+	beds = [];
+	occupancies = [];
+	descriptions = [];
+	images = [];
+	reservedRoomNums = [];
+	totalPrices = [];	
+}
+
+function getCapacity(){
+	let sumOccupancy = 0;
+	
+	for (let x = 0; x < numRooms; x++)
+		sumOccupancy += occupancies[x];
+	
+	return sumOccupancy;
+}
+
+function assertNumRooms(){
+	return (numRooms === roomNames.length
+		   && numRooms === beds.length
+		   && numRooms === occupancies.length
+		   && numRooms === descriptions.length
+		   && numRooms === images.length
+		   && numRooms === reservedRoomNums.length
+		   && numRooms === totalPrices.length);
 }

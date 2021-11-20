@@ -17,19 +17,21 @@
 			<div class="col-2"><h1 style="text-align: center">Contact</h1></div>
 		</div>
 		
-		<div class="row2" style="color: beige">
+		<% for(var x = 0; x < numRooms; x++){ %>
+		<div class="roomInfo" style="color: beige">
 			<div class="col-6" style="text-align: center">
 				<br>
 				<br>
-				<h1 style="font-size: 40pt"><%= roomName %></h1>
-				<p style="font-size: 30pt">Beds: <%= numBeds %></p>
-				<p style="font-size: 30pt">Occupancy: <%= maxOccupancy %></p>
-				<p style="font-size: 20pt"><%= description %></p>
+				<h1 style="font-size: 40pt"><%= roomNames[x] %></h1>
+				<p style="font-size: 30pt">Beds: <%= numBeds[x] %></p>
+				<p style="font-size: 30pt">Occupancy: <%= occupancies[x] %></p>
+				<p style="font-size: 20pt"><%= descriptions[x] %></p>
 			</div>
 			<div class="col-6">
-				<img src="<%= image %>" style="width: 100%; height: 100%; margin-left: auto; margin-right: auto; display: block">
+				<img src="<%= images[x] %>" style="width: 100%; height: 100%; margin-left: auto; margin-right: auto; display: block">
 			</div>
 		</div>
+		<% } %>
 		
 		<div class="row3" style="color:beige">
 			<div class="col-4">
@@ -77,11 +79,12 @@
 					<br>
 					<input name="checkIn" class="checkIn" type="hidden" value="<%= checkIn %>">
 					<input name="checkOut" class="checkOut" type="hidden" value=" <%= checkOut %>">
-					<input name="numRooms" class="numRooms" type="hidden" value="<%= numRooms %>">
 					<input name="numAdults" class="numAdults" type="hidden" value="<%= numAdults %>">
 					<input name="numChildren" class="numChildren" type="hidden" value="<%= numChildren %>">
 					<input name="price" class="price" type="hidden" value="<%= price %>">
-					<input name="roomNum" class="roomNum" type="hidden" value="<%= roomNum %>">
+					<% for (var x = 0; x < numRooms; x++){ %>
+						<input name="<%= x %>" class="<%= x %>" type="hidden" value="<%= roomNums[x] %>">
+					<% } %>
 					<button class="bookButton" type="submit" style="width: 100%; padding: 16px 32px; background-color: wheat; cursor: pointer">Book Reservation</button>
 				</form>
 			</div>
