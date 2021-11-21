@@ -15,12 +15,14 @@
 **	Open a command prompt or terminal, and run the commands to install these libraries
 **	An associated link is provided where these commands can be found, along with their documentation
 */
+const crypto = require('crypto');
 const alert = require('alert'); //https://www.npmjs.com/package/alert-node
 const ejs = require('ejs'); //https://ejs.co/
 const express  = require("express"); //https://expressjs.com/
 const app = express(); 
 const bodyParser = require('body-parser');	//https://www.npmjs.com/package/body-parser
-const MongoClient = require('mongodb').MongoClient;	//Terminal command: npm install mongodb
+const Mongo = require('mongodb');
+const MongoClient = Mongo.MongoClient;	//Terminal command: npm install mongodb
 const dbURL = "mongodb+srv://group7:group7Pass@cmpsc487gr7.0naf3.mongodb.net/CocoaInn?retryWrites=true&w=majority"
 
 
@@ -227,7 +229,8 @@ app.post("/confirmation.html", function(req, response){
 			children: Number(req.body.numChildren),
 			price: req.body.price,
 			notes: "",
-			assignedRoom: reservedRoomNums
+			assignedRoom: reservedRoomNums,
+			confirmationNumber: crypto.randomUUID()
 			}
 	
 	MongoClient.connect(dbURL, function(err, db){
@@ -239,9 +242,6 @@ app.post("/confirmation.html", function(req, response){
 		dbo.collection("reservation").insertOne(reservation, function(err, res){
 			if (err)
 				throw err;
-			
-			//Get the reservation ID so we can pass it to the confirmation page
-			const confirmationNumber = `${res.insertedId}`;
 			
 			//Now update the room table by inserting the check in/out dates on the reservedDates array
 			var dates = {checkIn: reservation.checkIn,
@@ -256,7 +256,7 @@ app.post("/confirmation.html", function(req, response){
 
 					//Render the confirmation page with the user's confirmation number
 					if (x+1 === numRooms){
-						response.render("confirmationEJS", {confirmationNumber: confirmationNumber});
+						response.render("confirmationEJS", {confirmationNumber: reservation.confirmationNumber});
 						clearCart();
 						db.close();
 					}
@@ -268,17 +268,43 @@ app.post("/confirmation.html", function(req, response){
 })
 
 //When a user enters a reservation confirmation number and clicks on the Search button
-app.post("/reservationDetails.html", function (req, res){
-	let confirmationNumber = req.body.confirmationNumber;
-	
-	var dbo = db.db("CocoaInn");
-	const query = {_id: confirmationNumber};
-	dbo.collection("reservation").findOne(query, function(err, result){
-		if (err){
-			alert("Could not find a reservation.");
-			db.close();
-			return;
-		}
+app.post("/reservationDetails.html", function (req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, result){
+			if (err2)
+				throw err2;
+			if (result == null){
+				alert("Could not find reservation.");
+				db.close();
+				return;
+			}
+			else{
+				//Got the reservation
+				//Get the rooms associated with this reservation
+				//Retrieve all rooms first, then go through a loop to see if the room numbers match the reservation's assigned room numbers
+				//Done this way because a single read operation on the database is slow compared to a loop, and may cause data to be skipped over
+				dbo.collection("room").find({}).toArray(function(err3, rooms){
+					if (err3)
+						throw err3;
+					let reservedRooms = [];
+					
+					for (let x = 0; x < result.assignedRoom.length; x++){
+						for (let y = 0; y < rooms.length; y++){
+							if (result.assignedRoom[x] === rooms[y].roomNum){
+								reservedRooms.push(rooms[y]);
+								break;
+							}
+						}
+					}
+					response.render("modifyEJS", {reservation: result, rooms: reservedRooms});
+					db.close();
+				})
+			}
+		})
 	})
 })
 
