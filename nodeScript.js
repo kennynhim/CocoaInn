@@ -101,8 +101,7 @@ app.post("/Reservation.html", function(req,res){
 	const numAdults = Number(req.body.numAdults);
 	const numChildren = Number(req.body.numChildren);
 
-	//Validate input
-	if (!validate(checkIn, checkOut, numAdults, numChildren))
+	if (!validateDate(checkIn, checkOut))
 		return;
 		
 	//Now connect to database and query
@@ -215,8 +214,6 @@ app.post("/booking.html", function(req, res){
 
 //When a user clicks on the "Book Reservation" button on the Booking page
 //Adds a reservation record to the database
-//TODO
-//Redo the insertOne method to DB to account for booking multiple rooms
 app.post("/confirmation.html", function(req, response){
 	var reservation ={
 			firstName: req.body.firstName,
@@ -270,19 +267,20 @@ app.post("/confirmation.html", function(req, response){
 	})
 })
 
-//Validates inputs for reservation parameters
-function validate(checkIn, checkOut, numAdults, numChildren){
-	if (numAdults <= 0){
-		alert("Number of adults must be > 0");
-		return false;
-	}
-
-	if (numChildren < 0){
-		alert("Number of children must be >= 0");
-		return false;
-	}
-	return validateDate(checkIn, checkOut);
-}
+//When a user enters a reservation confirmation number and clicks on the Search button
+app.post("/reservationDetails.html", function (req, res){
+	let confirmationNumber = req.body.confirmationNumber;
+	
+	var dbo = db.db("CocoaInn");
+	const query = {_id: confirmationNumber};
+	dbo.collection("reservation").findOne(query, function(err, result){
+		if (err){
+			alert("Could not find a reservation.");
+			db.close();
+			return;
+		}
+	})
+})
 
 //Validates the dates for a single reservation
 //Returns false if check in comes on or after check out
@@ -318,9 +316,9 @@ function validateDate(checkIn, checkOut){
 //Checks if two different reservations conflict, ie they share the same room and the reservation dates overlap
 function validateReservationConflict(reqCheckIn, reqCheckOut, honoredCheckIn, honoredCheckOut){
 	//First, validate the requested check in and check out dates
-	
 	if (!validateDate(reqCheckIn, reqCheckOut))
 		return false;
+	
 	var reqCheckInDate = new Date(getYear(reqCheckIn), getMonth(reqCheckIn)-1, getDay(reqCheckIn));
 	var reqCheckOutDate = new Date(getYear(reqCheckOut), getMonth(reqCheckOut)-1, getDay(reqCheckOut));
 	var honoredCheckInDate = new Date(getYear(honoredCheckIn), getMonth(honoredCheckIn) - 1, getDay(honoredCheckIn));

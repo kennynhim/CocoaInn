@@ -16,14 +16,23 @@
 				<div class="col-2"><h1 style="text-align: center">Golf</h1></div>
 				<div class="col-2"><h1 style="text-align: center">Contact</h1></div>
 			</div>
-
+			
 			<div class="row2" style="color: beige">
+				<div class="col-12">
+					<form method="post" action="reservationDetails.html" style="padding-left: 400px">
+						<input name="confirmationNumber" class="confirmationNumber" type="search" placeholder="Reservation Confirmation Number" style="width:50%; padding: 12px 20px; text-align: center">
+						<button type="submit" style="padding: 12px 20px; background-color: wheat">Search</button>
+					</form>
+				</div>
+			</div>
+
+			<div class="row3" style="color: beige">
 				<div class="col-12">
 					<h1 style="text-align: center; font-size: 40pt">Thank you for your reseravtion!</h1>
 				</div>
 			</div>
 
-			<div class="row3" style="color:beige">
+			<div class="row4" style="color:beige">
 				<div class="col-12">
 					<p style="text-align: center; font-size: 25pt; padding: 20px">Your confirmation number is: <%= confirmationNumber %></p>
 					<p style="text-align: center; font-size: 25pt; padding: 20px">A welcome letter has been sent to your email address containing the details of your stay.</p>

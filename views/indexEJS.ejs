@@ -8,10 +8,6 @@
 
 	<body style="background-color: black">
 		<div class="homePage">
-			<!--ROW1: The menu bar: Home, Reserve, Dine, Spa, Golf, Contact -->
-			<!--Note: Each row has a width of 12 units. An element with col-2, for example, is a column with a width of 2 unit. -->
-			<!--The column widths must add to 12 units in total to complete the row. -->
-			<!--To create a row, specify a new "div" element. Then create children div elements of that parent div element. Give the children div elements a "class=col-x", with x representing the width for that particular element -->
 			<div class="row1" style="color: beige">
 				<div class="col-2"><a href="index.html" style="font-size: 35pt; color: beige">Home</a></div>
 				<div class="col-2"><a href="Reservation.html" style="font-size: 35pt; color: beige">Reserve</a></div>
@@ -21,10 +17,16 @@
 				<div class="col-2"><h1 style="text-align: center">Contact</h1></div>
 			</div>
 			
-			<!--ROW2: The welcome message, opening text/description, and image -->
-			<!--Note how the text element takes up 4 columns, and the image takes up 8 columns, for a total of 12 -->
-			<!--The "br" tags represent a line break in an attempt to align the text with the image -->
-			<div class="row2" style="color: white">
+			<div class="row2" style="color: beige">
+				<div class="col-12">
+					<form method="post" action="reservationDetails.html" style="padding-left: 400px">
+						<input name="confirmationNumber" class="confirmationNumber" type="search" placeholder="Reservation Confirmation Number" style="width:50%; padding: 12px 20px; text-align: center">
+						<button type="submit" style="padding: 12px 20px; background-color: wheat">Search</button>
+					</form>
+				</div>
+			</div>
+			
+			<div class="row3" style="color: white">
 				<div class="col-4">
 					<br><br><br><br><br><br><br><br><p style="font-size: 50pt; text-align: center">Welcome to the Cocoa Inn</p>
 					<br><br><br><br><p style="text-align: center; font-size: 20pt">Insert some creative description here. Perhaps insert a small section for selecting a check-in, check-out, and number of guest fields so the user can quickly make a reservation?</p>
