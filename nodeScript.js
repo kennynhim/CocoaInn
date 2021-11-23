@@ -186,8 +186,9 @@ app.post("/booking.html", function(req, res){
 	if (numAdults + numChildren <= getCapacity()){
 		
 		let priceSum = 0;
-		for (let x = 0; x < numRooms; x++)
-			priceSum += totalPrices[x];			
+		for (let x = 0; x < numRooms; x++){
+			priceSum += getStayDuration(checkIn, checkOut)*totalPrices[x];
+		}
 		
 		res.render("bookingEJS", {checkIn : checkIn,
 								  checkOut : checkOut,
@@ -328,6 +329,45 @@ app.post("/modifyDate.html", function(req, response){
 
 //When user modifies their reservation detail by changing the check in/out date
 //And the user clicks on "submit" to change the reservation
+app.post("/confirmModification.html", function(req, response){
+	//Calculate the price change, if any
+	//Display the price change to user
+	//Ask if they want to continue with modification
+	const checkIn = req.body.checkIn;
+	const checkOut = req.body.checkOut;
+	const confirmation = req.body.confirmationNumber;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmation}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			if (reservation != null){
+				//Get the total price for the new check in and check out dates
+				dbo.collection("room").find({}).toArray(function(err3, rooms){
+					if (err3)
+						throw err3;
+					let total = 0;
+					for (let x = 0; x < reservation.assignedRoom.length; x++){
+						for (let y = 0; y < rooms.length; y++){
+							if (reservation.assignedRoom[x] === rooms[y].roomNum){
+								total += getStayDuration(checkIn, checkOut)*rooms[y].price;
+								break;
+							}
+						}
+					}
+					//Get price change
+					let priceChange = total - reservation.price;
+					response.render("confirmDateChangeEJS", {reservation: reservation, newCheckIn: checkIn, newCheckOut: checkOut, newPrice: total, priceChange: priceChange});
+				})
+			}
+		})
+	})
+});
+
+	
 app.post("/changeDateRequested.html", function(req, response){
 	const checkIn = req.body.checkIn;
 	const checkOut = req.body.checkOut;
@@ -379,7 +419,7 @@ app.post("/changeDateRequested.html", function(req, response){
 					}
 					else{			//Otherwise if bCanChange, update the reservation collection and room collection, and return to the details page
 						const originalCheckIn = reservation.checkIn;
-						dbo.collection("reservation").updateOne({confirmationNumber: confirmation}, { $set: {"checkIn": checkIn, "checkOut": checkOut} }, function(err4, result1){
+						dbo.collection("reservation").updateOne({confirmationNumber: confirmation}, { $set: {"checkIn": checkIn, "checkOut": checkOut, "price": req.body.price} }, function(err4, result1){
 							if (err4)
 								throw err4;
 							//First, get all rooms so we can pass it in to modifyEJS
