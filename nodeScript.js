@@ -367,7 +367,9 @@ app.post("/confirmModification.html", function(req, response){
 	})
 });
 
-	
+
+//When user clicks on "Continue" from confirming the reservation date change
+//TODO: move the check for reservation conflicts to app.post(confirmModification)
 app.post("/changeDateRequested.html", function(req, response){
 	const checkIn = req.body.checkIn;
 	const checkOut = req.body.checkOut;
