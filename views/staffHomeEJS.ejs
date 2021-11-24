@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="staffHomePage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= user.userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<form method="get" action="staffModify.html">
+							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
+							<button type="submit" style="width:24%; padding: 10px">Search</button>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-3">
+					<div class="col-12">
+						<div class="col-2"></div>
+						<div class="col-8">
+							<form method="post" action="staffMakeReservation.html">
+								<button type="submit" style="width:100%; padding:10px">Create Reservation</button>
+							</form>
+						</div>
+						<div class="col-2"></div>
+					</div>
+					<div class="col-12">
+						<div class="col-2"></div>
+						<div class="col-8">
+							<form method="get" action="staffModify.html">
+								<button type="submit" style="width:100%; padding:10px">Modify Reservation</button>
+							</form>
+						</div>
+						<div class="col-2"></div>
+					</div>
+					<div class="col-12">
+						<div class="col-2"></div>
+						<div class="col-8">
+							<form method="get" action="staffModify.html">
+								<button type="submit" style="width:100%; padding:10px">View Rooms</button>
+							</form>
+						</div>
+						<div class="col-2"></div>
+					</div>
+				</div>
+				
+				<div class="col-9">
+					<div class="col-4" style="height: 650px; overflow-x: hidden; overflow-y: auto">
+						<h3 style="text-align: center">Today's Check Ins</h3>
+						<% for (let x = 0; x < checkIns.length; x++) { %>
+							<div class="col-12">
+								<div class="col-12">
+									<h3 style="text-align: center"><%= checkIns[x].firstName %> <%= checkIns[x].lastName %></h3>
+								</div>
+								<div class="col-12">
+									<form method="post" action="staffModify.html">
+										<button type="submit" style="width:100%; padding: 10px"><%= checkIns[x].confirmationNumber%></button>
+									</form>
+								</div>
+								<div class="col-12">
+									<form method="post" action="checkIn.html">
+										<button type="submit" style="width: 100%; padding:10px; background-color: mediumseagreen">Check In</button>
+									</form>
+								</div>
+							</div>
+						<% } %>
+					</div>
+					<div class="col-4" style="height: 650px; overflow-x: hidden; overflow-y: auto">
+						<h3 style="text-align: center">Current Guests</h3>
+						<% for (let x = 0; x < currentGuests.length; x++) { %>
+							<div class="col-12">
+								<div class="col-12">
+									<h3 style="text-align: center"><%= currentGuests[x].firstName %> <%= currentGuests[x].lastName %></h3>
+								</div>
+								<div class="col-12">
+									<form method="post" action="staffModify.html">
+										<button type="submit" style="width:100%; padding: 10px"><%= currentGuests[x].confirmationNumber %></button>
+									</form>
+								</div>
+							</div>
+						<% } %>
+					</div>
+					<div class="col-4" style="height: 650px; overflow-x: hidden; overflow-y: auto">
+						<h3 style="text-align: center">Today's Check Outs</h3>
+						<% for (let x = 0; x < checkOuts.length; x++) { %>
+							<div class="col-12">
+								<div class="col-12">
+									<h3 style="text-align: center"><%= checkOuts[x].firstName %> <%= checkOuts[x].lastName %></h3>
+								</div>
+								<div class="col-12">
+									<form method="post" action="staffModify.html">
+										<button type="submit" style="width:100%; padding: 10px"><%= checkOuts[x].confirmationNumber %></button>
+									</form>
+								</div>
+								<div class="col-12">
+									<form method="post" action="checkOut.html">
+										<button type="submit" style="width: 100%; padding:10px; background-color: indianred">Check Out</button>
+									</form>
+								</div>
+							</div>
+						<% } %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

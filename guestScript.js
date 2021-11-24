@@ -529,7 +529,7 @@ app.post("/cancelRequested.html", function(req, response){
 						dbo.collection("reservation").deleteOne({confirmationNumber: confirmation}, function(err6, result2){
 							if (err6)
 								throw err6;
-							console.log("Reservation deleted!");
+							response.render("canceledEJS");
 						})
 					}
 				}
