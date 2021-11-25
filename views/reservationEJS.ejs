@@ -84,7 +84,8 @@
 						<% for(var x = 0; x < rooms.length; x++) { %>
 							<div class="col-5"><br><br><br><br><br><h1 style="text-align: center"><%= rooms[x].roomName %></h1><p style = "text-align:center">Beds: <%= rooms[x].numBeds %><br>Occupancy: <%= rooms[x].maxOccupancy %><br><%= rooms[x].description %></p></div>
 							<div class="col-5"><img src="<%= rooms[x].image %>" style="width: 100%; height: auto; margin-left: auto; margin-right: auto; display: block"></div>
-							<div class="col-2"><br><br><br><br><br><h2 style="text-align: center">$<%= rooms[x].price %></h2><p style="text-align: center">(per night)</p>
+							<div class="col-2">
+								<br><br><br><br><br><h2 style="text-align: center">$<%= rooms[x].price %></h2><p style="text-align: center">(per night)</p>
 								<form action="booking.html" method="post">
 									<input type="hidden" name="checkInFinal" class="checkInFinal" value="<%= checkIn %>">
 									<input type="hidden" name="checkOutFinal" class="checkOutFinal" value="<%= checkOut %>">

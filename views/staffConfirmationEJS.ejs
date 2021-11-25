@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="staffConfirmationPage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+		</div>
+		
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<form method="post" action="staffModifyReservation.html">
+							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:24%; padding: 10px">Search</button>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+		
+		<div class="row3">
+			<div class="col-12">
+				<h1 style="text-align: center; font-size: 40pt">The reservation has been successfully booked!</h1>
+			</div>
+		</div>
+		
+		<div class="row4">
+			<div class="col-12">
+				<p style="text-align: center; font-size: 25pt; padding: 20px">The guest's confirmation number is: <%= confirmationNumber %></p>
+				<p style="text-align: center; font-size: 25pt; padding: 20px">A welcome letter has been sent to the guest's email address containing the details of their stay.</p>
+				<p style="text-align: center; font-size: 25pt; padding: 20px">If you wish to modify their reservation, enter the confirmation number in the Reservation Search bar.</p>
+			</div>
+		</div>
+	</body>
+</html>

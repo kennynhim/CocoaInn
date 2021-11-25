@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Cocoa Inn</title>
+	<link href="css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="staffOccupancySelectionPage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: 482475</b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="482475">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+		</div>
+		
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<form method="get" action="staffModify.html">
+							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
+							<button type="submit" style="width:24%; padding: 10px">Search</button>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+		
+			<div class="row3">
+				<div class="col-12">
+					<p style="text-align: center; font-size: 25pt; padding: 20px">You have selected a room with a max occupancy less than the total number of guests on the reservation.</p>
+					<p style="text-align: center; font-size: 25pt; padding: 20px">Would you like to add additional rooms to accommodate your guests?</p>
+				</div>
+			</div>
+		
+			<div class="row4" style="color: beige">
+				<div class="col-6">
+					<form method="get" action="staffReservation.html">
+						<button type="submit" style="padding: 16px 32px; width: 100%; background-color: #5C5C5C; font-size: 15pt">No, remove the current selection.</button>
+					</form>
+				</div>
+				<div class="col-6">
+					<form method="post" action="staffReservation.html">
+						<button type="submit" style="padding: 16px 32px; width: 100%; background-color: wheat; font-size: 15pt">Yes, keep selection and add another room.</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

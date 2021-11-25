@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="staffBookingPage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<form method="post" action="staffModifyReservation.html">
+							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:24%; padding: 10px">Search</button>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<div class="col-3">
+						<h2 style="text-align: center; font-size: 25pt">Guest's Stay</h2>
+						<br>
+						<h3 style="text-align: center; font-size: 25pt">Check In: <%= checkIn %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 25pt">Check Out: <%= checkOut %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 25pt">Rooms: <%= numRooms %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 25pt">Adults: <%= numAdults %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 25pt">Children: <%= numChildren %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 25pt">Total: <%= price %></h3>
+					</div>
+					<div class="col-3" style="height: 860px; overflow-x: hidden; overflow-y: auto">
+						<h2 style="text-align: center; font-size: 25pt" >Guest's Rooms</h2>
+						<% for (let x = 0; x < numRooms; x++) { %>
+							<div class="col-12" style="text-align: center; font-size:15pt">
+								<b>
+								<p><%= roomNames[x] %></p>
+								<p>Room: <%= roomNums[x] %></p>
+								<p>Beds: <%= numBeds[x] %></p>
+								<p>Occupancy: <%= occupancies[x] %></p>
+								<p>Amenities:</p></b>
+							</div>
+						<% } %>
+					</div>
+					<div class="col-6">
+						<p style="text-align: center; font-size: 30pt">Booking Form</p>
+						<form method="post" action="staffConfirm.html">
+							<div class="col-6">
+								<input name="firstName" class="firstName" type="text" placeholder="First Name" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+							</div>
+							<div class="col-6">
+								<input name="lastName" class="lastName" type="text" placeholder="Last Name" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+							</div>
+							<div class="col-12"></div>
+							<div class="col-6">
+								<input name="email" class="email" type="email" placeholder="Email" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+							</div>
+							<div class="col-6">
+								<input name="phone" class="phone" type="tel" placeholder="Phone" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+							</div>
+							<div class="col-12"><p style="text-align: center; font-size: 30pt">Payment</p></div>
+							<div class="col-12">
+								<input name="ccNum" class="ccNum" type="text" placeholder="CC Number" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on">
+							</div>
+							<div class="col-4">
+								<input name="ccv" class="ccv" type="text" placeholder="CCV" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on">
+							</div>
+							<div class="col-4">
+								<input name="ccMonth" class="ccMonth" type="number" placeholder="Exp. Month" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" min="1" max="12">
+							</div>
+							<div class="col-4">
+								<input name="ccYear" class="ccYear" type="number" placeholder="Exp. Year" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" min="2021" max="2026">
+							</div>
+							<div class="col-12">
+								<p style="text-align: center; font-size: 15pt">Guests are required to show a photo identification and the credit card used for payment upon check-in. You may cancel free of charge until 48 hours before check-in. You will be charged 100 percent of the first night if you cancel within 48 hours of check-in. Pets are not allowed. Smoking is not allowed.</p>
+							</div>
+							<div class="col-4"></div>
+							<div class="col-4">
+							<input name="checkIn" class="checkIn" type="hidden" value="<%= checkIn %>">
+							<input name="checkOut" class="checkOut" type="hidden" value=" <%= checkOut %>">
+							<input name="numAdults" class="numAdults" type="hidden" value="<%= numAdults %>">
+							<input name="numChildren" class="numChildren" type="hidden" value="<%= numChildren %>">
+							<input name="price" class="price" type="hidden" value="<%= price %>">
+							<% for (var x = 0; x < numRooms; x++){ %>
+								<input name="<%= x %>" class="<%= x %>" type="hidden" value="<%= roomNums[x] %>">
+							<% } %>
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button class="bookButton" type="submit" style="width: 100%; padding: 16px 32px; background-color: #B3B3B3; cursor: pointer">Book Reservation</button>
+							</div>
+							<div class="col-4"></div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
