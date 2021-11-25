@@ -10,11 +10,11 @@
 		<div class="staffHomePage">
 			<div class="row1">
 				<div class="col-2">
-					<p style="text-align: center"><b>Employee: <%= user.userID %></b></p>
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
 				  <div class="col-3"></div>
 				  <div class="col-6">
 						<form method="post" action="staffHome.html">
-							<input type="hidden" name="userID" class="userID" value="">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
 							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
 						</form>
 					</div>
