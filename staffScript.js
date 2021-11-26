@@ -448,6 +448,152 @@ function searchReservationRoomDate(request, response, date, roomNum){
 	})
 }
 
+//When employee/manager clicks on "Submit" button on modify date page after entering in a new check in and check out date
+app.post("/tryModifyDate.html", function(req, response){
+	//Calculate the price change, if any
+	//Display the price change to user
+	//Ask if they want to continue with modification
+	const checkIn = req.body.newCheckIn;
+	const checkOut = req.body.newCheckOut;
+	const confirmation = req.body.confirmationNumber;
+	const userID = req.body.userID;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmation}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			if (reservation != null){
+				//First, check if the new check in/out date conflicts with another reservation
+				dbo.collection("reservation").find({}).toArray(function(err3, honoredReservations){
+					if (err3)
+						throw err3;
+					let bCanChange = true;
+					let roomNum = 0;
+					for (let x = 0; x < reservation.assignedRoom.length; x++){
+						for (let y = 0; y < honoredReservations.length; y++){
+							for(let z = 0; z < honoredReservations[y].assignedRoom.length; z++){
+								if (confirmation != honoredReservations[y].confirmationNumber && reservation.assignedRoom[x] === honoredReservations[y].assignedRoom[z]){
+									if (!validateReservationConflict(checkIn, checkOut, honoredReservations[y].checkIn, honoredReservations[y].checkOut)){
+										bCanChange = false;
+										roomNum = reservation.assignedRoom[x];
+										break;
+									}
+								}
+							}
+							if (!bCanChange)
+								break;
+						}
+						if (!bCanChange)
+							break;
+					}
+					//If !bCanChange, display a message and remain on the page
+					if (!bCanChange){
+						alert(`The new dates for room ${roomNum} conflict with another reservation.`);
+						db.close();
+						return;
+					}
+					else{
+						//Get the total price for the new check in and check out dates
+						dbo.collection("room").find({}).toArray(function(err3, rooms){
+							if (err3)
+								throw err3;
+							let total = 0;
+							for (let x = 0; x < reservation.assignedRoom.length; x++){
+								for (let y = 0; y < rooms.length; y++){
+									if (reservation.assignedRoom[x] === rooms[y].roomNum){
+										total += getStayDuration(checkIn, checkOut)*rooms[y].price;
+										break;
+									}
+								}
+							}
+							//Get price change
+							let priceChange = total - reservation.price;
+							response.render("staffConfirmModifyDateEJS", {userID: userID,
+																		  reservation: reservation,
+																		  newCheckIn: checkIn,
+																		  newCheckOut: checkOut,
+																		  newPrice: total,
+																		  priceChange: priceChange});
+						})
+					}
+				})
+			}
+		})
+	})
+})
+
+//When staff clicks on "Continue" from confirming the reservation date change
+app.post("/changeDateRequested.html", function(req, response){
+	const checkIn = req.body.checkIn;
+	const checkOut = req.body.checkOut;
+	const confirmation = req.body.confirmationNumber;
+	const userID = req.body.userID;
+	
+	if (!validateDate(checkIn, checkOut))
+		return;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		//First, get the reservation object
+		const query = {confirmationNumber: confirmation};
+		dbo.collection("reservation").findOne(query, function(err2, reservation){
+			if (err2)
+				throw err2;
+			if (reservation != null){
+				dbo.collection("reservation").find({}).toArray(function(err3, honoredReservations){
+					if (err3)
+						throw err3;
+				//update the reservation collection and room collection, and return to the details page
+				const originalCheckIn = reservation.checkIn;
+				dbo.collection("reservation").updateOne({confirmationNumber: confirmation}, { $set: {"checkIn": checkIn, "checkOut": checkOut, "price": req.body.price} }, function(err4, result1){
+					if (err4)
+						throw err4;
+					//First, get all rooms so we can pass it in to modifyEJS
+					let reservedRooms = [];
+					dbo.collection("room").find({}).toArray(function(err5, rooms){
+						if (err5)
+							throw err5;
+						//Insert into reservedRooms array so we can pass it into modifyEJS
+						for (let x = 0; x < reservation.assignedRoom.length; x++){
+							for (let y = 0; y < rooms.length; y++){
+								if (reservation.assignedRoom[x] === rooms[y].roomNum){
+									reservedRooms.push(rooms[y]);
+									break;
+								}
+							}
+						}
+
+						//Update the rooms with the new check in and check out dates
+						for (let x = 0; x < reservation.assignedRoom.length; x++){
+							const query = {roomNum: reservation.assignedRoom[x], "reservedDates.checkIn": originalCheckIn};
+							const update = {$set: {"reservedDates.$.checkIn": checkIn, "reservedDates.$.checkOut": checkOut}};
+							dbo.collection("room").updateOne(query, update, function(err6, result2){
+								if (err6)
+									throw err6;
+							});
+							if (x+1 === reservation.assignedRoom.length){
+								//Get the new reservation info
+								dbo.collection("reservation").findOne({confirmationNumber: confirmation}, function(err7, newReservation){
+									if (err7)
+										throw err7;
+									if (newReservation != null)
+										response.render("staffModifyEJS", {userID: userID, reservation: newReservation, rooms: reservedRooms});												
+									})
+								}
+							}
+						})
+					})
+				})
+			}
+		})
+	})
+})
+
 //When an employee/manager enters a reservation confirmation number in the search field, and clicks on the "Search" button
 //Or when employee/manager clicks on the confirmation number on the homepage for current guests
 app.post("/staffModifyReservation.html", function(req, response){
@@ -479,6 +625,32 @@ app.post("/searchRoom.html", function(req, response){
 	const date = req.body.date;
 	const roomNum = req.body.roomNum;
 	searchReservationRoomDate(req, response, date, roomNum);
+})
+
+//When employee/manager clicks on "Change Check In/Out" button on reservation modification page
+app.post("/modifyDate.html", function(req, response){
+	const firstName = req.body.firstName;
+	const lastName = req.body.lastName;
+	const checkIn = req.body.checkIn;
+	const checkOut = req.body.checkOut;
+	const adults = req.body.adults;
+	const children = req.body.children;
+	const confirmationNumber = req.body.confirmationNumber;
+	const userID = req.body.userID;
+	
+	response.render("staffModifyDateEJS", {firstName: firstName,
+										   lastName: lastName,
+										   checkIn: checkIn,
+										   checkOut: checkOut,
+										   adults: adults,
+										   children: children,
+										   confirmationNumber: confirmationNumber,
+										   userID: userID});
+})
+
+//When employee/manager clicks on "Back" button on a modification page
+app.post("/modifyCanceled.html", function(req, response){
+	
 })
 
 function clearCart(){

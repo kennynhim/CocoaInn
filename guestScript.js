@@ -409,8 +409,6 @@ app.post("/changeDateRequested.html", function(req, response){
 	if (!validateDate(checkIn, checkOut))
 		return;
 	
-	//Go through all reservations (except for ours)
-	//If the reserved rooms match, and the dates between our reservation and theirs overlap, do not allow the date change
 	MongoClient.connect(dbURL, function(err1, db){
 		if (err1)
 			throw err1;

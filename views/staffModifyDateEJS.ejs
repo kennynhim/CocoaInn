@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="staffModifyDatePage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<form method="get" action="staffModify.html">
+							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
+							<button type="submit" style="width:24%; padding: 10px">Search</button>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<div class="col-4">
+						<h2 style="text-align: center; font-size: 30pt"><%= firstName %> <%= lastName %>'s Stay</h2>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Check In: <%= checkIn %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Check Out: <%= checkOut %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Adults: <%= adults %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Children: <%= children %></h3>
+					</div>
+					
+					<div class="col-8">
+						<div class="col-12">
+							<form method="post" action="staffModifyReservation.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= confirmationNumber %>">
+								<button type="submit" style="background-color: #AFA5A5; width:15%; padding: 16px 32px; text-align: center; font-size: 15pt">Back</button>
+							</form>
+						</div>
+						<form method="post" action="tryModifyDate.html">
+							<p style="text-align: center; font-size: 20pt">New Check In</p>
+							<input type="date" name="newCheckIn" class="newCheckIn" style="background-color: beige; padding: 16px 32px; text-align: center; font-size: 15pt; width: 100%">
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<p style="text-align: center; font-size: 20pt">New Check Out</p>
+							<input type="date" name="newCheckOut" class="newCheckOut" style="background-color: beige; padding: 16px 32px; text-align: center; font-size: 15pt; width: 100%">
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<div class="col-3"></div>
+							<div class="col-6">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= confirmationNumber %>">
+								<button type="submit" style="text-align: center; width: 100%; padding: 16px 32px; font-size: 15pt; background-color: honeydew">Submit</button>
+							</div>
+							<div class="col-3"></div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
