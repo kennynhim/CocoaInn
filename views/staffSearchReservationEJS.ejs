@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="searchReservationPage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="post" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<form method="post" action="staffModify.html">
+							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
+							<button type="submit" style="width:24%; padding: 10px">Search</button>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<h1 style="text-align: center">Search Guest Name</h1>
+				</div>
+				<div class="col-12">
+					<form method="post" action="searchName.html">
+						<div class="col-5">
+							<input name="firstName" class="firstName" type="text" placeholder="First Name" style="width:100%; padding: 16px 32px; text-align: center">
+						</div>
+						<div class="col-5">
+							<input name="lastName" class="lastName" type="text" placeholder="Last Name" style="width:100%; padding: 16px 32px; text-align: center">
+						</div>
+						<div class="col-2">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; padding: 16px">Search</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="row4">
+				<div class="col-12">
+					<h1 style="text-align: center">Search Guest Email</h1>
+				</div>
+				<div class="col-12">
+					<form method="post" action="searchEmail.html">
+						<div class="col-10">
+							<input name="email" class="email" type="email" placeholder="Email" style="width:100%; padding: 16px 32px; text-align: center">
+						</div>
+						<div class="col-2">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; padding: 16px">Search</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="row5">
+				<div class="col-12">
+					<h1 style="text-align: center">Search Guest Phone</h1>
+				</div>
+				<div class="col-12">
+					<form method="post" action="searchPhone.html">
+						<div class="col-10">
+							<input name="phone" class="phone" type="tel" placeholder="Phone" style="width:100%; padding: 16px 32px; text-align: center">
+						</div>
+						<div class="col-2">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; padding: 16px">Search</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="row6">
+				<div class="col-12">
+					<h1 style="text-align: center">Search Room and Date</h1>
+				</div>
+				<div class="col-12">
+					<form method="post" action="searchRoom.html">
+						<div class="col-5">
+							<input name="date" class="date" type="date" style="width:100%; padding: 16px 32px; text-align: center">
+						</div>
+						<div class="col-5">
+							<input name="roomNum" class="roomNum" type="number" placeholder="Room Number" min="1" max="6" style="width:100%; padding: 16px 32px; text-align: center">
+						</div>
+						<div class="col-2">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; padding: 16px">Search</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

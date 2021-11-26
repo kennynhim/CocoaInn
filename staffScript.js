@@ -320,11 +320,76 @@ app.post("/staffConfirm.html", function(req, response){
 	})	
 })
 
+//When staff clicks on "Search Reservations" button on staff home page
+app.post("/staffSearchGuests.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffSearchReservationEJS", {userID: userID});
+})
+
+function searchReservation(request, response, confirmationNumber, firstName, lastName, email, phone, date, roomNum){
+	const userID = request.body.userID;
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		var query = {};
+		if (confirmationNumber != null){
+			query = {confirmationNumber: confirmationNumber};
+		}
+		else if (firstName != null && lastName != null){
+			query = {firstName: firstName, lastName: lastName};
+		}
+		else if (email != null){
+			query = {email: email};
+		}
+		else if (phone != null){
+			query = {phone: phone};
+		}
+		else if (date != null && roomNum != null){
+		}
+		dbo.collection("reservation").findOne(query, function(err2, result){
+			if (err2)
+				throw err2;
+			if (result == null){
+				alert("Could not find reservation.");
+				db.close();
+				return;
+			}
+			else{
+				//Got the reservation
+				//Get the rooms associated with this reservation
+				//Retrieve all rooms first, then go through a loop to see if the room numbers match the reservation's assigned room numbers
+				//Done this way because a single read operation on the database is slow compared to a loop, and may cause data to be skipped over
+				dbo.collection("room").find({}).toArray(function(err3, rooms){
+					if (err3)
+						throw err3;
+					let reservedRooms = [];
+					
+					for (let x = 0; x < result.assignedRoom.length; x++){
+						for (let y = 0; y < rooms.length; y++){
+							if (result.assignedRoom[x] === rooms[y].roomNum){
+								reservedRooms.push(rooms[y]);
+								break;
+							}
+						}
+						if (x+1 === result.assignedRoom.length)
+							response.render("staffModifyEJS", {reservation: result, rooms: reservedRooms, userID: userID});
+					}
+				})
+			}			
+		})
+	})
+}
+
 //When an employee/manager enters a reservation confirmation number in the search field, and clicks on the "Search" button
+//Or when employee/manager clicks on the confirmation number on the homepage for current guests
 app.post("/staffModifyReservation.html", function(req, response){
 	const confirmationNumber = req.body.confirmationNumber;
-	const userID = req.body.userID;
-	MongoClient.connect(dbURL, function(err1, db){
+	searchReservation(req, response, confirmationNumber, null, null, null, null, null, null);
+	
+	
+	
+	/*MongoClient.connect(dbURL, function(err1, db){
 		if (err1)
 			throw err1;
 		var dbo = db.db("CocoaInn");
@@ -359,7 +424,33 @@ app.post("/staffModifyReservation.html", function(req, response){
 				})
 			}
 		})
-	})
+	})*/
+})
+
+//When employee/manager searches for a reservation by guest name and then clicks "Submit"
+app.post("/searchName.html", function(req, response){
+	const firstName = req.body.firstName;
+	const lastName = req.body.lastName;
+	searchReservation(req, response, null, firstName, lastName, null, null, null, null);
+})
+
+//When employee/manager searches for a reservation by guest email and then clicks "Submit"
+app.post("/searchEmail.html", function(req, response){
+	const email = req.body.email;
+	searchReservation(req, response, null, null, null, email, null, null, null);
+})
+
+//When employee/manager searches for a reservation by guest phone and then clicks "Submit"
+app.post("/searchPhone.html", function(req, response){
+	const phone = req.body.phone;
+	searchReservation(req, response, null, null, null, null, phone, null, null);
+})
+
+//When employee/manager searches for a reservation by room and date and then clicks "Submit"
+app.post("/searchRoom.html", function(req, response){
+	const date = req.body.date;
+	const roomNum = req.body.roomNum;
+	searchReservation(req, response, null, null, null, null, null, date, roomNum);
 })
 
 function clearCart(){

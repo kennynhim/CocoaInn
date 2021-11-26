@@ -63,9 +63,9 @@
 					<div class="col-12">
 						<div class="col-2"></div>
 						<div class="col-8">
-							<form method="post" action="staffSearchReservation.html">
+							<form method="post" action="staffSearchGuests.html">
 								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
-								<button type="submit" style="width:100%; padding:10px">Modify Reservation</button>
+								<button type="submit" style="width:100%; padding:10px">Search Reservation</button>
 							</form>
 						</div>
 						<div class="col-2"></div>
@@ -91,8 +91,9 @@
 									<h3 style="text-align: center"><%= checkIns[x].firstName %> <%= checkIns[x].lastName %></h3>
 								</div>
 								<div class="col-12">
-									<form method="post" action="staffModify.html">
+									<form method="post" action="staffModifyReservation.html">
 										<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+										<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= checkIns[x].confirmationNumber %>">
 										<button type="submit" style="width:100%; padding: 10px"><%= checkIns[x].confirmationNumber%></button>
 									</form>
 								</div>
@@ -113,8 +114,9 @@
 									<h3 style="text-align: center"><%= currentGuests[x].firstName %> <%= currentGuests[x].lastName %></h3>
 								</div>
 								<div class="col-12">
-									<form method="post" action="staffModify.html">
+									<form method="post" action="staffModifyReservation.html">
 										<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+										<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= currentGuests[x].confirmationNumber %>">
 										<button type="submit" style="width:100%; padding: 10px"><%= currentGuests[x].confirmationNumber %></button>
 									</form>
 								</div>
@@ -129,8 +131,9 @@
 									<h3 style="text-align: center"><%= checkOuts[x].firstName %> <%= checkOuts[x].lastName %></h3>
 								</div>
 								<div class="col-12">
-									<form method="post" action="staffModify.html">
+									<form method="post" action="staffModifyReservation.html">
 										<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+										<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= checkOuts[x].confirmationNumber %>">
 										<button type="submit" style="width:100%; padding: 10px"><%= checkOuts[x].confirmationNumber %></button>
 									</form>
 								</div>
