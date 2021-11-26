@@ -326,7 +326,7 @@ app.post("/staffSearchGuests.html", function(req, response){
 	response.render("staffSearchReservationEJS", {userID: userID});
 })
 
-function searchReservation(request, response, confirmationNumber, firstName, lastName, email, phone, date, roomNum){
+function searchReservation(request, response, confirmationNumber, firstName, lastName, email, phone){
 	const userID = request.body.userID;
 	MongoClient.connect(dbURL, function(err1, db){
 		if (err1)
@@ -336,8 +336,17 @@ function searchReservation(request, response, confirmationNumber, firstName, las
 		if (confirmationNumber != null){
 			query = {confirmationNumber: confirmationNumber};
 		}
-		else if (firstName != null && lastName != null){
-			query = {firstName: firstName, lastName: lastName};
+		else if (firstName != null || lastName != null){
+			if (firstName.length === 0 && lastName.length === 0){
+				alert("Please enter a name");
+				return;
+			}
+			else if (firstName.length > 0 && lastName.length > 0)
+				query = {firstName: firstName, lastName: lastName};
+			else if (firstName.length > 0 && lastName.length === 0)
+				query = {firstName: firstName};
+			else if (firstName.length === 0 && lastName.length > 0)
+				query = {lastName: lastName};
 		}
 		else if (email != null){
 			query = {email: email};
@@ -345,17 +354,15 @@ function searchReservation(request, response, confirmationNumber, firstName, las
 		else if (phone != null){
 			query = {phone: phone};
 		}
-		else if (date != null && roomNum != null){
-		}
-		dbo.collection("reservation").findOne(query, function(err2, result){
+		dbo.collection("reservation").find(query).toArray(function(err2, result){
 			if (err2)
 				throw err2;
-			if (result == null){
+			if (result.length == 0){
 				alert("Could not find reservation.");
 				db.close();
 				return;
 			}
-			else{
+			else if (result.length == 1){
 				//Got the reservation
 				//Get the rooms associated with this reservation
 				//Retrieve all rooms first, then go through a loop to see if the room numbers match the reservation's assigned room numbers
@@ -365,19 +372,79 @@ function searchReservation(request, response, confirmationNumber, firstName, las
 						throw err3;
 					let reservedRooms = [];
 					
-					for (let x = 0; x < result.assignedRoom.length; x++){
+					for (let x = 0; x < result[0].assignedRoom.length; x++){
 						for (let y = 0; y < rooms.length; y++){
-							if (result.assignedRoom[x] === rooms[y].roomNum){
+							if (result[0].assignedRoom[x] === rooms[y].roomNum){
 								reservedRooms.push(rooms[y]);
 								break;
 							}
 						}
-						if (x+1 === result.assignedRoom.length)
-							response.render("staffModifyEJS", {reservation: result, rooms: reservedRooms, userID: userID});
+						if (x+1 === result[0].assignedRoom.length)
+							response.render("staffModifyEJS", {reservation: result[0], rooms: reservedRooms, userID: userID});
 					}
 				})
-			}			
+			}
+			else{	//Got multiple reservation matches. Go to the reservation search results page and display all the matching reservations
+				response.render("staffReservationSearchResultEJS", {reservations: result, userID: userID})
+			}
 		})
+	})
+}
+
+function searchReservationRoomDate(request, response, date, roomNum){
+	const targetDate = new Date(getYear(date), getMonth(date)-1, getDay(date));
+	const targetDateTime = targetDate.getTime();
+	const userID = request.body.userID;
+	
+	console.log(date);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").find({}).toArray(function(err2, reservations){
+			if (err2)
+				throw err2;
+			var foundReservations = [];
+			for (let x = 0; x < reservations.length; x++){
+				let checkIn = new Date(getYear(reservations[x].checkIn), getMonth(reservations[x].checkIn)-1, getDay(reservations[x].checkIn));
+				let checkOut = new Date(getYear(reservations[x].checkOut), getMonth(reservations[x].checkOut)-1, getDay(reservations[x].checkOut));
+				if (date == reservations[x].checkIn || date == reservations[x].checkOut || (targetDateTime > checkIn.getTime() && targetDateTime < checkOut.getTime())){
+					for (let y = 0; y < reservations[x].assignedRoom.length; y++){
+						if (reservations[x].assignedRoom[y] == roomNum){
+							foundReservations.push(reservations[x]);
+							break;
+						}
+					}	
+				}
+			}
+			if (foundReservations.length === 0){
+				alert("Could not find reservation.");
+				db.close();
+				return;			
+			}
+			else if (foundReservations.length === 1){
+				dbo.collection("room").find({}).toArray(function(err3, rooms){
+					if (err3)
+						throw err3;
+					let reservedRooms = [];
+
+					for (let x = 0; x < foundReservations[0].assignedRoom.length; x++){
+						for (let y = 0; y < rooms.length; y++){
+							if (foundReservations[0].assignedRoom[x] === rooms[y].roomNum){
+								reservedRooms.push(rooms[y]);
+								break;
+							}
+						}
+						if (x+1 === foundReservations[0].assignedRoom.length)
+							response.render("staffModifyEJS", {reservation: foundReservations[0], rooms: reservedRooms, userID: userID});
+					}
+				})
+			}
+			else{
+				response.render("staffReservationSearchResultEJS", {reservations: foundReservations, userID: userID})			
+			}
+		})			
 	})
 }
 
@@ -385,72 +452,33 @@ function searchReservation(request, response, confirmationNumber, firstName, las
 //Or when employee/manager clicks on the confirmation number on the homepage for current guests
 app.post("/staffModifyReservation.html", function(req, response){
 	const confirmationNumber = req.body.confirmationNumber;
-	searchReservation(req, response, confirmationNumber, null, null, null, null, null, null);
-	
-	
-	
-	/*MongoClient.connect(dbURL, function(err1, db){
-		if (err1)
-			throw err1;
-		var dbo = db.db("CocoaInn");
-		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, result){
-			if (err2)
-				throw err2;
-			if (result == null){
-				alert("Could not find reservation.");
-				db.close();
-				return;
-			}
-			else{
-				//Got the reservation
-				//Get the rooms associated with this reservation
-				//Retrieve all rooms first, then go through a loop to see if the room numbers match the reservation's assigned room numbers
-				//Done this way because a single read operation on the database is slow compared to a loop, and may cause data to be skipped over
-				dbo.collection("room").find({}).toArray(function(err3, rooms){
-					if (err3)
-						throw err3;
-					let reservedRooms = [];
-					
-					for (let x = 0; x < result.assignedRoom.length; x++){
-						for (let y = 0; y < rooms.length; y++){
-							if (result.assignedRoom[x] === rooms[y].roomNum){
-								reservedRooms.push(rooms[y]);
-								break;
-							}
-						}
-						if (x+1 === result.assignedRoom.length)
-							response.render("staffModifyEJS", {reservation: result, rooms: reservedRooms, userID: userID});
-					}
-				})
-			}
-		})
-	})*/
+	searchReservation(req, response, confirmationNumber, null, null, null, null);
 })
 
 //When employee/manager searches for a reservation by guest name and then clicks "Submit"
 app.post("/searchName.html", function(req, response){
 	const firstName = req.body.firstName;
 	const lastName = req.body.lastName;
-	searchReservation(req, response, null, firstName, lastName, null, null, null, null);
+	searchReservation(req, response, null, firstName, lastName, null, null);
 })
 
 //When employee/manager searches for a reservation by guest email and then clicks "Submit"
 app.post("/searchEmail.html", function(req, response){
 	const email = req.body.email;
-	searchReservation(req, response, null, null, null, email, null, null, null);
+	searchReservation(req, response, null, null, null, email, null);
 })
 
 //When employee/manager searches for a reservation by guest phone and then clicks "Submit"
 app.post("/searchPhone.html", function(req, response){
 	const phone = req.body.phone;
-	searchReservation(req, response, null, null, null, null, phone, null, null);
+	searchReservation(req, response, null, null, null, null, phone);
 })
 
 //When employee/manager searches for a reservation by room and date and then clicks "Submit"
 app.post("/searchRoom.html", function(req, response){
 	const date = req.body.date;
 	const roomNum = req.body.roomNum;
-	searchReservation(req, response, null, null, null, null, null, date, roomNum);
+	searchReservationRoomDate(req, response, date, roomNum);
 })
 
 function clearCart(){

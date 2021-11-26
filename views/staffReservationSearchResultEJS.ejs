@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="staffSearchReseervationQuery">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="post" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<form method="post" action="staffModify.html">
+							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
+							<button type="submit" style="width:24%; padding: 10px">Search</button>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<h1 style="text-align: center; font-size: 30pt">Search Results</h1>
+				</div>
+			</div>
+			
+			<div class="row4">
+				<% for (let x = 0; x < reservations.length; x++) { %>
+					<div class="col-12">
+						<div class="col-8" style="text-align: center">
+							<h3><%= reservations[x].firstName %> <%= reservations[x].lastName %></h3>
+							<h4><%= reservations[x].confirmationNumber %></h4>
+							<h4><%= reservations[x].email %></h4>
+							<h4><%= reservations[x].phone %></h4>
+							<h4>Check In: <%= reservations[x].checkIn %></h4>
+							<h4>Check Out: <%= reservations[x].checkOut %></h4>
+						</div>
+						<div class="col-4">
+							<div class="col-12">
+								<div class="col-3"></div>
+								<div class="col-6">
+									<form method="post" action="staffModifyReservation.html">
+										<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservations[x].confirmationNumber %>">
+										<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+										<button type="submit" style="width: 100%; padding: 15px; background-color: honeydew">Search</button>
+									</form>
+								</div>
+								<div class="col-3"></div>
+							</div>
+						</div>
+					</div>
+				<% } %>
+			</div>
+		</div>
+	</body>
+</html>
