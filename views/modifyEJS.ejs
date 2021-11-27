@@ -49,54 +49,79 @@
 				</div>
 			</div>
 			<div class="row3" style="color: wheat">
+				<div class="col-12">
 					<div class="col-4">
-					<h2 style="text-align: center; font-size: 30pt">Service</h2>
-					<form method="post" action="roomService.html">
-						<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Room Service</button>
+						<h2 style="text-align: center; font-size: 30pt">Service</h2>
+						<form method="post" action="roomService.html">
+							<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Room Service</button>
+							<br>
+							<br>
+						<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Spa reservation</button>
+							<br>
+							<br>
+						<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Dining Reservation</button>						
+						</form>					
+						<h2 style="text-align: center; font-size: 30pt">Modify</h2>
+						<form method="post" action="modifyDate.html">
+							<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
+							<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Change Check In/Out</button>
+						</form>
 						<br>
+						<form method="post" action="add-RemoveRoom.html">
+							<input type="hidden">
+							<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Add/Remove Room</button>
+						</form>
 						<br>
-					<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Spa reservation</button>
+						<form method="post" action="changeRoom.html">
+							<input type="hidden">
+							<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Change Room</button>
+						</form>
 						<br>
+						<form method="post" action="add-removeGuest.html">
+							<input type="hidden">
+							<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Add/Remove Guest</button>
+						</form>
 						<br>
-					<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Dining Reservation</button>						
-					</form>					
-					<h2 style="text-align: center; font-size: 30pt">Modify</h2>
-					<form method="post" action="modifyDate.html">
-						<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
-						<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Change Check In/Out</button>
-					</form>
-					<br>
-					<form method="post" action="add-RemoveRoom.html">
-						<input type="hidden">
-						<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Add/Remove Room</button>
-					</form>
-					<br>
-					<form method="post" action="changeRoom.html">
-						<input type="hidden">
-						<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Change Room</button>
-					</form>
-					<br>
-					<form method="post" action="add-removeGuest.html">
-						<input type="hidden">
-						<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Add/Remove Guest</button>
-					</form>
-					<br>
-					<form method="post" action="cancel.html">
-						<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
-						<button type="submit" style="width: 100%; background-color:#DD8284; padding: 16px 32px">Cancel Reservation</button>
-					</form>
-				</div>
-				
-				<div class="col-8">
-					<h1 style="text-align: center; font-size: 30pt">Have questions or requests?</h1>
-					<br>
-					<p style="text-align: center; font-size: 20pt">Call us: 717-123-4567</p>
-					<br>
-					<p style="text-align: center; font-size: 20pt">Or send us an email.</p>
-					<form method="post" action="sendEmail.html">
-						<input name="message" class="message" type="text" style="width: 100%; height: 400px">
-						<button type="submit" style="width: 100%; padding: 16px 32px; background-color: wheat">Send</button>
-					</form>
+						<form method="post" action="cancel.html">
+							<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
+							<button type="submit" style="width: 100%; background-color:#DD8284; padding: 16px 32px">Cancel Reservation</button>
+						</form>
+					</div>
+					
+					<div class="col-8">
+						<h1 style="text-align: center; font-size: 30pt">Have questions or requests?</h1>
+						<br>
+						<p style="text-align: center; font-size: 20pt">Call us: 717-123-4567</p>
+						<br>
+						<p style="text-align: center; font-size: 20pt">Or send us a chat.</p>
+						<div class="col-12">
+							<div class="col-2"></div>
+							<div class="col-8" style="height: 280px; overflow-x: hidden; overflow-y: auto">
+								<% for (let x = 0; x < reservation.notes.length; x++) { %>
+									<p><%= reservation.notes[x] %></p>
+								<% } %>
+							</div>
+							<div class="col-2"></div>
+						</div>
+						<form method="post" action="sendChat.html">
+							<div class="col-12">
+								<div class="col-2"></div>
+								<div class="col-8">
+									<input name="message" class="message" type="text" style="width: 100%; padding:20px">
+									<input name="firstName" class="firstName" type="hidden" value="<%= reservation.firstName %>">
+									<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+								</div>
+								<div class="col-2"></div>
+							</div>
+							<div class="col-12">
+								<div class="col-4"></div>
+								<div class="col-4">
+									<button type="submit" style="width: 100%; padding: 16px 32px; background-color: wheat">Send</button>
+								</div>
+								<div class="col-4"></div>
+							</div>
+						</form>
+					</div>				
 				</div>
 			</div>
 		</div>

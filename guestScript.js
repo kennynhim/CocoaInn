@@ -229,7 +229,7 @@ app.post("/confirmation.html", function(req, response){
 			adults: Number(req.body.numAdults),
 			children: Number(req.body.numChildren),
 			price: req.body.price,
-			notes: "",
+			notes: [],
 			assignedRoom: reservedRoomNums,
 			confirmationNumber: crypto.randomUUID()
 			}
@@ -271,7 +271,11 @@ app.post("/confirmation.html", function(req, response){
 //When a user enters a reservation confirmation number and clicks on the Search button
 //Or, when the user clicks on the "Back" button after selecting a reservation modification button
 app.post("/reservationDetails.html", function (req, response){
-	const confirmationNumber = req.body.confirmationNumber;
+	renderDetailsPage(req, response);
+})
+
+function renderDetailsPage(request, response){
+	const confirmationNumber = request.body.confirmationNumber;
 	MongoClient.connect(dbURL, function(err1, db){
 		if (err1)
 			throw err1;
@@ -308,7 +312,7 @@ app.post("/reservationDetails.html", function (req, response){
 			}
 		})
 	})
-})
+}
 
 //When user clicks on the "Change Check In/Out" button on the details page
 app.post("/modifyDate.html", function(req, response){
@@ -532,6 +536,31 @@ app.post("/cancelRequested.html", function(req, response){
 			})
 		})
 	})
+})
+
+//When user enters a chat message in the reservation details page, and clicks on "Send"
+//Add the message to the notes array in the reservation record
+app.post("/sendChat.html", function (req, response){
+	const firstName = req.body.firstName;
+	const message = String(req.body.message);
+	const today = new Date();
+	const note = firstName.concat(', ', today.toLocaleString(), ': ', message);
+	const confirmationNumber = req.body.confirmationNumber;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		const query = {confirmationNumber: confirmationNumber};
+		const update = { $push: {"notes": note} };
+		dbo.collection("reservation").updateOne(query, update, function(err2, result){
+			if (err2)
+				throw err2;
+			renderDetailsPage(req, response);
+		})
+		
+	})
+	
 })
 
 //Validates the dates for a single reservation

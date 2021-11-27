@@ -129,21 +129,26 @@
 				<div class="col-12">
 					<div class="col-2"></div>
 					<div class="col-8" style="height: 280px; overflow-x: hidden; overflow-y: auto">
-						<p>Guest (11/25/2021 5:23PM): i need extra pillows</p>
-						<p>Employee (11/25/2021 5:25PM): Right away!</p>
+						<% for (let x = 0; x < reservation.notes.length; x++){ %>
+							<p><%= reservation.notes[x] %></p>
+						<% } %>
 					</div>
 					<div class="col-2"></div>
 				</div>
 				<div class="col-12">
 					<div class="col-2"></div>
 					<div class="col-8">
-						<form method="post" action="staffModify.html">
-							<input type="text" style="width:100%; padding: 25px">
-							<div class="col-4"></div>
-							<div class="col-4">
-								<button type="submit" style="width:100%; padding: 16px; background-color: honeydew">Send</button>
+						<form method="post" action="sendChat.html">
+							<input name="message" class="message" type="text" style="width:100%; padding: 25px">
+							<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+							<input name="userID" class="userID" type="hidden" value="<%= userID %>"
+							<div class="col-12">
+								<div class="col-4"></div>
+								<div class="col-4">
+									<button type="submit" style="width:100%; padding: 16px; background-color: honeydew">Send</button>
+								</div>
+								<div class="col-4"></div>
 							</div>
-							<div class="col-4"></div>
 						</form>
 					</div>
 					<div class="col-2"></div>
