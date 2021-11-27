@@ -38,8 +38,9 @@
 				<div class="col-12">
 					<div class="col-4"></div>
 					<div class="col-4">
-						<form method="get" action="staffModify.html">
+						<form method="post" action="staffModifyReservation.html">
 							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
 							<button type="submit" style="width:24%; padding: 10px">Search</button>
 						</form>
 					</div>
@@ -63,9 +64,11 @@
 					
 				<div class="col-8">
 					<% if (priceChange > 0) { %>
-						<h2 style="text-align: center; font-size:30pt">An additional $<%= priceChange %> will be charged to your account.</h2>
-					<% } else { %>
-						<h2 style="text-align: center; font-size:30pt">You will be refunded $<%= -priceChange %>.</h2>
+						<h2 style="text-align: center; font-size:30pt">An additional $<%= priceChange %> will be charged to the guest's account.</h2>
+					<% } else if (priceChange < 0) { %>
+						<h2 style="text-align: center; font-size:30pt">The guest will be refunded $<%= -priceChange %>.</h2>
+					<% } else{ %>
+						<h2 style="text-align: center; font-size:30pt">No charges will be made to the account.</h2>
 					<% } %>
 					<br>
 					<br>

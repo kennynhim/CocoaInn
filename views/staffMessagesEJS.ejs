@@ -7,7 +7,7 @@
 	</head>
 
 	<body style="background-color: wheat">
-		<div class="staffReservationCanceledPage">
+		<div class="messagesPage">
 			<div class="row1">
 				<div class="col-2">
 					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
@@ -48,10 +48,33 @@
 				</div>
 			</div>
 			
-				<div class="row2">
+			<div class="row3">
 				<div class="col-12">
-					<br>
-					<h1 style="text-align: center; font-size: 30pt">The reservation has been canceled.</h1>
+					<h1 style="text-align: center; font-size: 30pt">Messages</h1>
+				</div>
+			</div>
+			
+			<div class="row4">
+				<div class="col-12" style="height: 650px; overflow-x: hidden; overflow-y: auto">
+					<% for (let x = 0; x < notifications.length; x++){ %>
+						<div class="col-12" >
+							<div class="col-3">
+								<h3 style="text-align: center"><%= notifications[x].firstName %> <%= notifications[x].lastName %></h3>
+							</div>
+							<div class="col-6"><p><%= notifications[x].message %></p></div>
+							<div class="col-3">
+								<div class="col-4"></div>
+								<div class="col-4">
+									<form method="post" action="staffModifyReservation.html">
+										<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+										<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= notifications[x].confirmationNumber %>">
+										<button type="submit" style="width: 100%; padding: 16px; background-color: honeydew">View</button>
+									</form>
+								</div>
+								<div class="col-4"></div>
+							</div>
+						</div>
+					<% } %>
 				</div>
 			</div>
 		</div>

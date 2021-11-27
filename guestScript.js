@@ -540,8 +540,10 @@ app.post("/cancelRequested.html", function(req, response){
 
 //When user enters a chat message in the reservation details page, and clicks on "Send"
 //Add the message to the notes array in the reservation record
+//Add a notification to notifications table
 app.post("/sendChat.html", function (req, response){
 	const firstName = req.body.firstName;
+	const lastName = req.body.lastName;
 	const message = String(req.body.message);
 	const today = new Date();
 	const note = firstName.concat(', ', today.toLocaleString(), ': ', message);
@@ -553,14 +555,17 @@ app.post("/sendChat.html", function (req, response){
 		var dbo = db.db("CocoaInn");
 		const query = {confirmationNumber: confirmationNumber};
 		const update = { $push: {"notes": note} };
-		dbo.collection("reservation").updateOne(query, update, function(err2, result){
+		dbo.collection("reservation").updateOne(query, update, function(err2, result1){
 			if (err2)
 				throw err2;
-			renderDetailsPage(req, response);
+			const notification = {confirmationNumber: confirmationNumber, firstName: firstName, lastName: lastName, message: today.toLocaleString().concat(': ', message)};
+			dbo.collection("notifications").insertOne(notification, function(err3, result2){
+				if (err3)
+					throw err3;
+				renderDetailsPage(req, response);				  
+			})
 		})
-		
 	})
-	
 })
 
 //Validates the dates for a single reservation

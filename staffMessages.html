@@ -7,14 +7,14 @@
 	</head>
 
 	<body style="background-color: wheat">
-		<div class="staffOccupancySelectionPage">
+		<div class="messagesPage">
 			<div class="row1">
 				<div class="col-2">
-					<p style="text-align: center"><b>Employee: 482475</b></p>
+					<p style="text-align: center"><b>Employee: </b></p>
 				  <div class="col-3"></div>
 				  <div class="col-6">
 						<form method="post" action="staffHome.html">
-							<input type="hidden" name="userID" class="userID" value="482475">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
 							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
 						</form>
 					</div>
@@ -33,20 +33,10 @@
 					<div class="col-3"></div>
 				</div>
 			</div>
-		</div>
-		
+			
 			<div class="row2">
 				<div class="col-12">
-					<div class="col-4">
-							<div class="col-4"></div>
-							<div class="col-4">
-								<form class="notification" method="post" action="viewMessages.html">
-									<button type="submit">Messages</button>
-									<span class="badge">3</span>
-								</form>
-							</div>
-							<div class="col-4"></div>
-						</div>
+					<div class="col-4"></div>
 					<div class="col-4">
 						<form method="get" action="staffModify.html">
 							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
@@ -56,24 +46,30 @@
 					<div class="col-4"></div>
 				</div>
 			</div>
-		
+			
 			<div class="row3">
 				<div class="col-12">
-					<p style="text-align: center; font-size: 25pt; padding: 20px">You have selected a room with a max occupancy less than the total number of guests on the reservation.</p>
-					<p style="text-align: center; font-size: 25pt; padding: 20px">Would you like to add additional rooms to accommodate your guests?</p>
+					<h1 style="text-align: center; font-size: 30pt">Messages</h1>
 				</div>
 			</div>
-		
-			<div class="row4" style="color: beige">
-				<div class="col-6">
-					<form method="get" action="staffReservation.html">
-						<button type="submit" style="padding: 16px 32px; width: 100%; background-color: #5C5C5C; font-size: 15pt">No, remove the current selection.</button>
-					</form>
-				</div>
-				<div class="col-6">
-					<form method="post" action="staffReservation.html">
-						<button type="submit" style="padding: 16px 32px; width: 100%; background-color: wheat; font-size: 15pt">Yes, keep selection and add another room.</button>
-					</form>
+			
+			<div class="row4">
+				<div class="col-12" style="height: 650px; overflow-x: hidden; overflow-y: auto">
+					<div class="col-12" >
+						<div class="col-3">
+							<h3 style="text-align: center">John Kennedy</h3>
+						</div>
+						<div class="col-6"><p>where's the toilet paper!?</p></div>
+						<div class="col-3">
+							<div class="col-4"></div>
+							<div class="col-4">
+								<form method="post" action="modify.html">
+									<button type="submit" style="width: 100%; padding: 16px; background-color: honeydew">View</button>
+								</form>
+							</div>
+							<div class="col-4"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

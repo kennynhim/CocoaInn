@@ -99,8 +99,13 @@ function displayHomePage(userID, db, response){
 			else if (isCurrentGuest(reservations[x].checkIn, reservations[x].checkOut))
 				currentGuests.push(reservations[x]);
 		}
-
-		response.render("staffHomeEJS", {userID: userID, checkIns: checkIns, checkOuts: checkOuts, currentGuests: currentGuests});
+		
+		//TODO: Query all notifications and display it
+		dbo.collection("notifications").find({}).toArray(function (err2, notifications){
+			if (err2)
+				throw err2;
+			response.render("staffHomeEJS", {userID: userID, checkIns: checkIns, checkOuts: checkOuts, currentGuests: currentGuests, numMessages: notifications.length});
+		})
 	})
 }
 
@@ -108,6 +113,38 @@ function displayHomePage(userID, db, response){
 app.get("/logout.html", function(req, response){
 	response.render("loginEJS");
 })
+
+//When user clicks on "Messages" button on staff homepage
+app.post("/viewMessages.html", function(req, response){
+	const userID = req.body.userID;
+	
+	//Query notifications table for all notifications
+	//Display messages page
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("notifications").find({}).toArray(function(err2, notifications){
+			if (err2)
+				throw err2;
+			response.render("staffMessagesEJS", {notifications: notifications, userID: userID});
+		})
+	})
+})
+
+//Called when employee/manager views a reservation detail that had a new message
+//Removes the associated reservation's notification from the notifications table
+function removeNotification(confirmationNumber){
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("notifications").deleteMany({confirmationNumber: confirmationNumber}, function(err2, result){
+			if (err2)
+				throw err2;
+		})
+	})
+}
 
 //When employee/manager clicks on "Create Reservation" button
 //Query the database for all rooms, whether vacant or not
@@ -379,8 +416,10 @@ function searchReservation(request, response, confirmationNumber, firstName, las
 								break;
 							}
 						}
-						if (x+1 === result[0].assignedRoom.length)
+						if (x+1 === result[0].assignedRoom.length){
+							removeNotification(result[0].confirmationNumber);
 							response.render("staffModifyEJS", {reservation: result[0], rooms: reservedRooms, userID: userID});
+						}
 					}
 				})
 			}
@@ -436,8 +475,10 @@ function searchReservationRoomDate(request, response, date, roomNum){
 								break;
 							}
 						}
-						if (x+1 === foundReservations[0].assignedRoom.length)
+						if (x+1 === foundReservations[0].assignedRoom.length){
+							removeNotification(foundReservations[0].confirmationNumber);
 							response.render("staffModifyEJS", {reservation: foundReservations[0], rooms: reservedRooms, userID: userID});
+						}
 					}
 				})
 			}
