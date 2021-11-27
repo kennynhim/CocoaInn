@@ -497,8 +497,6 @@ app.post("/cancel.html", function(req, response){
 //When a user clicks "Cancel Reservation" after confirming they want to cancel
 //Remove the check in/out dates in the rooms collection associated w/ the reservation
 //Remove the reservation record
-//TODO:
-//Make a "Your reservation has been cancelled" page and render it after user cancels reservation
 app.post("/cancelRequested.html", function(req, response){
 	const confirmation = req.body.confirmationNumber;
 	

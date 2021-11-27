@@ -83,7 +83,14 @@
 						</form>
 						<br>
 						<form method="post" action="cancel.html">
-							<input type="hidden">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<input type="hidden" name="firstName" class="firstName" value="<%= reservation.firstName %>">
+							<input type="hidden" name="lastName" class="lastName" value="<%= reservation.lastName %>">
+							<input type="hidden" name="checkIn" class="checkIn" value="<%= reservation.checkIn %>">
+							<input type="hidden" name="checkOut" class="checkOut" value="<%= reservation.checkOut %>">
+							<input type="hidden" name="adults" class="adults" value="<%= reservation.adults %>">
+							<input type="hidden" name="children" class="children" value="<%= reservation.children %>">
+							<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
 							<button type="submit" style="width: 100%; background-color:#DD8284; padding: 16px 32px">Cancel Reservation</button>
 						</form>
 					</div>

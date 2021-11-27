@@ -648,9 +648,77 @@ app.post("/modifyDate.html", function(req, response){
 										   userID: userID});
 })
 
-//When employee/manager clicks on "Back" button on a modification page
-app.post("/modifyCanceled.html", function(req, response){
+//When employee/manager clicks on "Cancel" button on the reservation modification page
+//First, check if they are able to cancel with a full refund
+//Display the cancel confirmation page
+app.post("/cancel.html", function(req, response){
+	const firstName = req.body.firstName;
+	const lastName = req.body.lastName;
+	const checkIn = req.body.checkIn;
+	const checkOut = req.body.checkOut;
+	const adults = req.body.adults;
+	const children = req.body.children;
+	const confirmationNumber = req.body.confirmationNumber;
+	const userID = req.body.userID;
 	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		//Retrieve our reservation
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			//Retrieve our cancellation policy
+			dbo.collection("policy").findOne({}, function(err3, policy){
+				if (err3)
+					throw err3;
+				let cancelValid = cancelIsValid(reservation.checkIn, policy.cancelTime);
+				response.render("staffCancelReservationEJS", {reservation: reservation, cancelValid: cancelValid, userID: userID});
+			})
+		})
+	})
+})
+
+//When a user clicks "Cancel Reservation" after confirming they want to cancel
+//Remove the check in/out dates in the rooms collection associated w/ the reservation
+//Remove the reservation record
+app.post("/cancelRequested.html", function(req, response){
+	const confirmation = req.body.confirmationNumber;
+	const userID = req.body.userID;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmation}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			dbo.collection("room").find({}).toArray(function (err4, rooms){
+				if (err4)
+					throw err4;
+				//Remove the check in/out dates in the rooms collection associated w/ the reservation
+				for (let x = 0; x < reservation.assignedRoom.length; x++){
+					const query = {roomNum: reservation.assignedRoom[x]};
+					const update = {$pull: {reservedDates: {checkIn: reservation.checkIn, checkOut: reservation.checkOut}}};
+					dbo.collection("room").updateOne(query, update, function(err5, result){
+						if (err5)
+							throw err5;
+					})
+					//Remove the reservation
+					//Display "Your reservation has been cancelled" page
+					if (x+1 === reservation.assignedRoom.length){
+						dbo.collection("reservation").deleteOne({confirmationNumber: confirmation}, function(err6, result2){
+							if (err6)
+								throw err6;
+							response.render("staffCanceledEJS", {userID: userID});
+						})
+					}
+				}
+			})
+		})
+	})
 })
 
 function clearCart(){
