@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Cocoa Inn</title>
+	<link href="css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="checkInPage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: </b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<form method="post" action="staffModifyReservation.html">
+							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
+							<input name="userID" class="userID" type="hidden" value="<%= userID %>">
+							<button type="submit" style="width:24%; padding: 10px">Search</button>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<div class="col-4">
+						<h2 style="text-align: center; font-size: 30pt">William Shakespeare</h2>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Check In:</h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Check Out:</h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Rooms: 1, 2</h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Adults:</h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Children:</h3>
+					</div>
+					
+					<div class="col-8">
+						<div class="col-12">
+							<form method="post" action="staffModifyReservation.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= confirmationNumber %>">
+								<button type="submit" style="background-color: #AFA5A5; width:15%; padding: 16px 32px; text-align: center; font-size: 15pt">Back</button>
+							</form>
+						</div>
+						
+						<div class="col-12">
+							<h2 style="text-align: center; font-size: 30pt">Check In List</h2>
+						</div>
+						<div class="col-3"></div>
+						<div class="col-6">
+							<form method="post" action="checkIn.html" style="font-size: 15pt">
+								<input name="greet" class="greet" type="checkbox">
+								<label for="greet">Greeted guest and offered bellhop service</label>
+								<br>
+								<br>
+								<input name="identify" class="identify" type="checkbox">
+								<label for="identify">Identified guest with photo ID</label>
+								<br>
+								<br>
+								<input name="options" class="options" type="checkbox">
+								<label for="options">Informed guest of dining and concierge options</label>
+								<br>
+								<br>
+								<input name="keys" class="keys" type="checkbox">
+								<label for="keys">Issued keys for all rooms</label>
+								<br>
+								<br>
+								<div class="col-3"></div>
+								<div class="col-6">
+									<button type="submit" style="width: 100%; padding: 16px">Check In</button>
+								</div>
+								<div class="col-3"></div>
+							</form>
+						</div>
+						<div class="col-3"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

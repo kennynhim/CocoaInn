@@ -36,15 +36,39 @@
 			
 			<div class="row2">
 				<div class="col-12">
-					<div class="col-4"></div>
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<% if (reservation.bCheckedIn == false) { %>
+								<form method="post" action="checkIn.html">
+									<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+									<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
+									<button type="submit" style="width:100%; padding: 16px; background-color: honeydew">Check In</button>
+								</form>
+							<% } else { %>
+								<h3 style="text-align: center; font-size: 17pt">Checked In</h3>
+							<% } %>
+						</div>
+						<div class="col-4"></div>
+					</div>
 					<div class="col-4">
 						<form method="post" action="staffModifyReservation.html">
 							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center">
-							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<input name="userID" class="userID" type="hidden" value="<%= userID %>">
 							<button type="submit" style="width:24%; padding: 10px">Search</button>
 						</form>
 					</div>
-					<div class="col-4"></div>
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="checkOut.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
+								<button type="submit" style="width:100%; padding: 16px; background-color: honeydew">Check Out</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
 				</div>
 			</div>
 			

@@ -787,8 +787,44 @@ app.post("/sendChat.html", function (req, response){
 	
 })
 
+
+//When staff clicks on "Check In" on reservation details page
+//Render the check in page
+app.post("/checkIn.html", function(req, response){
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: req.body.confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			response.render("staffCheckInEJS", {userID: req.body.userID, reservation: reservation});			
+		})
+	})
+})
+
+//When staff clicks on "Check In" on check in page
+//Set bCheckedIn to true in reservations collection
+//Render the reservation details page after
+app.post("/confirmCheckIn.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		const query = {confirmationNumber: confirmationNumber};
+		const update = {$set: {bCheckedIn: true}};
+		dbo.collection("reservation").updateOne(query, update, function(err2, result){
+			if (err2)
+				throw err2;
+			searchReservation(req, response, confirmationNumber, null, null, null, null);
+		})
+	})
+})
+
 //TODO:
-//Create a notification system when a guest sends a chat message
+//Check out- delete the reservation from the reservation collection and update the accounting collection with the price
+//Move guest reservations on the home page who have been checked in to "Current Guests"
 
 function clearCart(){
 	numRooms = 0;
