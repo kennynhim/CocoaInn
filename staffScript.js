@@ -722,9 +722,13 @@ app.post("/cancel.html", function(req, response){
 })
 
 //When a user clicks "Cancel Reservation" after confirming they want to cancel
+app.post("/cancelRequested.html", function(req, response){
+	removeReservation(req, response, true);
+})
+
 //Remove the check in/out dates in the rooms collection associated w/ the reservation
 //Remove the reservation record
-app.post("/cancelRequested.html", function(req, response){
+function removeReservation(req, response, canceled){
 	const confirmation = req.body.confirmationNumber;
 	const userID = req.body.userID;
 	
@@ -742,7 +746,7 @@ app.post("/cancelRequested.html", function(req, response){
 				//Remove the check in/out dates in the rooms collection associated w/ the reservation
 				for (let x = 0; x < reservation.assignedRoom.length; x++){
 					const query = {roomNum: reservation.assignedRoom[x]};
-					const update = {$pull: {reservedDates: {checkIn: reservation.checkIn, checkOut: reservation.checkOut}}};
+					const update = {$pull: {reservedDates: {checkIn: reservation.checkIn}}};
 					dbo.collection("room").updateOne(query, update, function(err5, result){
 						if (err5)
 							throw err5;
@@ -753,14 +757,14 @@ app.post("/cancelRequested.html", function(req, response){
 						dbo.collection("reservation").deleteOne({confirmationNumber: confirmation}, function(err6, result2){
 							if (err6)
 								throw err6;
-							response.render("staffCanceledEJS", {userID: userID});
+							response.render("staffCanceledEJS", {userID: userID, canceled: canceled});
 						})
 					}
 				}
 			})
 		})
 	})
-})
+}
 
 //When staff enters a chat message in the reservation details page, and clicks on "Send"
 //Add the message to the notes array in the reservation record
@@ -822,8 +826,29 @@ app.post("/confirmCheckIn.html", function(req, response){
 	})
 })
 
+//When staff clicks on "Check Out" on reservation details page
+//Render the check out page
+app.post("/checkOut.html", function(req, response){
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: req.body.confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			response.render("staffCheckOutEJS", {userID: req.body.userID, reservation: reservation});			
+		})
+	})	
+})
+
+//When staff clicks on "Check Out" on check out page
+//Remove the reservation
+//Delete the corresponding date objects in the reservedDates array of the rooms collection
+app.post("/confirmCheckOut.html", function(req, response){
+	removeReservation(req, response, false);
+})
+
 //TODO:
-//Check out- delete the reservation from the reservation collection and update the accounting collection with the price
 //Move guest reservations on the home page who have been checked in to "Current Guests"
 
 function clearCart(){

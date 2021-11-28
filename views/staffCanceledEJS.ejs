@@ -51,7 +51,11 @@
 				<div class="row2">
 				<div class="col-12">
 					<br>
-					<h1 style="text-align: center; font-size: 30pt">The reservation has been canceled.</h1>
+					<% if (canceled) { %>
+						<h1 style="text-align: center; font-size: 30pt">The reservation has been canceled.</h1>
+					<% } else{ %>
+						<h1 style="text-align: center; font-size: 30pt">The guest has been successfully checked out.</h1>
+					<% } %>
 				</div>
 			</div>
 		</div>
