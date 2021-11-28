@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Cocoa Inn</title>
+	<link href="css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="staffAddUserPage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: </b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-6">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="addStaff.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Add Staff User</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+					<div class="col-6">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="addStaff.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Remove Staff User</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<div class="col-4">
+					</div>
+					<div class="col-4">
+						<form method="post" action="addStaffUser.html">
+							<input name="userID" class="userID" type="text" placeholder="Employee ID" style="width:100%; padding: 16px; text-align: center" required>
+							<br>
+							<br>
+							<input name="username" class="username" type="text" placeholder="Username" style="width:100%; padding: 16px; text-align: center" required>
+							<br>
+							<br>
+							<input name="password" class="password" type="password" placeholder="Password" style="width:100%; padding: 16px; text-align: center" required>
+							<br>
+							<br>
+							<input name="password" class="password" type="password" placeholder="Re-Enter Password" style="width:100%; padding: 16px; text-align: center" required>
+							<br>
+							<br>
+							<div class="col-12">
+								<div class="col-4">
+									<input name="permission" class="permission" type="radio" value="false">
+									<label for="permission">Manager</label>
+								</div>
+								<div class="col-4"></div>
+								<div class="col-4">
+									<input name="permission" class="permission" type="radio" value="true">
+									<label for="permission">Employee</label>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="col-4"></div>
+								<div class="col-4">
+									<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+									<button type="submit" style="width: 100%; padding:16px">Add User</button>
+								</div>
+								<div class="col-4"></div>
+							</div>
+						</form>
+					</div>
+					<div class="col-4">
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

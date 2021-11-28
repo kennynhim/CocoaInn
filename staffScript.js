@@ -60,7 +60,7 @@ app.post("/staffLogin.html", function(req, response){
 				return;
 			}
 			user.password = null;
-			displayHomePage(user.userID, db, response);
+			displayHomePage(user.userID, db, response, user.manager);
 		})
 	})
 })
@@ -73,11 +73,16 @@ app.post("/staffHome.html", function(req, response){
 	MongoClient.connect(dbURL, function(err1, db){
 		if (err1)
 			throw err1;
-		displayHomePage(userID, db, response);
+		var dbo = db.db("CocoaInn");
+		dbo.collection("staff").findOne({userID: userID}, function(err2, user){
+			if (err2)
+				throw err2;
+			displayHomePage(userID, db, response, user.manager);
+		})
 	})
 })
 
-function displayHomePage(userID, db, response){
+function displayHomePage(userID, db, response, bManager){
 	//Query all reservations so we can display today's check ins, check outs, and current guests
 	var dbo = db.db("CocoaInn");
 	dbo.collection("reservation").find({}).toArray(function (err1, reservations){
@@ -99,12 +104,11 @@ function displayHomePage(userID, db, response){
 			else if (isCurrentGuest(reservations[x].checkIn, reservations[x].checkOut))
 				currentGuests.push(reservations[x]);
 		}
-		
-		//TODO: Query all notifications and display it
 		dbo.collection("notifications").find({}).toArray(function (err2, notifications){
 			if (err2)
 				throw err2;
-			response.render("staffHomeEJS", {userID: userID, checkIns: checkIns, checkOuts: checkOuts, currentGuests: currentGuests, numMessages: notifications.length});
+			//Check if this is an employee or manager
+			response.render("staffHomeEJS", {userID: userID, checkIns: checkIns, checkOuts: checkOuts, currentGuests: currentGuests, numMessages: notifications.length, bIsManager: bManager});
 		})
 	})
 }
@@ -849,6 +853,50 @@ app.post("/confirmCheckOut.html", function(req, response){
 	removeReservation(req, response, false);
 })
 
+//When manager clicks on "Add/Remove Staff" button on homepage
+app.post("/modifyStaff.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffModifyStaffEJS", {userID: userID});
+})
+
+//When manager clicks on "Add Staff User" button on Add/Remove staff page
+app.post("/addStaff.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffAddStaffEJS", {userID: userID});
+})
+
+//When manager clicks on "Add User" button after filling out fields for a new staff employee
+//Creates a new user document in the staff collection
+app.post("/addStaffUser.html", function(req, response){
+	const password = req.body.password;
+	const validatePassword = req.body.validatePassword;
+	if (password != validatePassword){
+		alert("The passwords do not match");
+		return;
+	}
+	const userID = req.body.userID;
+	const staffUserID = req.body.employeeID;
+	const username = req.body.username;
+	const bManager = req.body.permission;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		const user = {userID: staffUserID,
+					 username: username,
+					 password: password,
+					 manager: bManager};
+		dbo.collection("staff").insertOne(user, function(err2, result){
+			if (err2)
+				throw err2;
+			response.render("staffConfirmAddUserEJS", {userID: userID});
+		})
+	})
+})
+
+//TODO
+//Remove a staff user
 function clearCart(){
 	numRooms = 0;
 	roomNames = [];
