@@ -895,8 +895,39 @@ app.post("/addStaffUser.html", function(req, response){
 	})
 })
 
-//TODO
-//Remove a staff user
+//When manager clicks on "Remove Staff User" button on Add/Remove staff page
+app.post("/removeStaff.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffRemoveStaffEJS", {userID: userID});
+})
+
+//When manager clicks on "Remove Staff User" button on Remove staff page
+//Removes the associated user document from the staff collection
+app.post("/removeStaffUser.html", function(req, response){
+	const userID = req.body.userID;
+	const employeeID = req.body.employeeID;
+	
+	if (userID == employeeID){
+		alert("You cannot remove yourself!");
+		return;
+	}
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("staff").deleteOne({userID: employeeID}, function(err2, result){
+			if (err2)
+				throw err2;
+			if (result.deletedCount === 0){
+				alert("This user does not exist.");
+				return;
+			}
+			response.render("staffConfirmRemoveUserEJS", {userID: userID});
+		})
+	})
+})
+
 function clearCart(){
 	numRooms = 0;
 	roomNames = [];
