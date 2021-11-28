@@ -231,8 +231,9 @@ app.post("/confirmation.html", function(req, response){
 			price: req.body.price,
 			notes: [],
 			assignedRoom: reservedRoomNums,
-			confirmationNumber: crypto.randomUUID()
-			}
+			confirmationNumber: crypto.randomUUID(),
+			bCheckedIn: false
+	}
 	
 	MongoClient.connect(dbURL, function(err, db){
 		if (err)

@@ -92,7 +92,7 @@ function displayHomePage(userID, db, response){
 
 		//Get all of today's check ins and check outs
 		for (let x = 0; x < reservations.length; x++){
-			if (reservations[x].checkIn === todayString.substr(0,10))
+			if (reservations[x].checkIn === todayString.substr(0,10) && reservations[x].bCheckedIn == false)
 				checkIns.push(reservations[x]);
 			else if (reservations[x].checkOut === todayString.substr(0,10))
 				checkOuts.push(reservations[x]);
@@ -320,8 +320,9 @@ app.post("/staffConfirm.html", function(req, response){
 			price: req.body.price,
 			notes: [],
 			assignedRoom: reservedRoomNums,
-			confirmationNumber: crypto.randomUUID()
-			}
+			confirmationNumber: crypto.randomUUID(),
+			bCheckedIn: false
+	}
 	
 	MongoClient.connect(dbURL, function(err, db){
 		if (err)
@@ -848,9 +849,6 @@ app.post("/confirmCheckOut.html", function(req, response){
 	removeReservation(req, response, false);
 })
 
-//TODO:
-//Move guest reservations on the home page who have been checked in to "Current Guests"
-
 function clearCart(){
 	numRooms = 0;
 	roomNames = [];
@@ -935,7 +933,7 @@ function isCurrentGuest(checkIn, checkOut){
 	const checkInDate = new Date(getYear(checkIn), getMonth(checkIn)-1, getDay(checkIn));
 	const checkOutDate = new Date(getYear(checkOut), getMonth(checkOut)-1, getDay(checkOut));
 	
-	return today.getTime() > checkInDate.getTime() && today.getTime() < checkOutDate.getTime();
+	return today.getTime() == checkInDate.getTime() || (today.getTime() > checkInDate.getTime() && today.getTime() < checkOutDate.getTime());
 }
 
 function getStayDuration(checkIn, checkOut){
