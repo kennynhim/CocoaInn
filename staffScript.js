@@ -983,6 +983,54 @@ app.post("/addRoomRequested.html", function(req, response){
 //When manager clicks on "Edit Room" button on Modify Rooms page
 app.post("/editRoom.html", function(req, response){
 	const userID = req.body.userID;
+	response.render("staffEditRoomEJS", {userID: userID});
+})
+
+//When manager enters a room number to edit, and clicks on the "Edit" button
+//Query the DB for the room and pre-fill the form with the room's information
+app.post("/editRoomView.html", function(req, response){
+	const userID = req.body.userID;
+	const roomNum = Number(req.body.roomNum);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("room").findOne({roomNum: roomNum}, function(err2, room){
+			if (err2)
+				throw err2;
+			if (room == null){
+				alert("This room does not exist.");
+				return;
+			}
+			response.render("staffEditRoomViewEJS", {userID: userID, room: room});
+		})
+	})
+})
+
+//When user enters in a room information to edit, and clicks on the "Save Changes" button
+//Update the room document with the new parameters
+app.post("/editRoomRequest.html", function(req, response){
+	const userID = req.body.userID;
+	const roomNum = Number(req.body.roomNum);
+	
+	const update = {$set: {roomName: req.body.roomName,
+	maxOccupancy: Number(req.body.occupancy),
+	numBeds: Number(req.body.numBeds),
+	description: req.body.description,
+	image: req.body.image,
+	price: Number(req.body.price)}};
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("room").updateOne({roomNum: roomNum}, update, function(err2, result){
+			if (err2)
+				throw err2;
+			response.render("staffConfirmEditRoomEJS", {userID: userID});
+		})
+	})
 })
 
 //When manager clicks on "Remove Room" button on Modify Rooms page
