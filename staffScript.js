@@ -928,6 +928,68 @@ app.post("/removeStaffUser.html", function(req, response){
 	})
 })
 
+//When manager clicks on Add/Remove Rooms button on staff homepage
+app.post("/modifyRooms.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffRoomEJS", {userID: userID});
+})
+
+//When manager clicks on "Add Room" button on Modify Rooms page
+app.post("/addRoom.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffAddRoomEJS", {userID: userID});
+})
+
+//When manager clicks on "Add Room" button after entering in new room information
+//Creates a new document in the rooms collection
+app.post("/addRoomRequested.html", function(req, response){
+	const userID = req.body.userID;
+	
+	const room = {roomNum: Number(req.body.roomNum),
+	 roomName: req.body.roomName,
+	 maxOccupancy: Number(req.body.occupancy),
+	 numBeds: Number(req.body.numBeds),
+	 description: req.body.description,
+	 image: req.body.image,
+	 price: Number(req.body.price),
+	 reservedDates: []};
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		//Make sure the new room number does not conflict with an existing room number
+		dbo.collection("room").find({}).toArray(function(err2, rooms){
+			if (err2)
+				throw err2;
+			for (let x = 0; x < rooms.length; x++){
+				if (rooms[x].roomNum == room.roomNum){
+					alert("The room number already exists. Enter a new room number.");
+					return;
+				}
+				if (x+1 === rooms.length){
+					//All good, add the room
+					dbo.collection("room").insertOne(room, function(err3, result){
+						if (err3)
+							throw err3;
+						response.render("staffConfirmAddRoomEJS", {userID: userID});
+					})
+				}
+			}
+		})
+	})
+})
+
+//When manager clicks on "Edit Room" button on Modify Rooms page
+app.post("/editRoom.html", function(req, response){
+	const userID = req.body.userID;
+})
+
+//When manager clicks on "Remove Room" button on Modify Rooms page
+app.post("/removeRoom.html", function(req, response){
+	const userID = req.body.userID;
+})
+
 function clearCart(){
 	numRooms = 0;
 	roomNames = [];
