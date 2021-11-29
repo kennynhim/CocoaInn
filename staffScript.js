@@ -1090,6 +1090,76 @@ app.post("/removeRoomRequested.html", function(req, response){
 	})
 })
 
+//When manager clicks on "Edit Policy" on staff homepage
+app.post("/modifyPolicy.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffPolicyEJS", {userID: userID});
+})
+
+function displayPolicy(req, response, EJS){
+	const userID = req.body.userID;
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		
+		dbo.collection("policy").findOne({}, function(err2, policy){
+			if (err2)
+				throw err2;
+			response.render(EJS, {userID: userID, policy: policy});		
+		})
+	})	
+}
+
+//When manager clicks on "Cancel Time" button on Edit Policy page
+//Query from policy collection and display the current value to manager
+app.post("/editCancelTime.html", function(req, response){
+	displayPolicy(req, response, "staffEditCancelTimeEJS");
+})
+
+//When manager clicks on "Save Changes" button on Edit Cancel Time page
+//Update the policy collection
+app.post("/editCancelTimeRequested.html", function(req, response){
+	const userID = req.body.userID;
+	const cancelTime = Number(req.body.cancelTime);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		const update = {$set: {cancelTime: cancelTime}};
+		dbo.collection("policy").updateOne({}, update, function(err2, result){
+			if (err2)
+				throw err2;
+			response.render("staffConfirmPolicyEJS", {userID: userID});
+		})
+	})
+})
+
+//When manager clicks on "Cancel Fee" button on Policy page
+app.post("/editCancelFee.html", function(req, response){
+	displayPolicy(req, response, "staffEditCancelFeeEJS");
+})
+
+//When manager clicks on "Save Changes" button on Edit Cancel Fee page
+//Update the policy collection
+app.post("/editCancelFeeRequested.html", function(req, response){
+	const userID = req.body.userID;
+	const cancelFee = Number(req.body.cancelFee);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		const update = {$set: {cancelFee: cancelFee}};
+		dbo.collection("policy").updateOne({}, update, function(err2, result){
+			if (err2)
+				throw err2;
+			response.render("staffConfirmPolicyEJS", {userID: userID});
+		})
+	})	
+})
+
 function clearCart(){
 	numRooms = 0;
 	roomNames = [];
