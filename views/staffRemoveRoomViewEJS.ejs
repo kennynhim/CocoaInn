@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="removeRoomViewPage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="addRoom.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Add Room</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="editRoom.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Edit Room</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="removeRoom.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Remove Room</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<form method="post" action="removeViewRoom.html">
+							<input name="roomNum" class="roomNum" type="number" style="width:100%; padding: 16px; text-align: center" placeholder="Room Number" min="1">
+							<input name="userID" class="userID" type="hidden" value="<%= userID %>">
+							<div class="col-4"></div>
+							<div class="col-4">
+								<button type="submit" style="width:100%; padding: 16px">View</button>
+							</div>
+							<div class="col-4"></div>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+			
+			<div class="row4">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4" style="text-align: center">
+						<h2>Room Number: <%= room.roomNum %></h2>
+						<h2><%= room.roomName %></h2>
+						<h2>Max Occupancy: <%= room.maxOccupancy %></h2>
+						<h2>Beds: <%= room.numBeds %></h2>
+						<h2>Price: <%= room.price %></h2>
+						<form method="post" action="removeRoomRequested.html">
+							<input name="userID" class="userID" type="hidden" value="<%= userID %>">
+							<input name="roomNum" class="roomNum" type="hidden" value="<%= room.roomNum %>">
+							<button type="submit" style="padding: 16px">Remove Room</button>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

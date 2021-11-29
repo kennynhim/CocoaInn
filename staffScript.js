@@ -988,6 +988,58 @@ app.post("/editRoom.html", function(req, response){
 //When manager clicks on "Remove Room" button on Modify Rooms page
 app.post("/removeRoom.html", function(req, response){
 	const userID = req.body.userID;
+	response.render("staffRemoveRoomEJS", {userID: userID});
+})
+
+//When manager clicks on "View" button on Remove Room page
+//Query Room collection for the requested room
+//Display the info to the user
+app.post("/removeViewRoom.html", function(req, response){
+	const userID = req.body.userID;
+	const roomNum = Number(req.body.roomNum);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("room").findOne({roomNum: roomNum}, function(err2, room){
+			if (err2)
+				throw err2;
+			if (room == null){
+				alert("Could not find the room");
+				return;
+			}
+			response.render("staffRemoveRoomViewEJS", {room: room, userID: userID});
+		})
+	})
+})
+
+//When manager clicks on "Remove Room" button after searching a room to remove
+//Check if the room has any current or future reservations
+//If not, remove the selected document from the room collection
+app.post("/removeRoomRequested.html", function(req, response){
+	const userID = req.body.userID;
+	const roomNum = Number(req.body.roomNum);
+
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		
+		dbo.collection("room").findOne({roomNum: roomNum}, function(err2, room){
+			if (room.reservedDates.length > 0){
+				alert("Cannot remove the room- there are current or future reservations");
+				return;
+			}
+
+			dbo.collection("room").deleteOne({roomNum: roomNum}, function(err2, result){
+				if (err2)
+					throw err2;
+				response.render("staffConfirmRemoveRoomEJS", {userID: userID});
+			})
+			
+		})
+	})
 })
 
 function clearCart(){
