@@ -190,9 +190,10 @@ app.post("/staffSearchReservation.html", function(req, response){
 	const numChildren = Number(req.body.numChildren);
 	const userID = req.body.userID;
 
-	if (!validateDate(checkIn, checkOut))
+	if (!validateDate(checkIn, checkOut)){
+		alert("Check In date must come before Check Out date");
 		return;
-		
+	}
 	//Now connect to database and query
 	MongoClient.connect(dbURL, function(err, db){
 		if (err)
@@ -578,8 +579,10 @@ app.post("/changeDateRequested.html", function(req, response){
 	const confirmation = req.body.confirmationNumber;
 	const userID = req.body.userID;
 	
-	if (!validateDate(checkIn, checkOut))
+	if (!validateDate(checkIn, checkOut)){
+		alert("Check In date must come before Check Out date.");
 		return;
+	}
 	
 	MongoClient.connect(dbURL, function(err1, db){
 		if (err1)
@@ -787,9 +790,9 @@ function updateReport(req, bCanceled){
 				const duration = Number(getStayDuration(reservation.checkIn, reservation.checkOut));
 				var revenueObj = {};
 				if (bCanceled)
-					revenueObj = {date: reservation.checkOut, price: reservation.price, bCanceled: bCanceled};
+					revenueObj = {date: reservation.checkOut, price: Number(reservation.price), bCanceled: bCanceled};
 				else
-					 revenueObj = {date: reservation.checkOut, price: reservation.price, guests: reservation.adults+reservation.children, duration: duration, bCanceled: bCanceled};
+					 revenueObj = {date: reservation.checkOut, price: Number(reservation.price), guests: reservation.adults+reservation.children, duration: duration, bCanceled: bCanceled};
 				dbo.collection("report").insertOne(revenueObj, function(err3, result){
 					if (err3)
 						throw err3;
@@ -1265,7 +1268,7 @@ app.post("/displayReport.html", function(req, response){
 	
 	//Validate start date comes before end date
 	if (!validateDate(start, end)){
-		alert("The start date must come before the end date");
+		alert("Start date must come before end date.");
 		return;
 	}
 	
@@ -1287,10 +1290,10 @@ app.post("/displayReport.html", function(req, response){
 				const targetDate = new Date(getYear(results[x].date), getMonth(results[x].date)-1, getDay(results[x].date));
 				if (targetDate.getTime() == startDate.getTime() || targetDate.getTime() == endDate.getTime() ||
 				   (targetDate.getTime() > startDate.getTime() && targetDate.getTime() < endDate.getTime())){
-					revenue += results[x].price;
+					revenue += Number(results[x].price);
 					if (results[x].bCanceled == false){
-						guests += results[x].guests;
-						duration += results[x].duration;
+						guests += Number(results[x].guests);
+						duration += Number(results[x].duration);
 						count++;
 					}
 					else
@@ -1298,9 +1301,9 @@ app.post("/displayReport.html", function(req, response){
 				}
 				if (x+1 === results.length){
 					if (count > 0)
-						response.render("staffBusinessReportEJS", {userID: userID, revenue: revenue, guests: guests, avgDuration: duration/count, cancelCount: cancelCount});
+						response.render("staffBusinessReportEJS", {userID: userID, revenue: Number(revenue)/1000, numReservations: Number(count), guests: Number(guests), avgDuration: duration/count, cancelCount: cancelCount});
 					else
-						response.render("staffBusinessReportEJS", {userID: userID, revenue: revenue, cancelCount: cancelCount});
+						response.render("staffBusinessReportEJS", {userID: userID, revenue: Number(revenue)/1000, numReservations: 0, guests: 0, avgDuration: 0, cancelCount: cancelCount});
 				}
 			}
 		})
@@ -1316,6 +1319,8 @@ app.post("/displayReport.html", function(req, response){
 //Realistic descriptions, images for rooms
 //Add amentities attribute to rooms, display on reservations page and details page
 //Improve user interface
+//Do not allow staff to check in or check out guests before their check in date. Staff may check out guests before the check out date if they have already checked in
+//When a reservation is canceled- refund the price on the reservation(set to 0), or refund the price and charge the cancel fee
 
 
 function clearCart(){
@@ -1344,17 +1349,14 @@ function validateDate(checkIn, checkOut){
 	if (checkInYear === checkOutYear){
 		if (checkInMonth === checkOutMonth){
 			if (checkInDay >= checkOutDay){
-				alert("Check In date must come before Check Out date.");
 				return false;
 			}
 		}
 		else if (checkInMonth > checkOutMonth){
-			alert("Check In date must come before Check Out date.");
 			return false;
 		}
 	}
 	else if (checkInYear > checkOutYear){
-		alert("Check In date must come before Check Out date.");
 		return false;		
 	}
 	return true;

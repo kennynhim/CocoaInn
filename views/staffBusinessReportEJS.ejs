@@ -35,7 +35,7 @@
 			</div>
 			
 			<div class="row2">
-				<form>
+				<form method="post" action="displayReport.html">
 					<div class="col-12">
 						<div class="col-4">
 							<div class="col-3"></div>
@@ -48,8 +48,8 @@
 						<div class="col-4">
 							<div class="col-3"></div>
 							<div class="col-6">
-								<label for="startDate">End Date</label>
-								<input name="startDate" class="startDate" type="date" style="width:100%; text-align: center; padding:16px">
+								<label for="endDate">End Date</label>
+								<input name="endDate" class="endDate" type="date" style="width:100%; text-align: center; padding:16px">
 							</div>
 							<div class="col-3"></div>					
 						</div>
@@ -57,6 +57,7 @@
 							<div class="col-3"></div>
 							<div class="col-6">
 								<br>
+								<input name="userID" class="userID" type="hidden" value="<%= userID %>">
 								<button type="submit" style="width:100%; padding:16px">Generate Report</button>
 							</div>
 							<div class="col-3"></div>
@@ -84,7 +85,7 @@
 								<p>Lodging Reservations</p>
 							</div>
 							<div class="col-3">
-								<p style="text-align: center">10</p>
+								<p style="text-align: center"><%= revenue %></p>
 							</div>
 						</div>
 						<div class="col-12">
@@ -120,7 +121,7 @@
 								<p><b>Total Revenue</b></p>
 							</div>
 							<div class="col-3">
-								<p style="text-align: center"><b>15</b></p>
+								<p style="text-align: center"><b><%= revenue + 1 +1.5 +2.5 %></b></p>
 							</div>
 						</div>
 						
@@ -174,7 +175,7 @@
 								<p style="font-size: 15pt"><b>Earnings Before Interest and Taxes</b></p>
 							</div>
 							<div class="col-3">
-								<p style="font-size: 15pt; text-align: center"><b>6</b></p>
+								<p style="font-size: 15pt; text-align: center"><b><%= revenue + 1 + 1.5 + 2.5 - 9 %></b></p>
 							</div>							
 						</div>
 						
@@ -203,7 +204,7 @@
 								<p style="font-size: 15pt"><b>Net Income</b></p>
 							</div>
 							<div class="col-3">
-								<p style="font-size: 15pt; text-align: center"><b>3.2</b></p>
+								<p style="font-size: 15pt; text-align: center"><b><%= revenue + 1 + 1.5 + 2.5 - 9 - 1 - 1.8 %></b></p>
 							</div>							
 						</div>	
 					</div>
@@ -217,7 +218,7 @@
 								<p>Total # reservations:</p>
 							</div>
 							<div class="col-3">
-								<p>14</p>
+								<p><%= numReservations %></p>
 							</div>
 						</div>
 						
@@ -226,7 +227,7 @@
 								<p>Total # guests:</p>
 							</div>
 							<div class="col-3">
-								<p>14</p>
+								<p><%= guests %></p>
 							</div>
 						</div>
 						
@@ -235,16 +236,16 @@
 								<p>Avg. length of reservation (days):</p>
 							</div>
 							<div class="col-3">
-								<p>14</p>
+								<p><%= avgDuration %></p>
 							</div>
 						</div>
 						
 						<div class="col-12">
 							<div class="col-9">
-								<p>Avg. length of reservation (days):</p>
+								<p>Total # cancelations:</p>
 							</div>
 							<div class="col-3">
-								<p>14</p>
+								<p><%= cancelCount %></p>
 							</div>
 						</div>
 						
