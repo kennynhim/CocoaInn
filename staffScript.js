@@ -1313,14 +1313,13 @@ app.post("/displayReport.html", function(req, response){
 
 //TODO
 //Use Check in time, Check out time, and cancel fee in reservation details page
-//Update staffBusinessReportEJS w/ values passed in from script
+//When a reservation is canceled- refund the price on the reservation(set to 0), or refund the price and charge the cancel fee
 //When a reservation is canceled, and there is a fee: update the "report" collection with the reservation's price (for guest cancellation)
 //If enough time- add room, change room, remove room, add/remove guest (must implement logic)
 //Realistic descriptions, images for rooms
 //Add amentities attribute to rooms, display on reservations page and details page
 //Improve user interface
 //Do not allow staff to check in or check out guests before their check in date. Staff may check out guests before the check out date if they have already checked in
-//When a reservation is canceled- refund the price on the reservation(set to 0), or refund the price and charge the cancel fee
 
 
 function clearCart(){
