@@ -728,6 +728,7 @@ app.post("/cancel.html", function(req, response){
 
 //When a user clicks "Cancel Reservation" after confirming they want to cancel
 app.post("/cancelRequested.html", function(req, response){
+	updateReport(req, true);
 	removeReservation(req, response, true);
 })
 
@@ -767,6 +768,33 @@ function removeReservation(req, response, canceled){
 					}
 				}
 			})
+		})
+	})
+}
+
+//Add a date, price, and number of guests to the "report" collection
+function updateReport(req, bCanceled){
+	const confirmation = req.body.confirmationNumber;
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmation}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			if (reservation != null){
+				const duration = Number(getStayDuration(reservation.checkIn, reservation.checkOut));
+				var revenueObj = {};
+				if (bCanceled)
+					revenueObj = {date: reservation.checkOut, price: reservation.price, bCanceled: bCanceled};
+				else
+					 revenueObj = {date: reservation.checkOut, price: reservation.price, guests: reservation.adults+reservation.children, duration: duration, bCanceled: bCanceled};
+				dbo.collection("report").insertOne(revenueObj, function(err3, result){
+					if (err3)
+						throw err3;
+				})
+			}
 		})
 	})
 }
@@ -849,7 +877,9 @@ app.post("/checkOut.html", function(req, response){
 //When staff clicks on "Check Out" on check out page
 //Remove the reservation
 //Delete the corresponding date objects in the reservedDates array of the rooms collection
+//Update the "report" collection with the date, price, and number of guests
 app.post("/confirmCheckOut.html", function(req, response){
+	updateReport(req, false);
 	removeReservation(req, response, false);
 })
 
@@ -1159,6 +1189,134 @@ app.post("/editCancelFeeRequested.html", function(req, response){
 		})
 	})	
 })
+
+//When manager clicks on "Check In Time" button on Policy page
+app.post("/editCheckInTime.html", function(req, response){
+	displayPolicy(req, response, "staffEditCheckInTimeEJS");
+})
+
+//When manager clicks on "Save Changes" button on Check In Time policy page
+//Update the record in the policy collection
+app.post("/editCheckInTimeRequested.html", function(req, response){
+	const userID = req.body.userID;
+	const hour = Number(req.body.hour);
+	let minute = Number(req.body.minute);
+	const zero = "0";
+		if (minute <= 9)
+			minute = zero.concat(String(minute));
+	const meridiem = req.body.meridiem;
+	const checkInTime = String(hour).concat(":", String(minute), " ", meridiem);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		const update = {$set: {checkInTime: checkInTime}};
+		dbo.collection("policy").updateOne({}, update, function(err2, result){
+			if (err2)
+				throw err2;
+			response.render("staffConfirmPolicyEJS", {userID: userID});
+		})
+	})
+})
+
+app.post("/editCheckOutTime.html", function(req, response){
+	displayPolicy(req, response, "staffEditCheckOutTimeEJS");
+});
+
+
+//When manager clicks on "Save Changes" button on Check Out Time policy page
+//Update the record in the policy collection
+app.post("/editCheckOutTimeRequested.html",function(req, response){
+	const userID = req.body.userID;
+	const hour = Number(req.body.hour);
+	let minute = Number(req.body.minute);
+	const zero = "0";
+		if (minute <= 9)
+			minute = zero.concat(String(minute));
+	const meridiem = req.body.meridiem;
+	const checkOutTime = String(hour).concat(":", String(minute), " ", meridiem);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		const update = {$set: {checkOutTime: checkOutTime}};
+		dbo.collection("policy").updateOne({}, update, function(err2, result){
+			if (err2)
+				throw err2;
+			response.render("staffConfirmPolicyEJS", {userID: userID});
+		})
+	})	
+})
+
+//When manager clicks on "Business Report" button on staff homepage
+app.post("/report.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffBusinessReportDatesEJS", {userID: userID});
+})
+
+//When manager selects a start and end date on Business Report page, and clicks "Generate Report" button
+//Query the Report collection for all documents with a date that falls within the start and end date range
+//Sum up the prices of all the documents, and display the total price
+app.post("/displayReport.html", function(req, response){
+	const start = req.body.startDate;
+	const end = req.body.endDate;
+	
+	//Validate start date comes before end date
+	if (!validateDate(start, end)){
+		alert("The start date must come before the end date");
+		return;
+	}
+	
+	const userID = req.body.userID;
+	const startDate = new Date(getYear(start), getMonth(start)-1, getDay(start));
+	const endDate = new Date(getYear(end), getMonth(end)-1, getDay(end));
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("report").find({}).toArray(function(err2, results){
+			let revenue = 0;
+			let guests = 0;
+			let count = 0;
+			let duration = 0;
+			let cancelCount = 0;
+			for (let x = 0; x < results.length; x++){
+				const targetDate = new Date(getYear(results[x].date), getMonth(results[x].date)-1, getDay(results[x].date));
+				if (targetDate.getTime() == startDate.getTime() || targetDate.getTime() == endDate.getTime() ||
+				   (targetDate.getTime() > startDate.getTime() && targetDate.getTime() < endDate.getTime())){
+					revenue += results[x].price;
+					if (results[x].bCanceled == false){
+						guests += results[x].guests;
+						duration += results[x].duration;
+						count++;
+					}
+					else
+						cancelCount++;
+				}
+				if (x+1 === results.length){
+					if (count > 0)
+						response.render("staffBusinessReportEJS", {userID: userID, revenue: revenue, guests: guests, avgDuration: duration/count, cancelCount: cancelCount});
+					else
+						response.render("staffBusinessReportEJS", {userID: userID, revenue: revenue, cancelCount: cancelCount});
+				}
+			}
+		})
+	})
+
+})
+
+//TODO
+//Use Check in time, Check out time, and cancel fee in reservation details page
+//Update staffBusinessReportEJS w/ values passed in from script
+//When a reservation is canceled, and there is a fee: update the "report" collection with the reservation's price (for guest cancellation)
+//If enough time- add room, change room, remove room, add/remove guest (must implement logic)
+//Realistic descriptions, images for rooms
+//Add amentities attribute to rooms, display on reservations page and details page
+//Improve user interface
+
 
 function clearCart(){
 	numRooms = 0;

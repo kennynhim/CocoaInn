@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Cocoa Inn</title>
+	<link href="css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="businessReportPage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: </b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<form>
+					<div class="col-12">
+						<div class="col-4">
+							<div class="col-3"></div>
+							<div class="col-6">
+								<label for="startDate">Start Date</label>
+								<input name="startDate" class="startDate" type="date" style="width:100%; text-align: center; padding:16px">
+							</div>
+							<div class="col-3"></div>
+						</div>
+						<div class="col-4">
+							<div class="col-3"></div>
+							<div class="col-6">
+								<label for="startDate">End Date</label>
+								<input name="startDate" class="startDate" type="date" style="width:100%; text-align: center; padding:16px">
+							</div>
+							<div class="col-3"></div>					
+						</div>
+						<div class="col-4">
+							<div class="col-3"></div>
+							<div class="col-6">
+								<br>
+								<button type="submit" style="width:100%; padding:16px">Generate Report</button>
+							</div>
+							<div class="col-3"></div>
+						</div>
+					</div>
+				</form>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<div class="col-9">
+						<div class="col-12">
+							<div class="col-9">
+								<p style="font-size: 15pt"><b>Revenue</b></p>
+							</div>
+							<div class="col-3">
+								<p style="font-size: 15pt; text-align: center"><b>$ (in thousands)</b></p>
+							</div>							
+						</div>
+						
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p>Lodging Reservations</p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center">10</p>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p>Spa</p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center">1</p>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p>Golf</p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center">1.5</p>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p>Dining</p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center">2.5</p>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p><b>Total Revenue</b></p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center"><b>15</b></p>
+							</div>
+						</div>
+						
+						<div class="col-12">
+							<div class="col-9">
+								<p style="font-size: 15pt"><b>Expenses</b></p>
+							</div>
+							<div class="col-3">
+								<p style="font-size: 15pt; text-align: center"><b>$ (in thousands)</b></p>
+							</div>							
+						</div>
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p>Wages</p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center">(3)</p>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p>Administrative and General</p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center">(4)</p>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p>Utilities</p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center">(2)</p>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p><b>Total Expense</b></p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center"><b>(9)</b></p>
+							</div>
+						</div>
+						
+						<div class="col-12">
+							<div class="col-9">
+								<p style="font-size: 15pt"><b>Earnings Before Interest and Taxes</b></p>
+							</div>
+							<div class="col-3">
+								<p style="font-size: 15pt; text-align: center"><b>6</b></p>
+							</div>							
+						</div>
+						
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p>Interest</p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center">(1)</p>
+							</div>
+						</div>
+						
+						<div class="col-12">
+							<div class="col-1"></div>
+							<div class="col-8">
+								<p>Taxes</p>
+							</div>
+							<div class="col-3">
+								<p style="text-align: center">(1.8)</p>
+							</div>
+						</div>
+						
+						<div class="col-12">
+							<div class="col-9">
+								<p style="font-size: 15pt"><b>Net Income</b></p>
+							</div>
+							<div class="col-3">
+								<p style="font-size: 15pt; text-align: center"><b>3.2</b></p>
+							</div>							
+						</div>	
+					</div>
+					
+					<div class="col-3">
+						<div class="col-12">
+							<p style="font-size: 15pt; text-align: center"><b>Stats</b></p>
+						</div>
+						<div class="col-12">
+							<div class="col-9">
+								<p>Total # reservations:</p>
+							</div>
+							<div class="col-3">
+								<p>14</p>
+							</div>
+						</div>
+						
+						<div class="col-12">
+							<div class="col-9">
+								<p>Total # guests:</p>
+							</div>
+							<div class="col-3">
+								<p>14</p>
+							</div>
+						</div>
+						
+						<div class="col-12">
+							<div class="col-9">
+								<p>Avg. length of reservation (days):</p>
+							</div>
+							<div class="col-3">
+								<p>14</p>
+							</div>
+						</div>
+						
+						<div class="col-12">
+							<div class="col-9">
+								<p>Avg. length of reservation (days):</p>
+							</div>
+							<div class="col-3">
+								<p>14</p>
+							</div>
+						</div>
+						
+						<div class="col-12">
+							<div class="col-9">
+								<p>Profit Margin:</p>
+							</div>
+							<div class="col-3">
+								<p>21.3%</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row4">
+				<div class="col-12">
+					<div class="col-5"></div>
+					<div class="col-2">
+						<form method="post" type="exportReport.html">
+							<button type="submit" style="width:100%; padding: 16px">Export Report</button>
+						</form>
+					</div>
+					<div class="col-5"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

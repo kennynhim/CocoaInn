@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="businessReportPage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<form method="post" action="displayReport.html">
+					<div class="col-12">
+						<div class="col-4">
+							<div class="col-3"></div>
+							<div class="col-6">
+								<label for="startDate">Start Date</label>
+								<input name="startDate" class="startDate" type="date" style="width:100%; text-align: center; padding:16px">
+							</div>
+							<div class="col-3"></div>
+						</div>
+						<div class="col-4">
+							<div class="col-3"></div>
+							<div class="col-6">
+								<label for="endDate">End Date</label>
+								<input name="endDate" class="endDate" type="date" style="width:100%; text-align: center; padding:16px">
+							</div>
+							<div class="col-3"></div>					
+						</div>
+						<div class="col-4">
+							<div class="col-3"></div>
+							<div class="col-6">
+								<br>
+								<input name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Generate Report</button>
+							</div>
+							<div class="col-3"></div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

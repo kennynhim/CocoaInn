@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="editCheckOutTimePage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-3">
+						<div class="col-3"></div>
+						<div class="col-6">
+							<form method="post" action="editCancelTime.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Cancel Time</button>
+							</form>
+						</div>
+						<div class="col-3"></div>
+					</div>
+					<div class="col-3">
+						<div class="col-3"></div>
+						<div class="col-6">
+							<form method="post" action="editCancelFee.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Cancel Fee</button>
+							</form>
+						</div>
+						<div class="col-3"></div>
+					</div>
+					<div class="col-3">
+						<div class="col-3"></div>
+						<div class="col-6">
+							<form method="post" action="editCheckInTime.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Check In Time</button>
+							</form>
+						</div>
+						<div class="col-3"></div>
+					</div>
+					<div class="col-3">
+						<div class="col-3"></div>
+						<div class="col-6">
+							<form method="post" action="editCheckOutTime.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Check Out Time</button>
+							</form>
+						</div>
+						<div class="col-3"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<p style="text-align: center; font-size: 15pt">Check Out Time</p>
+						<form method="post" action="editCheckOutTimeRequested.html">
+							<div class="col-4">
+								<label for="hours">Hour HH</label>
+								<input name="hour" class="hour" type="number" placeholder="<%= policy.checkOutTime.substr(0,2) %>" style="width:100%; padding:16px" min="1" max="12" required>
+							</div>
+							<div class="col-4">
+								<label for="minute">Minute MM</label>
+								<input name="minute" class="minute" type="number" placeholder="<%= policy.checkOutTime.substr(3,5) %>" style="width:100%; padding:16px" min="0" max="59" required>								
+							</div>
+							<div class="col-4">
+								<br>
+								<label for="meridiem">AM</label>
+								<input name="meridiem" class="meridiem" type="radio" value="AM">
+								<label for="meridiem">PM</label>
+								<input name="meridiem" class="meridiem" type="radio" value="PM">
+							</div>
+							<div class="col-12">
+								<div class="col-4"></div>
+								<div class="col-4">
+									<p style="text-align: center">Note: Modifying the check out time will take effect immediately.</p>
+									<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+									<button type="submit" style="width:100%; padding: 16px">Save Changes</button>
+								</div>
+								<div class="col-4"></div>
+							</div>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
