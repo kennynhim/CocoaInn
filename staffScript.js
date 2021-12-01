@@ -424,7 +424,15 @@ function searchReservation(request, response, confirmationNumber, firstName, las
 						}
 						if (x+1 === result[0].assignedRoom.length){
 							removeNotification(result[0].confirmationNumber);
-							response.render("staffModifyEJS", {reservation: result[0], rooms: reservedRooms, userID: userID});
+							const today = new Date();
+							const checkIn = result[0].checkIn;
+							const checkInDate = new Date(getYear(checkIn), getMonth(checkIn)-1, getDay(checkIn));
+							let bCanCheckIn;
+							if (today.getTime() < checkInDate.getTime())
+								bCanCheckIn = false;
+							else
+								bCancheckIn = true;
+							response.render("staffModifyEJS", {reservation: result[0], rooms: reservedRooms, userID: userID, bCanCheckIn: bCanCheckIn});
 						}
 					}
 				})
@@ -483,7 +491,15 @@ function searchReservationRoomDate(request, response, date, roomNum){
 						}
 						if (x+1 === foundReservations[0].assignedRoom.length){
 							removeNotification(foundReservations[0].confirmationNumber);
-							response.render("staffModifyEJS", {reservation: foundReservations[0], rooms: reservedRooms, userID: userID});
+							const today = new Date();
+							const checkIn = foundReservations[0].checkIn;
+							const checkInDate = new Date(getYear(checkIn), getMonth(checkIn)-1, getDay(checkIn));
+							let bCanCheckIn;
+							if (today.getTime() < checkInDate.getTime())
+								bCanCheckIn = false;
+							else
+								bCanCheckIn = true;
+							response.render("staffModifyEJS", {reservation: foundReservations[0], rooms: reservedRooms, userID: userID, bCanCheckIn: bCanCheckIn});
 						}
 					}
 				})
@@ -630,8 +646,17 @@ app.post("/changeDateRequested.html", function(req, response){
 								dbo.collection("reservation").findOne({confirmationNumber: confirmation}, function(err7, newReservation){
 									if (err7)
 										throw err7;
-									if (newReservation != null)
-										response.render("staffModifyEJS", {userID: userID, reservation: newReservation, rooms: reservedRooms});												
+									if (newReservation != null){
+										const today = new Date();
+										const checkIn = newReservation.checkIn;
+										const checkInDate = new Date(getYear(checkIn), getMonth(checkIn)-1, getDay(checkIn));
+										let bCanCheckIn;
+										if (today.getTime() < checkInDate.getTime())
+											bCanCheckIn = false;
+										else
+											bCanCheckIn = true;
+										response.render("staffModifyEJS", {userID: userID, reservation: newReservation, rooms: reservedRooms, bCanCheckIn: bCanCheckIn});
+										}			
 									})
 								}
 							}
@@ -723,7 +748,8 @@ app.post("/cancel.html", function(req, response){
 				if (err3)
 					throw err3;
 				let cancelValid = cancelIsValid(reservation.checkIn, policy.cancelTime);
-				response.render("staffCancelReservationEJS", {reservation: reservation, cancelValid: cancelValid, userID: userID});
+				const cancelFee = Number(policy.cancelFee);
+				response.render("staffCancelReservationEJS", {reservation: reservation, cancelValid: cancelValid, cancelFee: cancelFee, userID: userID});
 			})
 		})
 	})
@@ -761,7 +787,7 @@ function removeReservation(req, response, canceled){
 							throw err5;
 					})
 					//Remove the reservation
-					//Display "Your reservation has been cancelled" page
+					//Display "Your reservation has been canceled" page
 					if (x+1 === reservation.assignedRoom.length){
 						dbo.collection("reservation").deleteOne({confirmationNumber: confirmation}, function(err6, result2){
 							if (err6)
@@ -787,15 +813,21 @@ function updateReport(req, bCanceled){
 			if (err2)
 				throw err2;
 			if (reservation != null){
-				const duration = Number(getStayDuration(reservation.checkIn, reservation.checkOut));
-				var revenueObj = {};
-				if (bCanceled)
-					revenueObj = {date: reservation.checkOut, price: Number(reservation.price), bCanceled: bCanceled};
-				else
-					 revenueObj = {date: reservation.checkOut, price: Number(reservation.price), guests: reservation.adults+reservation.children, duration: duration, bCanceled: bCanceled};
-				dbo.collection("report").insertOne(revenueObj, function(err3, result){
-					if (err3)
-						throw err3;
+				dbo.collection("policy").findOne({}, function(err3, policy){
+					const duration = Number(getStayDuration(reservation.checkIn, reservation.checkOut));
+					var revenueObj = {};
+					if (bCanceled){	//If canceled before the cancel-by date, give a full refund. Otherwise, charge the cancelation fee
+						if (cancelIsValid(reservation.checkIn, policy.cancelTime))
+							revenueObj = {date: reservation.checkOut, price: 0, bCanceled: bCanceled};
+						else
+							revenueObj = {date: reservation.checkOut, price: Number(policy.cancelFee), bCanceled: bCanceled};
+					}
+					else
+						 revenueObj = {date: reservation.checkOut, price: Number(reservation.price), guests: reservation.adults+reservation.children, duration: duration, bCanceled: bCanceled};
+					dbo.collection("report").insertOne(revenueObj, function(err3, result){
+						if (err3)
+							throw err3;
+					})
 				})
 			}
 		})
@@ -863,6 +895,7 @@ app.post("/confirmCheckIn.html", function(req, response){
 })
 
 //When staff clicks on "Check Out" on reservation details page
+//Check to see if staff can check out the guest (is today on or after the guest's check in date?)
 //Render the check out page
 app.post("/checkOut.html", function(req, response){
 	MongoClient.connect(dbURL, function(err1, db){
@@ -1312,14 +1345,15 @@ app.post("/displayReport.html", function(req, response){
 })
 
 //TODO
+//Do not allow staff to check in or check out guests before their check in date. Staff may check out guests before the check out date if they have already checked in
 //Use Check in time, Check out time, and cancel fee in reservation details page
-//When a reservation is canceled- refund the price on the reservation(set to 0), or refund the price and charge the cancel fee
+//When a reservation is canceled- refund the price on the reservation(set to 0), or refund the price and charge the cancel fee (only needed on guestScript)
 //When a reservation is canceled, and there is a fee: update the "report" collection with the reservation's price (for guest cancellation)
+//Export the business report to a text document
 //If enough time- add room, change room, remove room, add/remove guest (must implement logic)
 //Realistic descriptions, images for rooms
 //Add amentities attribute to rooms, display on reservations page and details page
 //Improve user interface
-//Do not allow staff to check in or check out guests before their check in date. Staff may check out guests before the check out date if they have already checked in
 
 
 function clearCart(){
