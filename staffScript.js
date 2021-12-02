@@ -4,6 +4,7 @@ const ejs = require('ejs'); //https://ejs.co/
 const express  = require("express"); //https://expressjs.com/
 const app = express(); 
 const bodyParser = require('body-parser');	//https://www.npmjs.com/package/body-parser
+const fs = require('fs');
 const Mongo = require('mongodb');
 const MongoClient = Mongo.MongoClient;	//Terminal command: npm install mongodb
 const dbURL = "mongodb+srv://group7:group7Pass@cmpsc487gr7.0naf3.mongodb.net/CocoaInn?retryWrites=true&w=majority"
@@ -427,11 +428,11 @@ function searchReservation(request, response, confirmationNumber, firstName, las
 							const today = new Date();
 							const checkIn = result[0].checkIn;
 							const checkInDate = new Date(getYear(checkIn), getMonth(checkIn)-1, getDay(checkIn));
-							let bCanCheckIn;
+							let bCanCheckIn = true;
 							if (today.getTime() < checkInDate.getTime())
 								bCanCheckIn = false;
-							else
-								bCancheckIn = true;
+							console.log("bCanCheckIn:");
+							console.log(bCanCheckIn);
 							response.render("staffModifyEJS", {reservation: result[0], rooms: reservedRooms, userID: userID, bCanCheckIn: bCanCheckIn});
 						}
 					}
@@ -1345,15 +1346,12 @@ app.post("/displayReport.html", function(req, response){
 })
 
 //TODO
-//Do not allow staff to check in or check out guests before their check in date. Staff may check out guests before the check out date if they have already checked in
+//Modify Room
+//Add/Remove Guest
 //Use Check in time, Check out time, and cancel fee in reservation details page
-//When a reservation is canceled- refund the price on the reservation(set to 0), or refund the price and charge the cancel fee (only needed on guestScript)
-//When a reservation is canceled, and there is a fee: update the "report" collection with the reservation's price (for guest cancellation)
-//Export the business report to a text document
-//If enough time- add room, change room, remove room, add/remove guest (must implement logic)
+//MAYBE- Export the business report to a text document
 //Realistic descriptions, images for rooms
 //Add amentities attribute to rooms, display on reservations page and details page
-//Improve user interface
 
 
 function clearCart(){

@@ -492,18 +492,19 @@ app.post("/cancel.html", function(req, response){
 				if (err3)
 					throw err3;
 				let cancelValid = cancelIsValid(reservation.checkIn, policy.cancelTime);
-				response.render("modifyCancelEJS", {reservation: reservation, cancelValid: cancelValid});
+				const cancelFee = policy.cancelFee;
+				response.render("modifyCancelEJS", {reservation: reservation, cancelValid: cancelValid, cancelFee: cancelFee});
 			})
 		})
 	})
 })
-
 
 //When a user clicks "Cancel Reservation" after confirming they want to cancel
 //Remove the check in/out dates in the rooms collection associated w/ the reservation
 //Remove the reservation record
 app.post("/cancelRequested.html", function(req, response){
 	const confirmation = req.body.confirmationNumber;
+	updateReport(confirmation, true);
 	
 	MongoClient.connect(dbURL, function(err1, db){
 		if (err1)
@@ -539,6 +540,41 @@ app.post("/cancelRequested.html", function(req, response){
 	})
 })
 
+
+//Add a date, price, and number of guests to the "report" collection
+function updateReport(confirmationNumber, bCanceled){
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			if (reservation != null){
+				dbo.collection("policy").findOne({}, function(err3, policy){
+					const duration = Number(getStayDuration(reservation.checkIn, reservation.checkOut));
+					var revenueObj = {};
+					if (bCanceled){	//If canceled before the cancel-by date, give a full refund. Otherwise, charge the cancelation fee
+						if (cancelIsValid(reservation.checkIn, policy.cancelTime))
+							revenueObj = {date: reservation.checkOut, price: 0, bCanceled: bCanceled};
+						else
+							revenueObj = {date: reservation.checkOut, price: Number(policy.cancelFee), bCanceled: bCanceled};
+					}
+					else
+						 revenueObj = {date: reservation.checkOut, price: Number(reservation.price), guests: reservation.adults+reservation.children, duration: duration, bCanceled: bCanceled};
+					dbo.collection("report").insertOne(revenueObj, function(err3, result){
+						if (err3)
+							throw err3;
+					})
+				})
+			}
+		})
+	})
+}
+
+
+
 //When user enters a chat message in the reservation details page, and clicks on "Send"
 //Add the message to the notes array in the reservation record
 //Add a notification to notifications table
@@ -568,6 +604,10 @@ app.post("/sendChat.html", function (req, response){
 		})
 	})
 })
+
+//TODO:
+//Finish Modify Room
+//Finish Add/Remove Guest
 
 //Validates the dates for a single reservation
 //Returns false if check in comes on or after check out
