@@ -722,8 +722,121 @@ app.post("/confirmAddRoom.html", function(req, response){
 	})
 })
 
+
+//When user clicks on "Remove Room" on Modify Room page
+//Query all the rooms of the user's reservation, and display the page
+app.post("/removeRoom.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			dbo.collection("room").find({}).toArray(function(err3, rooms){
+				if (err3)
+					throw err3;
+				let validRooms = [];
+				for (let x = 0; x < reservation.assignedRoom.length; x++){
+					for (let y = 0; y < rooms.length; y++){
+						if (reservation.assignedRoom[x] == rooms[y].roomNum){
+							validRooms.push(rooms[y]);
+							break;
+						}
+					}
+					if (x+1 === reservation.assignedRoom.length){
+						response.render("removeRoomEJS", {reservation: reservation, rooms: validRooms});
+					}
+				}
+			})
+		})
+	})
+})
+
+//When user clicks on "Remove Room" button on Remove Room page
+//Calculate price change and display a confirmation page to user
+//Make sure the user cannot remove the room if there is only one room left
+//Or the max occupancy of the existing rooms does not meet the number of guests on reservation
+app.post("/removeRoomRequested.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	const roomNum = Number(req.body.roomNum);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			if (reservation.numRooms == 1){
+				alert("You cannot remove this room.");
+				return;
+			}
+			const numGuests = Number(reservation.adults) + Number(reservation.children);
+			dbo.collection("room").find({}).toArray(function(err3, rooms){
+				if (err3)
+					throw err3;
+				//First, see if removing this room would set the max occupancy of all rooms below the number of guests
+				//Add all max occupancy of the reservation's rooms, except for the room to be deleted
+				let newMaxOccupancy = 0;
+				let priceChange = 0;
+				for (let x = 0; x < reservation.assignedRoom.length; x++){
+					for (let y = 0; y < rooms.length; y++){
+						if (rooms[y].roomNum == reservation.assignedRoom[x]){
+							if (rooms[y].roomNum != roomNum)
+								newMaxOccupancy += rooms[y].maxOccupancy;
+							else{
+								priceChange = getStayDuration(reservation.checkIn, reservation.checkOut)*rooms[y].price;
+							}
+						}
+					}
+					if (x+1 === reservation.assignedRoom.length){
+						if (newMaxOccupancy < Number(reservation.adults) + Number(reservation.children)){
+							alert("Cannot remove this room- max occupancy cannot support guests.");
+							return;
+						}
+						response.render("confirmRemoveRoomEJS", {reservation: reservation, priceChange: priceChange, roomNum: roomNum});
+					}
+				}
+			})
+		})
+	})
+})
+
+//When user confirms they want to remove room after being shown the price change
+//Remove the room from the reservation
+//Update the balance in the reservation
+//Remove the check in and check out dates from the room
+app.post("/confirmRemoveRoom.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	const roomNum = Number(req.body.roomNum);
+	const checkIn = req.body.checkIn;
+	const checkOut = req.body.checkOut;
+	const numRooms = Number(req.body.numRooms);
+	const priceChange = Number(req.body.priceChange);
+	const price = Number(req.body.price);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		const reservationUpdate = { $set: {numRooms: numRooms-1, price: price - priceChange}, $pull: {assignedRoom: {$in: [roomNum]}}}
+		dbo.collection("reservation").updateOne({confirmationNumber: confirmationNumber}, reservationUpdate, function(err2, result){
+			if (err2)
+				throw err2;
+			const roomUpdate = {$pull: {reservedDates: {checkIn: checkIn, checkOut: checkOut}}};
+			dbo.collection("room").updateOne({roomNum: roomNum}, roomUpdate, function(err3, result){
+				if (err3)
+					throw err3;
+				renderDetailsPage(req, response);
+			})
+		})
+	})
+})
+
 //TODO:
-//Finish Modify Room
 //Finish Add/Remove Guest
 
 //Validates the dates for a single reservation
