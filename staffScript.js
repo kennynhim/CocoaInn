@@ -431,8 +431,6 @@ function searchReservation(request, response, confirmationNumber, firstName, las
 							let bCanCheckIn = true;
 							if (today.getTime() < checkInDate.getTime())
 								bCanCheckIn = false;
-							console.log("bCanCheckIn:");
-							console.log(bCanCheckIn);
 							response.render("staffModifyEJS", {reservation: result[0], rooms: reservedRooms, userID: userID, bCanCheckIn: bCanCheckIn});
 						}
 					}
@@ -1343,6 +1341,127 @@ app.post("/displayReport.html", function(req, response){
 		})
 	})
 
+})
+
+//When staff clicks on "Modify Room" button on reservation details page
+app.post("/modifyRoom.html", function(req, response){
+	const userID = req.body.userID;
+	const confirmationNumber = req.body.confirmationNumber;
+
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			response.render("staffModifyRoomEJS", {userID: userID, reservation: reservation})		
+		})
+	})
+})
+
+
+//When staff clicks on "Add Room" button on Modify Room page
+//Query a list of all available rooms for the reservation's check in and check out date
+app.post("/modifyAddRoom.html", function(req, response){
+	const userID = req.body.userID;
+	const confirmationNumber = req.body.confirmationNumber;
+	const checkIn = req.body.checkIn;
+	const checkOut = req.body.checkOut;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			dbo.collection("room").find({}).toArray(function(err2, rooms){
+				if (err2)
+					throw err2;
+				let validRooms = [];
+				for (let x = 0; x < rooms.length; x++){
+					let valid = true;
+					for (let y = 0; y < rooms[x].reservedDates.length; y++){
+						if (!validateReservationConflict(checkIn, checkOut, rooms[x].reservedDates[y].checkIn, rooms[x].reservedDates[y].checkOut)){
+							valid = false;
+							break;
+						}
+					}
+					if (valid)
+						validRooms.push(rooms[x]);
+					if (x+1 === rooms.length){
+						response.render("staffModifyAddRoomEJS", {reservation: reservation, rooms: validRooms, userID: userID});						
+					}
+				}
+			})			
+		})
+	})
+})
+
+//When staff clicks on "Add Room" button on Add Room page
+//Calculate the price change
+//Display confirmation
+app.post("/modifyAddRoomRequested.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	const userID = req.body.userID;
+	const checkIn = req.body.checkIn;
+	const checkOut = req.body.checkOut;
+	const roomNum = Number(req.body.roomNum);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			dbo.collection("room").findOne({roomNum: roomNum}, function(err3, room){
+				if (err3)
+					throw err3;
+				const roomPrice = room.price;
+				const priceChange = getStayDuration(checkIn, checkOut)*roomPrice;
+				response.render("staffConfirmModifyAddRoomEJS", {reservation: reservation, roomNum: roomNum, priceChange: priceChange, userID: userID})
+			})
+		})
+	})	
+})
+
+
+//When staff clicks on "Add Room" after confirming price change
+//Add room to reservation, update balance, update numRooms
+//Update reservedDates in room
+app.post("/confirmAddRoom.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	const roomNum = Number(req.body.roomNum);
+	const priceChange = Number(req.body.priceChange);
+	const checkIn = req.body.checkIn;
+	const checkOut = req.body.checkOut;
+	const userID = req.body.userID;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		//Read from reservation
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			let newNumRooms = reservation.numRooms + 1;
+			let balance = Number(reservation.price) + priceChange;
+			const updateReservation = { $set: {numRooms: newNumRooms, price: Number(balance)}, $push: {"assignedRoom": roomNum} };
+			dbo.collection("reservation").updateOne({confirmationNumber: confirmationNumber}, updateReservation, function(err3, result){
+				if (err3)
+					throw err3;
+				const dates = {checkIn: checkIn, checkOut: checkOut};
+				dbo.collection("room").updateOne({roomNum: roomNum}, { $push: {"reservedDates": dates} }, function(err4, result){
+					if (err4)
+						throw err4;
+					searchReservation(req, response, confirmationNumber, null, null, null, null);					
+				})
+			})
+		})
+	})
 })
 
 //TODO

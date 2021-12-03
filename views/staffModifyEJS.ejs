@@ -97,14 +97,10 @@
 							<button type="submit" style="width: 100%; background-color: honeydew; padding: 16px 32px">Change Check In/Out</button>
 						</form>
 						<br>
-						<form method="post" action="add-RemoveRoom.html">
-							<input type="hidden">
-							<button type="submit" style="width: 100%; background-color: honeydew; padding: 16px 32px">Add/Remove Room</button>
-						</form>
-						<br>
-						<form method="post" action="changeRoom.html">
-							<input type="hidden">
-							<button type="submit" style="width: 100%; background-color: honeydew; padding: 16px 32px">Change Room</button>
+						<form method="post" action="modifyRoom.html">
+							<input name="userID" class="userID" type="hidden" value="<%= userID %>">
+							<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+							<button type="submit" style="width: 100%; background-color: honeydew; padding: 16px 32px">Modify Room</button>
 						</form>
 						<br>
 						<form method="post" action="add-removeGuest.html">
