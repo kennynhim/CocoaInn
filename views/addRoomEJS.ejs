@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: black">
+		<div class="addRoomPage">
+			<div class="row1" style="color: beige">
+				<div class="col-2"><a href="index.html" style="font-size: 35pt; color: beige">Home</a></div>
+				<div class="col-2"><a href="Reservation.html" style="font-size: 35pt; color: beige">Reserve</a></div>
+				<div class="col-2"><h1 style="text-align: center">Dine</h1></div>
+				<div class="col-2"><h1 style="text-align: center">Spa</h1></div>
+				<div class="col-2"><h1 style="text-align: center">Golf</h1></div>
+				<div class="col-2"><h1 style="text-align: center">Contact</h1></div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="reservationDetails.html">
+								<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+								<button type="submit" style="width:100%; padding:16px">Back</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="addRoom.html">
+								<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+								<input name="checkIn" class="checkIn" type="hidden" value="<%= reservation.checkIn %>">
+								<input name="checkOut" class="checkOut" type="hidden" value="<%= reservation.checkOut %>">
+								<button type="submit" style="width:100%; padding:16px">Add Room</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="removeRoom.html">
+								<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+								<button type="submit" style="width:100%; padding:16px">Remove Room</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<div class="col-3" style="color: honeydew">
+						<h2 style="text-align: center; font-size: 30pt">Your Stay</h2>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Check In: <%= reservation.checkIn %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Check Out: <%= reservation.checkOut %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Adults: <%= reservation.adults %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Children: <%= reservation.children %></h3>
+					</div>
+					<div class="col-9">
+						<% for (let x = 0; x < rooms.length; x++) { %>
+							<div class="col-12" style="color: honeydew">
+								<div class="col-4">
+									<br><br><br><br><br>
+									<h1 style="text-align: center"><%= rooms[x].roomName %></h1>
+									<p style = "text-align:center">Beds: <%= rooms[x].numBeds %><br>Occupancy: <%= rooms[x].maxOccupancy %><br><%= rooms[x].description %></p>
+								</div>
+								<div class="col-6"><img src="https://www.urbanpixxels.com/wp-content/uploads/22-12037-post/Bedroom-Boutique-Hotel-Room-Old-Clare-Sydney(pp_w768_h512).jpg" style="width: 100%; height: auto; margin-left: auto; margin-right: auto; display: block">
+								</div>
+								<div class="col-2">
+									<br><br><br><br><br>
+									<div class="col-12">
+										<h2 style="text-align: center">$150.00</h2>
+										<p style="text-align: center">(per night)</p>									
+									</div>
+									<div class="col-12">
+										<form action="addRoomRequested.html" method="post">
+												<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+												<input name="checkIn" class="checkIn" type="hidden" value="<%= reservation.checkIn %>">
+												<input name="checkOut" class="checkOut" type="hidden" value="<%= reservation.checkOut %>">
+												<input name="roomNum" class="roomNum" type="hidden" value="<%= rooms[x].roomNum %>">
+												<button class="bookButton" type="submit" style="width:100%; padding:16px">Add Room</button>											
+										</form>									
+									</div>
+								</div>
+							</div>
+						<% } %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
