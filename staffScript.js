@@ -708,6 +708,7 @@ app.post("/modifyDate.html", function(req, response){
 	const checkOut = req.body.checkOut;
 	const adults = req.body.adults;
 	const children = req.body.children;
+	const price = req.body.price;
 	const confirmationNumber = req.body.confirmationNumber;
 	const userID = req.body.userID;
 	
@@ -718,6 +719,7 @@ app.post("/modifyDate.html", function(req, response){
 										   adults: adults,
 										   children: children,
 										   confirmationNumber: confirmationNumber,
+										   price: price,
 										   userID: userID});
 })
 
@@ -1420,7 +1422,16 @@ app.post("/modifyAddRoomRequested.html", function(req, response){
 				if (err3)
 					throw err3;
 				const roomPrice = room.price;
-				const priceChange = getStayDuration(checkIn, checkOut)*roomPrice;
+				let priceChange = 0;
+				if (!reservation.bCheckedIn){
+					priceChange = getStayDuration(checkIn, checkOut)*roomPrice;
+				}
+				else{
+					const today = new Date();
+					priceChange = getStayDuration(today.toISOString.substr(0, 10), checkOut)*roomPrice;					
+				}
+					  
+					  
 				response.render("staffConfirmModifyAddRoomEJS", {reservation: reservation, roomNum: roomNum, priceChange: priceChange, userID: userID})
 			})
 		})
@@ -1579,14 +1590,6 @@ app.post("/confirmRemoveRoom.html", function(req, response){
 		})
 	})	
 })
-
-//TODO
-//Add/Remove Guest
-//Add a current balance to reservation details page
-//Use Check in time, Check out time, and cancel fee in reservation details page
-//MAYBE- Export the business report to a text document
-//Realistic descriptions, images for rooms
-//Add amentities attribute to rooms, display on reservations page and details page
 
 
 function clearCart(){

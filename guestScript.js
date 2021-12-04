@@ -354,7 +354,19 @@ app.post("/confirmModification.html", function(req, response){
 			if (err2)
 				throw err2;
 			if (reservation != null){
-				//First, check if the new check in/out date conflicts with another reservation
+				//First, check if the reservation has been checked in
+				//If so, check if the new check out date is sooner than the original check out date. If so, do not allow it
+				if (reservation.bCheckedIn){
+					const newCheckOutDate = new Date(getYear(checkOut), getMonth(checkOut)-1, getDay(checkOut));
+					const oldCheckOutDate = new Date(getYear(reservation.checkOut), getMonth(reservation.checkOut)-1, getDay(reservation.checkOut));
+					if (newCheckOutDate.getTime() < oldCheckOutDate.getTime()){
+						alert("Once checked in, the new check out date cannot come sooner than the original check out date. Please contact front desk.");
+						return;
+					}
+				}
+				
+				
+				//Second, check if the new check in/out date conflicts with another reservation
 				dbo.collection("reservation").find({}).toArray(function(err3, honoredReservations){
 					if (err3)
 						throw err3;
@@ -478,7 +490,8 @@ app.post("/changeDateRequested.html", function(req, response){
 })
 
 //When user clicks "Cancel Reservation" button on modification page
-//First, check if they are able to cancel with a full refund
+//First, check if guest is able to cancel reservation at all (they cannot if currently checked in- only staff can do so)
+//Second, check if they are able to cancel with a full refund
 //Display the cancel confirmation page
 app.post("/cancel.html", function(req, response){
 	const confirmation = req.body.confirmationNumber;
@@ -491,6 +504,12 @@ app.post("/cancel.html", function(req, response){
 		dbo.collection("reservation").findOne({confirmationNumber: confirmation}, function(err2, reservation){
 			if (err2)
 				throw err2;
+			//If checked in, stop
+			if (reservation.bCheckedIn){
+				alert("Cannot cancel reservation after check in. Please contact front desk.");
+				return;				
+			}
+			
 			//Retrieve our cancellation policy
 			dbo.collection("policy").findOne({}, function(err3, policy){
 				if (err3)
@@ -684,7 +703,15 @@ app.post("/addRoomRequested.html", function(req, response){
 				if (err3)
 					throw err3;
 				const roomPrice = room.price;
-				const priceChange = getStayDuration(checkIn, checkOut)*roomPrice;
+				let priceChange = 0;
+				if (!reservation.bCheckedIn){
+					priceChange = getStayDuration(checkIn, checkOut)*roomPrice;					
+				}
+				else{
+					//Guest is checked in. Price change should only reflect between today and check out
+					const today = new Date();
+					priceChange = getStayDuration(today.toISOString.substr(0, 10), checkOut)*roomPrice;
+				}
 				response.render("confirmAddRoomEJS", {reservation: reservation, roomNum: roomNum, priceChange: priceChange})
 			})
 		})
@@ -728,6 +755,7 @@ app.post("/confirmAddRoom.html", function(req, response){
 
 
 //When user clicks on "Remove Room" on Modify Room page
+//First, check to see if the guest is allowed to remove a room (they cannot if they are currently checked in, only staff can do so)
 //Query all the rooms of the user's reservation, and display the page
 app.post("/removeRoom.html", function(req, response){
 	const confirmationNumber = req.body.confirmationNumber;
@@ -739,6 +767,10 @@ app.post("/removeRoom.html", function(req, response){
 		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
 			if (err2)
 				throw err2;
+			if (reservation.bCheckedIn){
+				alert("Cannot remove rooms once checked in. Please contact front desk.");
+				return;
+			}
 			dbo.collection("room").find({}).toArray(function(err3, rooms){
 				if (err3)
 					throw err3;
@@ -839,10 +871,6 @@ app.post("/confirmRemoveRoom.html", function(req, response){
 		})
 	})
 })
-
-//TODO:
-//Finish Add/Remove Guest
-//Add a current balance to reservation details page
 
 
 //Validates the dates for a single reservation
