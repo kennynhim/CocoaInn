@@ -53,7 +53,17 @@
 							<button type="submit" style="width:24%; padding: 10px">Search</button>
 						</form>
 					</div>
-					<div class="col-4"></div>
+					<div class="col-4">
+							<div class="col-4"></div>
+							<div class="col-4">
+								<form class="notification" method="post" action="viewOpenReservations.html">
+									<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+									<button type="submit">Open Reservations</button>
+									<span class="badge">3</span>
+								</form>
+							</div>
+							<div class="col-4"></div>
+					</div>
 				</div>
 			</div>
 			

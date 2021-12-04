@@ -1,4 +1,5 @@
 To Do:
+- Shorten input fields in Search Reservation page for staff view
 - Convert all date objects from UTC to local time
 - Fix/Improve room listings on Check In/Check Out page for staff
 - Add a sort rooms by price, max occupancy functionality when searching for reservations

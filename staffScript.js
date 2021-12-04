@@ -95,6 +95,7 @@ function displayHomePage(userID, db, response, bManager){
 		let checkOuts = [];
 		const today = new Date();
 		const todayString = today.toISOString();
+		let numOpenReservations = 0;
 
 		//Get all of today's check ins and check outs
 		for (let x = 0; x < reservations.length; x++){
@@ -104,12 +105,15 @@ function displayHomePage(userID, db, response, bManager){
 				checkOuts.push(reservations[x]);
 			else if (isCurrentGuest(reservations[x].checkIn, reservations[x].checkOut))
 				currentGuests.push(reservations[x]);
+			let checkOutDate = new Date(getYear(reservations[x].checkOut), getMonth(reservations[x].checkOut)-1, getDay(reservations[x].checkOut));
+			if (checkOutDate.getTime() < today.getTime())
+				numOpenReservations++;
 		}
 		dbo.collection("notifications").find({}).toArray(function (err2, notifications){
 			if (err2)
 				throw err2;
 			//Check if this is an employee or manager
-			response.render("staffHomeEJS", {userID: userID, checkIns: checkIns, checkOuts: checkOuts, currentGuests: currentGuests, numMessages: notifications.length, bIsManager: bManager});
+			response.render("staffHomeEJS", {userID: userID, checkIns: checkIns, checkOuts: checkOuts, currentGuests: currentGuests, numMessages: notifications.length, bIsManager: bManager, numOpenReservations: numOpenReservations});
 		})
 	})
 }
@@ -1589,6 +1593,34 @@ app.post("/confirmRemoveRoom.html", function(req, response){
 			})
 		})
 	})	
+})
+
+//When staff clicks on "Open Reservations" button on staff home page
+//Display all reservations with a check out date that has already passed
+app.post("/viewOpenReservations.html", function(req, response){
+	const userID = req.body.userID;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		const today = new Date();
+		dbo.collection("reservation").find({}).toArray(function(err2, reservations){
+			if (err2)
+				throw err2;
+			const today = new Date();
+			let openReservations = [];
+			for (let x = 0; x < reservations.length; x++){
+				let checkOut = new Date(getYear(reservations[x].checkOut), getMonth(reservations[x].checkOut)-1, getDay(reservations[x].checkOut));
+				if (checkOut.getTime() < today.getTime()){
+					openReservations.push(reservations[x]);
+				}
+				if (x+1 == reservations.length){
+					response.render("staffOpenReservationsEJS", {openReservations: openReservations, userID: userID});
+				}
+			}
+		})
+	});
 })
 
 
