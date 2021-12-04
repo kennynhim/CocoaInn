@@ -86,6 +86,7 @@ app.get("/Reservation.html", function(req,res){
 						rooms : result,
 						checkIn: todayString.substr(0, 10),
 						checkOut: todayString.substr(0,10),
+						today: todayString.substr(0, 10),
 					   	numAdults: 1,
 					   	numChildren: 0});
 			db.close();
@@ -148,10 +149,13 @@ app.post("/Reservation.html", function(req,res){
 			}
 			
 			//Re-render the Reservations page, but now with only the available rooms according to the user's reservation parameters
+			const today = new Date();
+			const todayString = today.toISOString();
 			res.render("reservationEJS", {bInit: false,
 										  numRooms: numRooms,
 										  checkIn: checkIn,
 										  checkOut: checkOut,
+										  today: todayString.substr(0, 10),
 										  numAdults: numAdults,
 										  numChildren: numChildren,
 										  rooms: availableRooms});
@@ -838,6 +842,8 @@ app.post("/confirmRemoveRoom.html", function(req, response){
 
 //TODO:
 //Finish Add/Remove Guest
+//Add a current balance to reservation details page
+
 
 //Validates the dates for a single reservation
 //Returns false if check in comes on or after check out

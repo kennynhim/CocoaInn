@@ -1581,8 +1581,8 @@ app.post("/confirmRemoveRoom.html", function(req, response){
 })
 
 //TODO
-//Modify Room
 //Add/Remove Guest
+//Add a current balance to reservation details page
 //Use Check in time, Check out time, and cancel fee in reservation details page
 //MAYBE- Export the business report to a text document
 //Realistic descriptions, images for rooms
