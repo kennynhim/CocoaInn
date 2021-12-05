@@ -1,7 +1,9 @@
 To Do:
 - Fix/Improve room listings on Check In/Check Out page for staff
-- Add a sort rooms by price, max occupancy functionality when searching for reservations
-- Validate input fields for phone numbers
+- Change cursor of all buttons to pointer
+- Add a sort function on lists
+	* Sort by price, max occupancy when displaying a list of available rooms to reserve/add to to an existing reservation
+	* Sort by first name, last name, check in, check out
 - Add a "Do Not Distrub" button to the reservation details on guest view
 - Use Check in time, Check out time, and cancel fee in reservation details page
 - Realistic descriptions and images for rooms

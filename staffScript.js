@@ -325,7 +325,7 @@ app.post("/staffConfirm.html", function(req, response){
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			email: req.body.email,
-			phone: req.body.phone,
+			phone: phone,
 			checkIn: req.body.checkIn,
 			checkOut: req.body.checkOut,
 			numRooms: numRooms,
