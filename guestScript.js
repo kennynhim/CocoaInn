@@ -79,7 +79,8 @@ app.get("/Reservation.html", function(req,res){
 			if (err)
 				throw err;
 			const today = new Date();
-			const todayString = today.toISOString();
+			const local = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+			const todayString = local.toISOString();
 			res.render("reservationEJS",
 					   {bInit: true,
 						numRooms: numRooms,
@@ -150,7 +151,8 @@ app.post("/Reservation.html", function(req,res){
 			
 			//Re-render the Reservations page, but now with only the available rooms according to the user's reservation parameters
 			const today = new Date();
-			const todayString = today.toISOString();
+			const local = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+			const todayString = local.toISOString();
 			res.render("reservationEJS", {bInit: false,
 										  numRooms: numRooms,
 										  checkIn: checkIn,
@@ -710,7 +712,8 @@ app.post("/addRoomRequested.html", function(req, response){
 				else{
 					//Guest is checked in. Price change should only reflect between today and check out
 					const today = new Date();
-					priceChange = getStayDuration(today.toISOString.substr(0, 10), checkOut)*roomPrice;
+					const local = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+					priceChange = getStayDuration(local.toISOString.substr(0, 10), checkOut)*roomPrice;
 				}
 				response.render("confirmAddRoomEJS", {reservation: reservation, roomNum: roomNum, priceChange: priceChange})
 			})

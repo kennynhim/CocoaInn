@@ -1,18 +1,13 @@
 To Do:
-- Shorten input fields in Search Reservation page for staff view
-- Convert all date objects from UTC to local time
 - Fix/Improve room listings on Check In/Check Out page for staff
 - Add a sort rooms by price, max occupancy functionality when searching for reservations
-- Add a search of all open/current reservations to staff view(ie those checked in but that have not been checked out)
-	*Or, under "Current Guests" section on staff home page, show all open/current reservations and not just those that are currently staying
-- When searching for a reservation under staff view, names/emails should not be case-sensitive
 - Validate input fields for phone numbers
 - Add a "Do Not Distrub" button to the reservation details on guest view
 - Use Check in time, Check out time, and cancel fee in reservation details page
 - Realistic descriptions and images for rooms
 - Add amentities attribute to rooms, display on reservations page and details page
-- Icons next to buttons in reservation details?
 - Clean up user interface and make it look nicer
+	* Icons next to buttons in reservation details?
 - MAYBE - Add/Remove guest functionality, if there is enough time
 - MAYBE- Export the business report to a text document, if there is enough time
 
@@ -26,3 +21,7 @@ Finished:
 - Added a balance to reservation details on staff view
 - When modifying check in/out for staff view, pre-fill the check in/out dates with the reservation's check in/out dates
 - Re-size the modify check in/out date forms on the staff view to match the modify check in/out date forms on the guest view
+- Add a search of all open/current reservations to staff view(ie those checked in but that have not been checked out)
+- Shorten input fields in Search Reservation page for staff view
+- When searching for a reservation under staff view, names/emails should not be case-sensitive
+- Convert all date objects from UTC to local time

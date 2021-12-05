@@ -94,7 +94,10 @@ function displayHomePage(userID, db, response, bManager){
 		let currentGuests = [];
 		let checkOuts = [];
 		const today = new Date();
-		const todayString = today.toISOString();
+		let local = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+		local.setUTCHours(23);
+		local.setUTCMinutes(59);
+		const todayString = local.toISOString();
 		let numOpenReservations = 0;
 
 		//Get all of today's check ins and check outs
@@ -106,7 +109,7 @@ function displayHomePage(userID, db, response, bManager){
 			else if (isCurrentGuest(reservations[x].checkIn, reservations[x].checkOut))
 				currentGuests.push(reservations[x]);
 			let checkOutDate = new Date(getYear(reservations[x].checkOut), getMonth(reservations[x].checkOut)-1, getDay(reservations[x].checkOut));
-			if (checkOutDate.getTime() < today.getTime())
+			if (checkOutDate.getTime() < local.getTime())
 				numOpenReservations++;
 		}
 		dbo.collection("notifications").find({}).toArray(function (err2, notifications){
@@ -169,7 +172,8 @@ app.post("/staffMakeReservation.html", function(req, response){
 			if (err)
 				throw err;
 			const today = new Date();
-			const todayString = today.toISOString();
+			let local = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+			const todayString = local.toISOString();
 			response.render("staffReservationEJS",
 					   {bInit: true,
 						numRooms: numRooms,
@@ -386,18 +390,24 @@ function searchReservation(request, response, confirmationNumber, firstName, las
 		}
 		else if (firstName != null || lastName != null){
 			if (firstName.length === 0 && lastName.length === 0){
-				alert("Please enter a name");
+				alert("Please enter a name.");
 				return;
 			}
-			else if (firstName.length > 0 && lastName.length > 0)
-				query = {firstName: firstName, lastName: lastName};
-			else if (firstName.length > 0 && lastName.length === 0)
-				query = {firstName: firstName};
-			else if (firstName.length === 0 && lastName.length > 0)
-				query = {lastName: lastName};
+			else if (firstName.length > 0 && lastName.length > 0){
+				query = {"firstName" : { $regex : new RegExp(firstName, "i")} , "lastName" : { $regex : new RegExp(lastName, "i")}};
+			}
+			else if (firstName.length > 0 && lastName.length === 0){
+				query = {"firstName": { $regex : new RegExp(firstName, "i")}};
+				//query = {firstName: firstName};				
+			}
+			else if (firstName.length === 0 && lastName.length > 0){
+				query = {"lastName" : { $regex : new RegExp(lastName, "i")}};
+				//query = {lastName: lastName};				
+			}
 		}
 		else if (email != null){
-			query = {email: email};
+			query = {"email" : { $regex : new RegExp(email, "i")}};
+			//query = {email: email};
 		}
 		else if (phone != null){
 			query = {phone: phone};
@@ -1432,7 +1442,8 @@ app.post("/modifyAddRoomRequested.html", function(req, response){
 				}
 				else{
 					const today = new Date();
-					priceChange = getStayDuration(today.toISOString.substr(0, 10), checkOut)*roomPrice;					
+					const local = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+					priceChange = getStayDuration(local.toISOString.substr(0, 10), checkOut)*roomPrice;					
 				}
 					  
 					  
