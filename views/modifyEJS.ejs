@@ -10,6 +10,9 @@
 		<div class="detailsPage">
 			<div class="row1">
 				<div class="col-12">
+					<h1 style="text-align: center; font-size: 50pt; color: saddlebrown">The Cocoa Inn</h1>
+				</div>
+				<div class="col-12">
 					<div class="col-2">
 						<form method="get" action="index.html">
 							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Home</button>
@@ -68,13 +71,13 @@
 					</div>
 				</div>
 
-				<div class="col-8" style="height: 600px; overflow-x: hidden; overflow-y: auto">
+				<div class="col-8" style="height: 770px; overflow-x: hidden; overflow-y: auto">
 					<h2 style="text-align: center; font-size: 30pt">Your Rooms</h2>
 					<% for (let x = 0; x < rooms.length; x++) { %>
 						<% if (x % 2 == 0){ %>
-							<div class="col-12" style="background-color: #E8E5D6">
+							<div class="col-12" style="background-color: ivory">
 						<% } else{ %>
-								<div class="col-12" style="background-color: ivory">
+								<div class="col-12" style="background-color: #E8E5D6">
 						<% } %>
 							<div class="col-4">
 								<h2 style="text-align: center; font-size: 20pt"><%= rooms[x].roomName %></h2>
@@ -170,6 +173,7 @@
 					</div>
 					
 					<div class="col-8">
+						<br><br><br><br><br><br><br><br>
 						<h1 style="text-align: center; font-size: 30pt">Have questions or requests?</h1>
 						<br>
 						<p style="text-align: center; font-size: 20pt">Call us: 717-123-4567</p>

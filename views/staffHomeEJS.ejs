@@ -6,7 +6,7 @@
 		<link href="/public/css.css" rel="stylesheet" type="text/css">
 	</head>
 
-	<body style="background-color: wheat">
+	<body style="background-color: #E1DFC6">
 		<div class="staffHomePage">
 			<div class="row1">
 				<div class="col-2">
@@ -21,7 +21,7 @@
 				  <div class="col-3"></div>
 				</div>
 				<div class="col-8">
-					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+					<h1 style="text-align: center; font-size: 50pt; color: saddlebrown">The Cocoa Inn</h1>
 				</div>
 				<div class="col-2">
 					<div class="col-3"></div>
@@ -35,7 +35,7 @@
 			</div>
 			
 			<div class="row2">
-				<div class="col-12">
+				<div class="col-12" style="background-color: ivory">
 					<div class="col-4">
 							<div class="col-4"></div>
 							<div class="col-4">
@@ -73,7 +73,7 @@
 			</div>
 			
 			<div class="row3">
-				<div class="col-3">
+				<div class="col-3" style="border: 2px solid black">
 					<div class="col-12">
 						<div class="col-2"></div>
 						<div class="col-8">
@@ -150,11 +150,11 @@
 					<% } %>
 				</div>
 				
-				<div class="col-9">
-					<div class="col-4" style="height: 650px; overflow-x: hidden; overflow-y: auto">
+				<div class="col-9" style="border: 2px solid black">
+					<div class="col-4" style="height: 695px; overflow-x: hidden; overflow-y: auto; border: 1px solid black">
 						<h3 style="text-align: center">Today's Check Ins</h3>
 						<% for (let x = 0; x < checkIns.length; x++) { %>
-							<div class="col-12">
+							<div class="col-12" style="border: 1px solid black">
 								<div class="col-12">
 									<h3 style="text-align: center"><%= checkIns[x].firstName %> <%= checkIns[x].lastName %></h3>
 								</div>
@@ -175,10 +175,10 @@
 							</div>
 						<% } %>
 					</div>
-					<div class="col-4" style="height: 650px; overflow-x: hidden; overflow-y: auto">
+					<div class="col-4" style="height: 650px; overflow-x: hidden; overflow-y: auto; border: 1px solid black">
 						<h3 style="text-align: center">Current Guests</h3>
 						<% for (let x = 0; x < currentGuests.length; x++) { %>
-							<div class="col-12">
+							<div class="col-12" style="border: 1px solid black">
 								<div class="col-12">
 									<h3 style="text-align: center"><%= currentGuests[x].firstName %> <%= currentGuests[x].lastName %></h3>
 								</div>
@@ -192,10 +192,10 @@
 							</div>
 						<% } %>
 					</div>
-					<div class="col-4" style="height: 650px; overflow-x: hidden; overflow-y: auto">
+					<div class="col-4" style="height: 650px; overflow-x: hidden; overflow-y: auto; border: 1px solid black">
 						<h3 style="text-align: center">Today's Check Outs</h3>
 						<% for (let x = 0; x < checkOuts.length; x++) { %>
-							<div class="col-12">
+							<div class="col-12" style="border: 1px solid black">
 								<div class="col-12">
 									<h3 style="text-align: center"><%= checkOuts[x].firstName %> <%= checkOuts[x].lastName %></h3>
 								</div>

@@ -325,7 +325,7 @@ app.post("/staffConfirm.html", function(req, response){
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			email: req.body.email,
-			phone: phone,
+			phone: req.body.phone,
 			checkIn: req.body.checkIn,
 			checkOut: req.body.checkOut,
 			numRooms: numRooms,
@@ -816,6 +816,7 @@ function removeReservation(req, response, canceled){
 						dbo.collection("reservation").deleteOne({confirmationNumber: confirmation}, function(err6, result2){
 							if (err6)
 								throw err6;
+							removeNotification(confirmation);
 							response.render("staffCanceledEJS", {userID: userID, canceled: canceled});
 						})
 					}

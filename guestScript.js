@@ -590,7 +590,11 @@ app.post("/cancelRequested.html", function(req, response){
 						dbo.collection("reservation").deleteOne({confirmationNumber: confirmation}, function(err6, result2){
 							if (err6)
 								throw err6;
-							response.render("canceledEJS");
+							dbo.collection("notifications").deleteMany({confirmationNumber: confirmation}, function(err7, result3){
+								if (err7)
+									throw err7;
+								response.render("canceledEJS");
+							})
 						})
 					}
 				}

@@ -10,6 +10,9 @@
 	<div class="bookingPage">
 			<div class="row1">
 				<div class="col-12">
+					<h1 style="text-align: center; font-size: 50pt; color: saddlebrown">The Cocoa Inn</h1>
+				</div>
+				<div class="col-12">
 					<div class="col-2">
 						<form method="get" action="index.html">
 							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Home</button>
@@ -60,9 +63,9 @@
 			<h1 style="font-size: 40pt; text-align: center">Your Rooms</h1>
 			<% for(var x = 0; x < numRooms; x++){ %>
 				<% if (x % 2 == 0){ %>
-					<div class="col-12" style="background-color: #E8E5D6">
+					<div class="col-12" style="background-color: ivory">
 				<% } else{ %>
-						<div class="col-12" style="background-color: ivory">
+						<div class="col-12" style="background-color: #E8E5D6">
 				<% } %>
 					<div class="col-6" style="text-align: center">
 						<br>
@@ -93,7 +96,7 @@
 				<br>
 				<h3 style="text-align: center; font-size: 25pt">Children: <%= numChildren %></h3>
 				<br>
-				<h3 style="text-align: center; font-size: 25pt">Total: <%= price %></h3>
+				<h3 style="text-align: center; font-size: 25pt">Total: $<%= price %></h3>
 			</div>
 			
 			<div class="col-8">

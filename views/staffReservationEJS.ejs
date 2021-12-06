@@ -6,7 +6,7 @@
 		<link href="/public/css.css" rel="stylesheet" type="text/css">
 	</head>
 
-	<body style="background-color: wheat">
+	<body style="background-color: #E1DFC6">
 		<div class="staffReservationPage">
 			<div class="row1">
 				<div class="col-2">
@@ -21,7 +21,7 @@
 				  <div class="col-3"></div>
 				</div>
 				<div class="col-8">
-					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+					<h1 style="text-align: center; font-size: 50pt; color: saddlebrown">The Cocoa Inn</h1>
 				</div>
 				<div class="col-2">
 					<div class="col-3"></div>
@@ -35,14 +35,14 @@
 			</div>
 			
 			<div class="row2">
-				<div class="col-4">
+				<div class="col-4" style="background-color: ivory; border: 1px solid black">
 					<div class="col-4"></div>
 					<div class="col-4">
 						<% if (numRooms == 0 || bInit){ %>
 							<form method="post" action="staffSearchReservation.html">
 								<label for="checkIn" style="font-size: 20pt">Check In:</label>
 								<br>
-								<input class="checkIn" type="date" style="width:100%" name="checkIn" value ="<%= checkIn %>" min="<%= checkIn %>" required>
+								<input class="checkIn" type="date" style="width:100%; text-align: center" name="checkIn" value ="<%= checkIn %>" min="<%= checkIn %>" required>
 								<br>
 								<br>
 								<br>
@@ -50,7 +50,7 @@
 								<br>
 								<label for="checkOut" style ="font-size:20pt">Check Out:</label>
 								<br>
-								<input class="checkOut" type="date" style="width:100%" name="checkOut" value="<%= checkOut %>" min="<%= checkOut %>" required>
+								<input class="checkOut" type="date" style="width:100%; text-align: center" name="checkOut" value="<%= checkOut %>" min="<%= checkOut %>" required>
 								<br>
 								<br>
 								<br>
@@ -58,7 +58,7 @@
 								<br>
 								<label for="numAdults" style="font-size: 20pt">Adults</label>
 								<br>
-								<input class="numAdults" type="number" style="width:100%" placeholder="Adults" name ="numAdults" value="<%= numAdults %>" min=1 required>
+								<input class="numAdults" type="number" style="width:100%; text-align: center" placeholder="Adults" name ="numAdults" value="<%= numAdults %>" min=1 required>
 								<br>
 								<br>
 								<br>
@@ -66,7 +66,7 @@
 								<br>
 								<label for="numChildren" style="font-size: 20pt">Children</label>
 								<br>
-								<input class="numChildren" type="number" placeholder="Children" style="width: 100%" name="numChildren" value="<%= numChildren %>" min=0 required>
+								<input class="numChildren" type="number" placeholder="Children" style="width: 100%; text-align: center" name="numChildren" value="<%= numChildren %>" min=0 required>
 								<br>
 								<br>
 								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
@@ -84,55 +84,63 @@
 					</div>
 					<div class="col-4"></div>
 				</div>
-				<div class="col-8" style="height: 560px; overflow-x: hidden; overflow-y: auto">
+				<div class="col-8" style="height: 560px; overflow-x: hidden; overflow-y: auto; border: 1px solid black">
 					<% if (bInit) { %>
 						<% for(var x = 0; x < rooms.length; x++) { %>
-							<div class="col-12">
-								<div class="col-6">
-									<h2 style="text-align: center"><br><br><%= rooms[x].roomName %></h2>
+							<% if (x % 2 == 0) { %>
+								<div class="col-12" style="background-color: ivory; border: 1px solid black">
+							<% } else { %>
+								<div class="col-12" style="background-color: #E1DFC6; border: 1px solid black">	
+							<% } %>
+									<div class="col-6">
+										<h2 style="text-align: center"><br><br><%= rooms[x].roomName %></h2>
+									</div>
+									<div class="col-6" style="text-align: center; font-size: 17pt">
+										<p>Room: <%= rooms[x].roomNum %></p>
+										<p>Beds: <%= rooms[x].numBeds %></p>
+										<p>Occupancy: <%= rooms[x].maxOccupancy %></p>
+										<p>Amenities:</p>
+									</div>
 								</div>
-								<div class="col-6" style="text-align: center">
-									<p>Room: <%= rooms[x].roomNum %></p>
-									<p>Beds: <%= rooms[x].numBeds %></p>
-									<p>Occupancy: <%= rooms[x].maxOccupancy %></p>
-									<p>Amenities:</p>
-								</div>
-							</div>
 						<% } %>
 					<% } else{ %>
 						<% for(var x = 0; x < rooms.length; x++) { %>
-							<div class="col-12">
-								<div class="col-5">
-									<h2 style="text-align: center"><br><br><%= rooms[x].roomName %></h2>
+							<% if (x % 2 == 0){ %>
+								<div class="col-12" style="background-color: ivory; border: 1px solid black">
+							<% } else { %>
+								<div class="col-12" style="background-color: #E1DFC6; border: 1px solid black">
+							<% } %>		
+									<div class="col-5">
+										<h2 style="text-align: center"><br><br><%= rooms[x].roomName %></h2>
+									</div>
+									<div class="col-5" style="text-align: center; font-size: 17pt">
+										<p>Room: <%= rooms[x].roomNum %></p>
+										<p>Beds: <%= rooms[x].numBeds %></p>
+										<p>Occupancy: <%= rooms[x].maxOccupancy %></p>
+										<p>Amenities:</p>
+									</div>
+									<div class="col-2">
+										<br><h2 style="text-align: center">$<%= rooms[x].price %></h2><p style="text-align: center">(per night)</p>
+										<form method="post" action="staffBooking.html">
+											<input type="hidden">
+											<br>
+											<br>
+											<input type="hidden" name="checkInFinal" class="checkInFinal" value="<%= checkIn %>">
+											<input type="hidden" name="checkOutFinal" class="checkOutFinal" value="<%= checkOut %>">
+											<input type="hidden" name="numAdultsFinal" class="numAdultsFinal" value="<%= numAdults %>">
+											<input type="hidden" name="numChildrenFinal" class="numChildrenFinal" value="<%= numChildren %>">
+											<input type="hidden" name="roomNum" class="roomNumFinal" value="<%= rooms[x].roomNum %>">
+											<input type="hidden" name="roomName" class="roomNameFinal" value="<%= rooms[x].roomName %>">
+											<input type="hidden" name="maxOccupancy" class="maxOccupancy" value="<%= rooms[x].maxOccupancy %>">
+											<input type="hidden" name="numBeds" class="numBeds" value="<%= rooms[x].numBeds %>">
+											<input type="hidden" name="description" class="description" value="<%= rooms[x].description %>">
+											<input type="hidden" name="image" class="image" value="<%= rooms[x].image %>">
+											<input type="hidden" name="price" class="price" value="<%= rooms[x].price %>">
+											<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+											<button type="submit" style="width:100%; padding: 16px">Book</button>
+										</form>
+									</div>
 								</div>
-								<div class="col-5" style="text-align: center">
-									<p>Room: <%= rooms[x].roomNum %></p>
-									<p>Beds: <%= rooms[x].numBeds %></p>
-									<p>Occupancy: <%= rooms[x].maxOccupancy %></p>
-									<p>Amenities:</p>
-								</div>
-								<div class="col-2">
-									<br><h2 style="text-align: center">$<%= rooms[x].price %></h2><p style="text-align: center">(per night)</p>
-									<form method="post" action="staffBooking.html">
-										<input type="hidden">
-										<br>
-										<br>
-										<input type="hidden" name="checkInFinal" class="checkInFinal" value="<%= checkIn %>">
-										<input type="hidden" name="checkOutFinal" class="checkOutFinal" value="<%= checkOut %>">
-										<input type="hidden" name="numAdultsFinal" class="numAdultsFinal" value="<%= numAdults %>">
-										<input type="hidden" name="numChildrenFinal" class="numChildrenFinal" value="<%= numChildren %>">
-										<input type="hidden" name="roomNum" class="roomNumFinal" value="<%= rooms[x].roomNum %>">
-										<input type="hidden" name="roomName" class="roomNameFinal" value="<%= rooms[x].roomName %>">
-										<input type="hidden" name="maxOccupancy" class="maxOccupancy" value="<%= rooms[x].maxOccupancy %>">
-										<input type="hidden" name="numBeds" class="numBeds" value="<%= rooms[x].numBeds %>">
-										<input type="hidden" name="description" class="description" value="<%= rooms[x].description %>">
-										<input type="hidden" name="image" class="image" value="<%= rooms[x].image %>">
-										<input type="hidden" name="price" class="price" value="<%= rooms[x].price %>">
-										<input type="hidden" name="userID" class="userID" value="<%= userID %>">
-										<button type="submit" style="width:100%; padding: 16px">Book</button>
-									</form>
-								</div>
-							</div>
 						<% } %>
 					<% } %>
 				</div>

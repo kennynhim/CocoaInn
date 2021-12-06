@@ -6,7 +6,7 @@
 		<link href="/public/css.css" rel="stylesheet" type="text/css">
 	</head>
 
-	<body style="background-color: wheat">
+	<body style="background-color: #E1DFC6">
 		<div class="staffModifyPage">
 			<div class="row1">
 				<div class="col-2">
@@ -21,7 +21,7 @@
 				  <div class="col-3"></div>
 				</div>
 				<div class="col-8">
-					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+					<h1 style="text-align: center; font-size: 50pt; color: saddlebrown">The Cocoa Inn</h1>
 				</div>
 				<div class="col-2">
 					<div class="col-3"></div>
@@ -35,7 +35,7 @@
 			</div>
 			
 			<div class="row2">
-				<div class="col-12">
+				<div class="col-12" style="background-color: ivory">
 					<div class="col-4">
 						<div class="col-4"></div>
 						<div class="col-4">
@@ -78,8 +78,8 @@
 				</div>
 			</div>
 			
-			<div name="row3" class="col-12">
-				<div class="col-4">
+			<div name="row3" class="col-12" style="border:1px solid black">
+				<div class="col-4" style="background-color: ivory">
 					<div class="col-12">
 						<h2 style="text-align: center; font-size: 25pt">Modify</h2>
 					</div>
@@ -141,28 +141,32 @@
 					<h3 style="text-align: center; font-size: 20pt">Balance: $<%= reservation.price %></h3>
 				</div>
 				
-				<div class="col-4" style="height: 480px; overflow-x: hidden; overflow-y: auto">
+				<div class="col-4" style="height: 580px; overflow-x: hidden; overflow-y: auto">
 						<h2 style="text-align: center; font-size: 25pt" >Guest's Rooms</h2>
-						<div class="col-12" style="text-align: center; font-size:15pt">
+						<div class="col-12" style="text-align: center; font-size:15pt; border: 1px solid black">
 							<% for (let x = 0; x < rooms.length; x++) { %>
-								<div class="col-12">
-									<b>
-									<p><%= rooms[x].roomName %></p>
-									<p>Room Number: <%= rooms[x].roomNum %></p>
-									<p>Beds: <%= rooms[x].numBeds %></p>
-									<p>Occupancy: <%= rooms[x].maxOccupancy %></p>
-									<p>Amenities:</p></b>
-								</div>
+								<% if (x % 2 == 0) { %>
+									<div class="col-12" style="background-color: ivory; border: 1px solid black">
+								<% } else { %>
+									<div class="col-12" style="background-color: #E1DFC6; border: 1px solid black">
+								<% } %>
+										<b>
+										<p><%= rooms[x].roomName %></p>
+										<p>Room Number: <%= rooms[x].roomNum %></p>
+										<p>Beds: <%= rooms[x].numBeds %></p>
+										<p>Occupancy: <%= rooms[x].maxOccupancy %></p>
+										<p>Amenities:</p></b>
+									</div>
 							<% } %>
 						</div>
 				</div>
 			</div>
 			
-			<div name="row4" class="col-12">
+			<div name="row4" class="col-12" style="border: 1px solid black">
 				<h2 style="text-align: center; font-size: 25pt">Guest Chat</h2>
 				<div class="col-12">
 					<div class="col-2"></div>
-					<div class="col-8" style="height: 280px; overflow-x: hidden; overflow-y: auto">
+					<div class="col-8" style="height: 280px; overflow-x: hidden; overflow-y: auto; background-color: ivory; border: 1px solid black">
 						<% for (let x = 0; x < reservation.notes.length; x++){ %>
 							<p><%= reservation.notes[x] %></p>
 						<% } %>

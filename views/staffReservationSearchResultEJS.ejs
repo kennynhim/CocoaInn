@@ -6,7 +6,7 @@
 		<link href="/public/css.css" rel="stylesheet" type="text/css">
 	</head>
 
-	<body style="background-color: wheat">
+	<body style="background-color: #E1DFC6">
 		<div class="staffSearchReseervationQuery">
 			<div class="row1">
 				<div class="col-2">
@@ -21,7 +21,7 @@
 				  <div class="col-3"></div>
 				</div>
 				<div class="col-8">
-					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+					<h1 style="text-align: center; font-size: 50pt; color: saddlebrown">The Cocoa Inn</h1>
 				</div>
 				<div class="col-2">
 					<div class="col-3"></div>
@@ -56,7 +56,11 @@
 			
 			<div class="row4">
 				<% for (let x = 0; x < reservations.length; x++) { %>
-					<div class="col-12">
+					<% if (x % 2 == 0){ %>
+						<div class="col-12" style="background-color: ivory; border: 1px solid black">
+					<% } else { %>
+						<div class="col-12" style="background-color: #E1DFC6; border: 1px solid black">
+					<% } %>		
 						<div class="col-8" style="text-align: center">
 							<h3><%= reservations[x].firstName %> <%= reservations[x].lastName %></h3>
 							<h4><%= reservations[x].confirmationNumber %></h4>
