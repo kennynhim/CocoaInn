@@ -51,3 +51,59 @@
   background: red;
   color: white;
 }
+
+.parallaxWelcome {
+  /* The image used */
+  background-image: url("https://s3.us-east-2.amazonaws.com/cmd-jeld-wen/assets/images/2560/3113188152.jpg");
+
+  /* Set a specific height */
+  min-height: 500px;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.parallaxVineyard {
+  /* The image used */
+  background-image: url("https://www.thefoxhollow.com/hubfs/Blog/vineyard.jpg");
+
+  /* Set a specific height */
+  min-height: 500px;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.parallaxSpa {
+  /* The image used */
+  background-image: url("https://s7d2.scene7.com/is/image/ritzcarlton/Relaxation%20The%20Ritz-Carlton%20Spa?$XlargeViewport100pct$");
+
+  /* Set a specific height */
+  min-height: 500px;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.parallaxDining {
+  /* The image used */
+  background-image: url("https://blog.williams-sonoma.com/wp-content/uploads/2013/07/WS13D0157.jpg");
+
+  /* Set a specific height */
+  min-height: 500px;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

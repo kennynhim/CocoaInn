@@ -66,6 +66,23 @@ app.get("/index.html", function(req,res){
     res.render("indexEJS");
 });
 
+//When guest clicks on "Dine" link in menu bar
+app.get("/dine.html", function(req, response){
+	response.render("dineEJS");
+})
+
+app.get("/spa.html", function(req, response){
+	response.render("spaEJS");
+})
+
+app.get("/winery.html", function(req, response){
+	response.render("wineryEJS");
+})
+
+app.get("/contact.html", function(req, response){
+	response.render("contactEJS");
+})
+
 //When a user clicks on the "Reserve" link in the menu bar
 //Query the database for all rooms, whether vacant or not
 //Display all of these rooms

@@ -6,21 +6,47 @@
 		<link href="/public/css.css" rel="stylesheet" type="text/css">
 	</head>
 
-	<body style="background-color: black">
+	<body style="background-color: #E8E5D6">
 		<div class="homePage">
-			<div class="row1" style="color: beige">
-				<div class="col-2"><a href="index.html" style="font-size: 35pt; color: beige">Home</a></div>
-				<div class="col-2"><a href="Reservation.html" style="font-size: 35pt; color: beige">Reserve</a></div>
-				<div class="col-2"><h1 style="text-align: center">Dine</h1></div>
-				<div class="col-2"><h1 style="text-align: center">Spa</h1></div>
-				<div class="col-2"><h1 style="text-align: center">Golf</h1></div>
-				<div class="col-2"><h1 style="text-align: center">Contact</h1></div>
+			<div class="row1">
+				<div class="col-12">
+					<div class="col-2">
+						<form method="get" action="index.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Home</button>
+						</form>
+					</div>
+					<div class="col-2">
+						<form method="get" action="Reservation.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Reserve</button>
+						</form>
+					</div>
+					<div class="col-2">
+						<form method="get" action="dine.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Dine</button>
+						</form>
+					</div>
+					<div class="col-2">
+						<form method="get" action="spa.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Spa</button>
+						</form>
+					</div>
+					<div class="col-2">
+						<form method="get" action="winery.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Winery</button>
+						</form>
+					</div>
+					<div class="col-2">
+						<form method="get" action="contact.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Contact Us</button>
+						</form>
+					</div>				
+				</div>
 			</div>
 			
-			<div class="row2" style="color: beige">
+			<div class="row2">
 				<div class="col-12">
 					<div class="col-4"></div>
-					<div class="col-4">
+					<div class="col-4" style="background-color: ivory">
 						<form method="post" action="reservationDetails.html">
 							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Reservation Confirmation Number" style="width:75%; padding: 12px 20px; text-align: center">
 							<button type="submit" style="padding: 12px 20px; background-color: wheat; width:24%">Search</button>
@@ -30,18 +56,146 @@
 				</div>
 			</div>
 			
-			<div class="row3" style="color: white">
-				<div class="col-4">
-					<p style="font-size: 50pt; text-align: center">Welcome to the Cocoa Inn</p>
-					<p style="font-size:20pt; text-align: center">Serene.</p>
-			  	  	<p style="font-size:20pt; text-align: center">Charming.</p>
-					<p style="font-size:20pt; text-align: center">Cozy.</p>
-					<br>
-					<p style="text-align: center; font-size: 20pt">Our inn is tucked away on five acres of sprawling vineyards. Relax with a river stone massage. Savor the tender Wagyu or the vegan Chickpea stew. Enjoy a glass of aged Cabernet Sauvignon.</p>
-					<p style="text-align: center; font-size: 20pt">Our door awaits you.</p>
+			<div class="row3">
+				<div class="col-12">
+					<div class="parallaxWelcome">
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<div class="col-4"></div>
+						<div class="col-4" style="background-color: lavender">
+						<p style="font-size: 25pt; text-align: center">Welcome to the Cocoa Inn.</p>
+						</div>
+						<div class="col-4"></div>
+					</div>
 				</div>
-				<div class="col-8">
-					<img src="https://s3.us-east-2.amazonaws.com/cmd-jeld-wen/assets/images/2560/3113188152.jpg" style="width: 100%; height: auto; margin-left: auto; margin-right: auto; display: block">
+			</div>
+			
+			<div class="row4">
+				<div class="col-12">
+					<div class="parallaxVineyard">
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<div class="col-4"></div>
+						<div class="col-4" style="background-color: darkgrey">
+							<p style="font-size: 20pt; text-align: center; color: white">Our six-room inn is tucked away on five acres of sprawling vineyards. Enjoy the serenity and charm with one of our rooms.</p>
+							<div class="col-12">
+								<div class="col-4"></div>
+								<div class="col-4">
+									<form method="get" action="Reservation.html">
+										<button type="submit" style="width:100%; padding:10px">Reserve</button>
+									</form>									
+								</div>
+								<div class="col-4"></div>
+							</div>
+						</div>
+						<div class="col-4"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row5">
+				<div class="col-12">
+					<div class="parallaxSpa">
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<div class="col-4"></div>
+						<div class="col-4" style="background-color: rosybrown">
+							<p style="font-size: 20pt; text-align: center; color: black">Relax with a river stone massage or nourish your skin with a mango passion body wrap.</p>
+							<div class="col-12">
+								<div class="col-4"></div>
+								<div class="col-4">
+									<form method="post" action="spa.html">
+										<button type="submit" style="width:100%; padding:10px">Spa</button>
+									</form>
+								</div>
+								<div class="col-4"></div>
+							</div>
+						</div>
+						<div class="col-4"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row6">
+				<div class="col-12">
+					<div class="parallaxDining">
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<div class="col-4"></div>
+						<div class="col-4" style="background-color: darkkhaki">
+							<p style="font-size: 20pt; text-align: center; color: black">Savor the tender Wagyu or the vegan Chickpea Stew. Enjoy a glass of aged Cabernet Sauvignon.</p>
+							<div class="col-12">
+								<div class="col-4"></div>
+								<div class="col-4">
+									<form method="post" action="dine.html">
+										<button type="submit" style="width:100%; padding:10px">Dining</button>
+									</form>
+								</div>
+								<div class="col-4"></div>
+							</div>
+						</div>
+						<div class="col-4"></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row7">
+				<div class="col-12">
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<div class="col-4"></div>
+						<div class="col-4" style="background-color: ivory">
+						<p style="font-size: 25pt; text-align: center">Contact Us.</p>
+						</div>
+						<div class="col-4"></div>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
 				</div>
 			</div>
 		</div>

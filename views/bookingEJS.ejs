@@ -6,48 +6,81 @@
 <link href="/public/css.css" rel="stylesheet" type="text/css">
 </head>
 
-<body style="background-color: black">
+<body style="background-color: #E8E5D6">
 	<div class="bookingPage">
-		<div class="row1" style="color: beige">
-			<div class="col-2"><a href="index.html" style="font-size: 35pt; color: beige">Home</a></div>
-			<div class="col-2"><a href="Reservation.html" style="font-size: 35pt; color: beige">Reserve</a></div>
-			<div class="col-2"><h1 style="text-align: center">Dine</h1></div>
-			<div class="col-2"><h1 style="text-align: center">Spa</h1></div>
-			<div class="col-2"><h1 style="text-align: center">Golf</h1></div>
-			<div class="col-2"><h1 style="text-align: center">Contact</h1></div>
-		</div>
-		
-		<div class="row2" style="color: beige">
-			<div class="col-12">
-				<div class="col-4"></div>
-				<div class="col-4">
-					<form method="post" action="reservationDetails.html">
-						<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Reservation Confirmation Number" style="width:75%; padding: 12px 20px; text-align: center">
-						<button type="submit" style="padding: 12px 20px; background-color: wheat; width:24%">Search</button>
-					</form>					
+			<div class="row1">
+				<div class="col-12">
+					<div class="col-2">
+						<form method="get" action="index.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Home</button>
+						</form>
+					</div>
+					<div class="col-2">
+						<form method="get" action="Reservation.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Reserve</button>
+						</form>
+					</div>
+					<div class="col-2">
+						<form method="get" action="dine.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Dine</button>
+						</form>
+					</div>
+					<div class="col-2">
+						<form method="get" action="spa.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Spa</button>
+						</form>
+					</div>
+					<div class="col-2">
+						<form method="get" action="winery.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Winery</button>
+						</form>
+					</div>
+					<div class="col-2">
+						<form method="get" action="contact.html">
+							<button type="submit" style="width:100%; padding: 16px; background-color: ivory; font-size: 20pt">Contact Us</button>
+						</form>
+					</div>				
 				</div>
-				<div class="col-4"></div>
 			</div>
+		
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4" style="background-color: ivory">
+						<form method="post" action="reservationDetails.html">
+							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Reservation Confirmation Number" style="width:75%; padding: 12px 20px; text-align: center">
+							<button type="submit" style="padding: 12px 20px; background-color: wheat; width:24%">Search</button>
+						</form>					
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+		
+		<div class="col-12">
+			<h1 style="font-size: 40pt; text-align: center">Your Rooms</h1>
+			<% for(var x = 0; x < numRooms; x++){ %>
+				<% if (x % 2 == 0){ %>
+					<div class="col-12" style="background-color: #E8E5D6">
+				<% } else{ %>
+						<div class="col-12" style="background-color: ivory">
+				<% } %>
+					<div class="col-6" style="text-align: center">
+						<br>
+						<br>
+						<h1 style="font-size: 40pt"><%= roomNames[x] %></h1>
+						<p style="font-size: 30pt">Beds: <%= numBeds[x] %></p>
+						<p style="font-size: 30pt">Occupancy: <%= occupancies[x] %></p>
+						<p style="font-size: 20pt"><%= descriptions[x] %></p>
+					</div>
+					<div class="col-6">
+						<img src="<%= images[x] %>" style="width: 100%; height: 100%; margin-left: auto; margin-right: auto; display: block">
+					</div>					
+				</div>
+			<% } %>			
 		</div>
 		
-		<% for(var x = 0; x < numRooms; x++){ %>
-		<div class="roomInfo" style="color: beige">
-			<div class="col-6" style="text-align: center">
-				<br>
-				<br>
-				<h1 style="font-size: 40pt"><%= roomNames[x] %></h1>
-				<p style="font-size: 30pt">Beds: <%= numBeds[x] %></p>
-				<p style="font-size: 30pt">Occupancy: <%= occupancies[x] %></p>
-				<p style="font-size: 20pt"><%= descriptions[x] %></p>
-			</div>
-			<div class="col-6">
-				<img src="<%= images[x] %>" style="width: 100%; height: 100%; margin-left: auto; margin-right: auto; display: block">
-			</div>
-		</div>
-		<% } %>
-		
-		<div class="row3" style="color:beige">
-			<div class="col-4">
+		<div class="row3">
+			<div class="col-4" style="background-color: ivory">
 				<h2 style="text-align: center; font-size: 30pt">Your Stay</h2>
 				<br>
 				<h3 style="text-align: center; font-size: 25pt">Check In: <%= checkIn %></h3>
@@ -98,7 +131,15 @@
 					<% for (var x = 0; x < numRooms; x++){ %>
 						<input name="<%= x %>" class="<%= x %>" type="hidden" value="<%= roomNums[x] %>">
 					<% } %>
-					<button class="bookButton" type="submit" style="width: 100%; padding: 16px 32px; background-color: wheat; cursor: pointer">Book Reservation</button>
+					<div class="col-12">
+						<div class="col-3">
+						</div>
+						<div class="col-6">
+							<button class="bookButton" type="submit" style="width: 100%; padding: 16px 32px; background-color: wheat; cursor: pointer">Book Reservation</button>
+						</div>
+						<div class="col-3">
+						</div>
+					</div>
 				</form>
 			</div>
 		</div>
