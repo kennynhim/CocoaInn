@@ -29,7 +29,7 @@
 }
 
 .notification {
-  background-color: honeydew;
+  background-color: #E8E5D6;
   color: white;
   text-decoration: none;
   padding: 15px 26px;
@@ -39,7 +39,7 @@
 }
 
 .notification:hover {
-  background: red;
+  background: saddlebrown;
 }
 
 .notification .badge {
