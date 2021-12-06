@@ -30,6 +30,16 @@
 					<h3 style="text-align: center; font-size: 20pt">Children:</h3>
 					<br>
 					<h3 style="text-align: center; font-size: 20pt">Balance: $500</h3>
+					<div class="col-12">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="invoice.html">
+								<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
+								<button type="submit" style="width:100%; padding:16px; background-color: wheat">View Invoice</button>
+							</form>							
+						</div>
+						<div class="col-4"></div>
+					</div>
 				</div>
 
 				<div class="col-8" style="height: 600px; overflow-x: hidden; overflow-y: auto; color: wheat">

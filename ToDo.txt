@@ -5,7 +5,6 @@ To Do:
 	* Sort by price, max occupancy when displaying a list of available rooms to reserve/add to to an existing reservation
 	* Sort by first name, last name, check in, check out
 - Add a "Do Not Distrub" button to the reservation details on guest view
-- Use Check in time, Check out time, and cancel fee in reservation details page
 - Realistic descriptions and images for rooms
 - Add amentities attribute to rooms, display on reservations page and details page
 - Clean up user interface and make it look nicer
@@ -27,3 +26,4 @@ Finished:
 - Shorten input fields in Search Reservation page for staff view
 - When searching for a reservation under staff view, names/emails should not be case-sensitive
 - Convert all date objects from UTC to local time
+- Use Check in time, Check out time reservation details page

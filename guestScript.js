@@ -251,12 +251,16 @@ app.post("/confirmation.html", function(req, response){
 			numRooms: numRooms,
 			adults: Number(req.body.numAdults),
 			children: Number(req.body.numChildren),
-			price: req.body.price,
+			price: Number(req.body.price),
 			notes: [],
 			assignedRoom: reservedRoomNums,
 			confirmationNumber: crypto.randomUUID(),
-			bCheckedIn: false
+			bCheckedIn: false,
+			invoice: []
 	}
+	const today = new Date();
+	const bill = {amount: Number(req.body.price), date: today.toLocaleDateString(), item: "Booked reservation."};
+	reservation.invoice.push(bill);
 	
 	MongoClient.connect(dbURL, function(err, db){
 		if (err)
@@ -330,8 +334,12 @@ function renderDetailsPage(request, response){
 							}
 						}
 					}
-					response.render("modifyEJS", {reservation: result, rooms: reservedRooms});
-					db.close();
+					dbo.collection("policy").findOne({}, function(err4, policy){
+						if (err4)
+							throw err4;
+						response.render("modifyEJS", {reservation: result, rooms: reservedRooms, policy: policy});
+						db.close();
+					})
 				})
 			}
 		})
@@ -419,18 +427,20 @@ app.post("/confirmModification.html", function(req, response){
 						dbo.collection("room").find({}).toArray(function(err3, rooms){
 							if (err3)
 								throw err3;
-							let total = 0;
+							let newTotal = 0;
+							let oldTotal = 0;
 							for (let x = 0; x < reservation.assignedRoom.length; x++){
 								for (let y = 0; y < rooms.length; y++){
 									if (reservation.assignedRoom[x] === rooms[y].roomNum){
-										total += getStayDuration(checkIn, checkOut)*rooms[y].price;
+										newTotal += getStayDuration(checkIn, checkOut)*rooms[y].price;
+										oldTotal += getStayDuration(reservation.checkIn, reservation.checkOut)*rooms[y].price;
 										break;
 									}
 								}
 							}
 							//Get price change
-							let priceChange = total - reservation.price;
-							response.render("confirmDateChangeEJS", {reservation: reservation, newCheckIn: checkIn, newCheckOut: checkOut, newPrice: total, priceChange: priceChange});
+							let priceChange = newTotal - oldTotal;
+							response.render("confirmDateChangeEJS", {reservation: reservation, newCheckIn: checkIn, newCheckOut: checkOut, newPrice: reservation.price+priceChange, priceChange: priceChange});
 						})
 					}
 				})
@@ -464,7 +474,9 @@ app.post("/changeDateRequested.html", function(req, response){
 						throw err3;
 				//update the reservation collection and room collection, and return to the details page
 				const originalCheckIn = reservation.checkIn;
-				dbo.collection("reservation").updateOne({confirmationNumber: confirmation}, { $set: {"checkIn": checkIn, "checkOut": checkOut, "price": req.body.price} }, function(err4, result1){
+				const today = new Date();
+				const bill = {amount: Number(req.body.priceChange), date: today.toLocaleDateString(), item: "Updated check in/out date."};
+				dbo.collection("reservation").updateOne({confirmationNumber: confirmation}, { $set: {"checkIn": checkIn, "checkOut": checkOut, "price": Number(req.body.price)}, $push: {"invoice": bill} }, function(err4, result1){
 					if (err4)
 						throw err4;
 					//First, get all rooms so we can pass it in to modifyEJS
@@ -495,8 +507,13 @@ app.post("/changeDateRequested.html", function(req, response){
 								dbo.collection("reservation").findOne({confirmationNumber: confirmation}, function(err7, newReservation){
 									if (err7)
 										throw err7;
-									if (newReservation != null)
-										response.render("modifyEJS", {reservation: newReservation, rooms: reservedRooms});												
+									if (newReservation != null){
+										dbo.collection("policy").findOne({}, function(err8, policy){
+											if (err8)
+												throw err8;
+											response.render("modifyEJS", {reservation: newReservation, rooms: reservedRooms, policy: policy});
+										})
+									}												
 									})
 								}
 							}
@@ -756,9 +773,11 @@ app.post("/confirmAddRoom.html", function(req, response){
 		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
 			if (err2)
 				throw err2;
-			let newNumRooms = reservation.numRooms + 1;
-			let balance = Number(reservation.price) + priceChange;
-			const updateReservation = { $set: {numRooms: newNumRooms, price: Number(balance)}, $push: {"assignedRoom": roomNum} };
+			const newNumRooms = reservation.numRooms + 1;
+			const balance = Number(reservation.price) + priceChange;
+			const today = new Date();
+			const bill = {amount: Number(priceChange), date: today.toLocaleDateString(), item: "Added a room."};
+			const updateReservation = { $set: {numRooms: newNumRooms, price: Number(balance)}, $push: {"assignedRoom": roomNum, "invoice": bill} };
 			dbo.collection("reservation").updateOne({confirmationNumber: confirmationNumber}, updateReservation, function(err3, result){
 				if (err3)
 					throw err3;
@@ -878,7 +897,9 @@ app.post("/confirmRemoveRoom.html", function(req, response){
 		if (err1)
 			throw err1;
 		var dbo = db.db("CocoaInn");
-		const reservationUpdate = { $set: {numRooms: numRooms-1, price: price - priceChange}, $pull: {assignedRoom: {$in: [roomNum]}}}
+		const today = new Date();
+		const bill = {amount: -priceChange, date: today.toLocaleDateString(), item: "Removed a room."};
+		const reservationUpdate = { $set: {numRooms: numRooms-1, price: price - priceChange}, $pull: {assignedRoom: {$in: [roomNum]}}, $push: {"invoice": bill} }
 		dbo.collection("reservation").updateOne({confirmationNumber: confirmationNumber}, reservationUpdate, function(err2, result){
 			if (err2)
 				throw err2;
@@ -888,6 +909,22 @@ app.post("/confirmRemoveRoom.html", function(req, response){
 					throw err3;
 				renderDetailsPage(req, response);
 			})
+		})
+	})
+})
+
+
+app.post("/invoice.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			response.render("invoiceEJS", {invoice: reservation.invoice, confirmationNumber: confirmationNumber, balance: reservation.price});
 		})
 	})
 })

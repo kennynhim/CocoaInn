@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Cocoa Inn</title>
+	<link href="css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: wheat">
+		<div class="invoicePage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: </b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-1">
+						<form method="post" action="staffModifyReservation.html">
+							<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= confirmationNumber %>">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; padding: 10px">Back</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<h1 style="text-align: center; font-size: 40pt">Invoice</h1>
+				</div>
+				<div class="col-12" style="font-size: 20pt">
+					<div class="col-2"></div>
+					<div class="col-8">
+						<div class="col-4">
+							<p style="text-align: center">12/5/2021</p>
+						</div>
+						<div class="col-4">
+							<p style="text-align: center">Booked reservation</p>
+						</div>
+						<div class="col-4">
+							<p style="text-align: center">$400</p>
+						</div>
+					</div>
+					<div class="col-2"></div>
+				</div>
+				<div class="col-12">
+					<div class="col-2"></div>
+					<div class="col-8">
+						<div class="col-4">
+							<p style="text-align: center; font-size: 20pt"><b>Balance</b></p>
+						</div>
+						<div class="col-4"></div>
+						<div class="col-4">
+							<p style="text-align: center; font-size: 20pt; color: darkgreen"><b>($400)</b></p>
+						</div>
+					</div>
+					<div class="col-2"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
