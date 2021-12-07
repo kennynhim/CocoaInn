@@ -5,7 +5,7 @@
 **	Therefore, this is the main file from which we launch our website
 **	To execute this file, you must have Node JS installed: https://nodejs.org/en/
 **	Once installed, along with the required libraries listed below, open a command prompt/terminal and change directory(CD) to the location of this file
-**	Then run the command: node nodeScript.js
+**	Then run the command: node guestScript.js
 **	Open a browser(only tested with Chrome), and enter in the address bar: localhost:3000
 */
 
