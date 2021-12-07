@@ -110,8 +110,9 @@
 							<button type="submit" style="width: 100%; background-color: honeydew; padding: 16px 32px">View Invoice</button>
 						</form>
 						<br>
-						<form method="post" action="add-removeGuest.html">
-							<input type="hidden">
+						<form method="post" action="modifyGuest.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
 							<button type="submit" style="width: 100%; background-color: honeydew; padding: 16px 32px">Add/Remove Guest</button>
 						</form>
 						<br>

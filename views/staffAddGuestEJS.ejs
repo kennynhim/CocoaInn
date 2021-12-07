@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: #E1DFC6">
+		<div class="staffAddGuestPage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt; color: saddlebrown">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="get" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+		
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="staffModifyReservation.html">
+								<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+								<input name="userID" class="userID" type="hidden" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Back</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="addGuest.html">
+								<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+								<input name="userID" class="userID" type="hidden" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Add Guest</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+					<div class="col-4">
+						<div class="col-4"></div>
+						<div class="col-4">
+							<form method="post" action="removeGuest.html">
+								<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+								<input name="userID" class="userID" type="hidden" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding:16px">Remove Guest</button>
+							</form>
+						</div>
+						<div class="col-4"></div>
+					</div>
+				</div>
+			</div>
+		
+			<div class="row3">
+				<div class="col-12">
+					<div class="col-3" style="background-color: ivory">
+						<h2 style="text-align: center; font-size: 30pt"><%= reservation.firstName %> <%= reservation.lastName %></h2>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Check In: <%= reservation.checkIn %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Check Out: <%= reservation.checkOut %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Adults: <%= reservation.adults %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Children: <%= reservation.children %></h3>
+						<br>
+						<h3 style="text-align: center; font-size: 20pt">Balance: $<%= reservation.price %></h3>
+					</div>
+					<div class="col-9">
+						<div class="col-12">
+							<form method="post" action="addGuestRequested.html">
+								<div class="col-4"></div>
+								<div class="col-4">
+									<input name="adults" class="adults" type="number" placeholder="Adults" min="0" style="text-align: center; width: 100%; padding: 14px" required>
+									<br>
+									<br>
+									<input name="children" class="children" type="number" placeholder="Children" min="0" style="text-align: center; width: 100%; padding: 14px" required>
+									<br>
+									<br>
+									<div class="col-2"></div>
+									<div class="col-8">
+										<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+										<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
+										<button type="submit" style="width:100%; padding: 14px">Add Guests</button>
+									</div>
+									<div class="col-2"></div>
+								</div>
+								<div class="col-4"></div>							
+							</form>							
+						</div>						
+					</div>
+				</div>
+			</div>			
+		</div>
+	</body>
+</html>

@@ -933,6 +933,135 @@ app.post("/invoice.html", function(req, response){
 	})
 })
 
+//When guest clicks on "Add/Remove Guest" button on details page
+app.post("/modifyGuest.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			response.render("modifyGuestEJS", {reservation: reservation});
+		})
+	})
+})
+
+//When guest clicks on "Add Guest" button on modify guest page
+//Ask the user how many additional guests to add
+//If the new total for number of guests exceeds the occupancy of the reservation, deny the request
+app.post("/addGuest.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			response.render("addGuestEJS", {reservation: reservation});
+		})
+	})	
+})
+
+//When guest clicks on "Add Guest" button after entering in adult/children amounts to add
+//Check if new guest total exceeds max occupancy of all rooms on reservation
+//If it does, deny the request
+//Otherwise, update adults and children values on reservation
+app.post("/addGuestRequested.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	const adults = Number(req.body.adults);
+	const children = Number(req.body.children);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			dbo.collection("room").find({}).toArray(function(err3, rooms){
+				if (err3)
+					throw err3;
+				let occupancy = 0;
+				for (let x = 0; x < reservation.assignedRoom.length; x++){
+					for (let y = 0; y < rooms.length; y++){
+						if (reservation.assignedRoom[x] == rooms[y].roomNum){
+							occupancy += rooms[y].maxOccupancy;
+							break;
+						}
+					}
+				}
+				if (reservation.adults + reservation.children + adults + children > occupancy){
+					alert("The number of guests in your party will exceed the occupancy of your booked rooms. Please add additional rooms.");
+					return;
+				}
+				else{
+					const newAdults = Number(reservation.adults + adults);
+					const newChildren = Number(reservation.children + children);
+					dbo.collection("reservation").updateOne({confirmationNumber: confirmationNumber}, {$set: {"adults": newAdults, "children": newChildren}}, function(err3, result){
+						if (err3)
+							throw err3;
+						renderDetailsPage(req, response);
+					})
+				}
+			})
+		})
+	})	
+})
+
+//When guest clicks on "Remove Guest" button on modify guest page
+//Allow guest to remove all guests, down to one adult
+app.post("/removeGuest.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			response.render("removeGuestEJS", {reservation: reservation});
+		})
+	})		
+})
+
+//When guest clicks on "Remove Guest" button after entering in a number of adults and children to remove
+//Check if number of adults on reservation will be at least one
+app.post("/removeGuestRequested.html", function(req, response){
+	const confirmationNumber = req.body.confirmationNumber;
+	const adults = Number(req.body.adults);
+	const children = Number(req.body.children);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").findOne({confirmationNumber: confirmationNumber}, function(err2, reservation){
+			if (err2)
+				throw err2;
+			if (reservation.adults - adults < 1){
+				alert("You cannot remove this many adults from your reservation.");
+				return;
+			}
+			else{
+				const newAdults = reservation.adults - adults;
+				let newChildren = reservation.children - children;
+				if (newChildren < 0)
+					newChildren = 0;
+				dbo.collection("reservation").updateOne({confirmationNumber: confirmationNumber}, {$set: {"adults": newAdults, "children": newChildren}}, function(err3, result){
+					if (err3)
+						throw err3;
+					renderDetailsPage(req, response);
+				})
+			}
+		})
+	})
+})
 
 //Validates the dates for a single reservation
 //Returns false if check in comes on or after check out

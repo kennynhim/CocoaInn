@@ -4,13 +4,11 @@ To Do:
 - Add a sort function on lists
 	* Sort by price, max occupancy when displaying a list of available rooms to reserve/add to to an existing reservation
 	* Sort by first name, last name, check in, check out
-- Add a "Do Not Distrub" button to the reservation details on guest view
 - Realistic descriptions and images for rooms
 - Add amentities attribute to rooms, display on reservations page and details page
-- Clean up user interface and make it look nicer
-	* Icons next to buttons in reservation details?
-- MAYBE - Add/Remove guest functionality, if there is enough time
-- MAYBE- Export the business report to a text document, if there is enough time
+- Remove Export button from business report
+- Change Room Service/Dine/Spa buttons on guest reservation details page so there is no POST/GET
+- Create reservations for class presentation (a few reservations with current check ins/check outs, open reservations, open messages)
 
 
 
@@ -27,3 +25,4 @@ Finished:
 - When searching for a reservation under staff view, names/emails should not be case-sensitive
 - Convert all date objects from UTC to local time
 - Use Check in time, Check out time reservation details page
+- Add/Remove guest functionality, if there is enough time

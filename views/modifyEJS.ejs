@@ -145,7 +145,7 @@
 							<div class="col-6">
 								<form method="post" action="modifyRoom.html">
 									<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
-									<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Modify Room</button>
+									<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Add/Remove Room</button>
 								</form>								
 							</div>
 							<div class="col-3"></div>
@@ -153,8 +153,8 @@
 						<div class="col-12">
 							<div class="col-3"></div>
 							<div class="col-6">
-								<form method="post" action="add-removeGuest.html">
-									<input type="hidden">
+								<form method="post" action="modifyGuest.html">
+									<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
 									<button type="submit" style="width: 100%; background-color: wheat; padding: 16px 32px">Add/Remove Guest</button>
 								</form>								
 							</div>
