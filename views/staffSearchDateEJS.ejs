@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+		<title>Cocoa Inn</title>
+		<link href="/public/css.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body style="background-color: #E1DFC6">
+		<div class="searchDatePage">
+			<div class="row1">
+				<div class="col-2">
+					<p style="text-align: center"><b>Employee: <%= userID %></b></p>
+				  <div class="col-3"></div>
+				  <div class="col-6">
+						<form method="post" action="staffHome.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; text-align: center; padding: 10px">Home</button>
+						</form>
+					</div>
+				  <div class="col-3"></div>
+				</div>
+				<div class="col-8">
+					<h1 style="text-align: center; font-size: 50pt; color: saddlebrown">The Cocoa Inn</h1>
+				</div>
+				<div class="col-2">
+					<div class="col-3"></div>
+					<div class="col-6">
+						<form method="post" action="logout.html">
+							<button type="submit" style="width: 100%; padding: 10px">Logout</button>
+						</form>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+			
+			<div class="row2">
+				<div class="col-12">
+					<div class="col-4"></div>
+					<div class="col-4">
+						<form method="post" action="staffModifyReservation.html">
+							<input name="confirmationNumber" class="confirmationNumber" type="text" placeholder="Confirmation Number" style="width:75%; padding: 16px 32px; text-align: center" autocomplete="off" required>
+							<button type="submit" style="width:24%; padding: 10px">Search</button>
+						</form>
+					</div>
+					<div class="col-4"></div>
+				</div>
+			</div>
+			
+			<div class="row3">
+				<div class="col-12">
+					<div class="col-2">
+						<div class="col-1"></div>
+						<div class="col-10">
+							<form method="post" action="setupSearchName.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding: 10px">Search Name</button>
+							</form>							
+						</div>
+						<div class="col-1"></div>
+					</div>
+					<div class="col-2">
+						<div class="col-1"></div>
+						<div class="col-10">
+							<form method="post" action="setupSearchEmail.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding: 10px">Search Email</button>
+							</form>								
+						</div>
+						<div class="col-1"></div>					
+					</div>
+					<div class="col-2">
+						<div class="col-1"></div>
+						<div class="col-10">
+							<form method="post" action="setupSearchPhone.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding: 10px">Search Phone</button>
+							</form>								
+						</div>
+						<div class="col-1"></div>					
+					</div>
+					<div class="col-2">
+						<div class="col-1"></div>
+						<div class="col-10">
+							<form method="post" action="setupSearchDate.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding: 10px">Search Date</button>
+							</form>								
+						</div>
+						<div class="col-1"></div>					
+					</div>
+					<div class="col-2">
+						<div class="col-1"></div>
+						<div class="col-10">
+							<form method="post" action="setupSearchRoom.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding: 10px">Search Room</button>
+							</form>								
+						</div>
+						<div class="col-1"></div>					
+					</div>
+					<div class="col-2">
+						<div class="col-1"></div>
+						<div class="col-10">
+							<form method="post" action="setupSearchRoomDate.html">
+								<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+								<button type="submit" style="width:100%; padding: 10px">Search Room/Date</button>
+							</form>								
+						</div>
+						<div class="col-1"></div>					
+					</div>
+				</div>
+			</div>
+			
+			<div class="row4">
+				<div class="col-12">
+					<h1 style="text-align: center">Search by Date Range</h1>
+				</div>
+				<div class="col-12">
+					<form method="post" action="searchDateRange.html">
+						<div class="col-5">
+							<input name="start" class="start" type="date" placeholder="Start Date" style="width:100%; padding: 16px 32px; text-align: center" autocomplete="off" required>
+						</div>
+						<div class="col-5">
+							<input name="end" class="lastNendame" type="date" placeholder="End Date" style="width:100%; padding: 16px 32px; text-align: center" autocomplete="off" required>
+						</div>
+						<div class="col-2">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width:100%; padding: 16px">Search</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

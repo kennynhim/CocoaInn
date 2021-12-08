@@ -380,7 +380,7 @@ app.post("/staffConfirm.html", function(req, response){
 //When staff clicks on "Search Reservations" button on staff home page
 app.post("/staffSearchGuests.html", function(req, response){
 	const userID = req.body.userID;
-	response.render("staffSearchReservationEJS", {userID: userID});
+	response.render("staffSearchReservation2EJS", {userID: userID});
 })
 
 function searchReservation(request, response, confirmationNumber, firstName, lastName, email, phone){
@@ -696,11 +696,21 @@ app.post("/staffModifyReservation.html", function(req, response){
 	searchReservation(req, response, confirmationNumber, null, null, null, null);
 })
 
+app.post("/setupSearchName.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffSearchNameEJS", {userID: userID});
+})
+
 //When employee/manager searches for a reservation by guest name and then clicks "Submit"
 app.post("/searchName.html", function(req, response){
 	const firstName = req.body.firstName;
 	const lastName = req.body.lastName;
 	searchReservation(req, response, null, firstName, lastName, null, null);
+})
+
+app.post("/setupSearchEmail.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffSearchEmailEJS", {userID: userID});
 })
 
 //When employee/manager searches for a reservation by guest email and then clicks "Submit"
@@ -709,10 +719,20 @@ app.post("/searchEmail.html", function(req, response){
 	searchReservation(req, response, null, null, null, email, null);
 })
 
+app.post("/setupSearchPhone.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffSearchPhoneEJS", {userID: userID});
+})
+
 //When employee/manager searches for a reservation by guest phone and then clicks "Submit"
 app.post("/searchPhone.html", function(req, response){
 	const phone = req.body.phone;
 	searchReservation(req, response, null, null, null, null, phone);
+})
+
+app.post("/setupSearchDate.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffSearchDateEJS", {userID: userID});
 })
 
 //When employee/manager searches for a reservation by date range
@@ -743,6 +763,11 @@ app.post("/searchDateRange.html", function(req, response){
 			}
 		})
 	})
+})
+
+app.post("/setupSearchRoom.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffSearchRoomEJS", {userID: userID});
 })
 
 //When employee/manager searches for a reservation by room number
@@ -779,6 +804,11 @@ app.post("/searchRoom.html", function(req, response){
 			})			
 		})
 	})
+})
+
+app.post("/setupSearchRoomDate.html", function(req, response){
+	const userID = req.body.userID;
+	response.render("staffSearchRoomDateEJS", {userID: userID});
 })
 
 //When employee/manager searches for a reservation by room and date and then clicks "Submit"
