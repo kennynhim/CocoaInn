@@ -92,14 +92,16 @@
 							<% } else { %>
 								<div class="col-12" style="background-color: #E1DFC6; border: 1px solid black">	
 							<% } %>
-									<div class="col-6">
+									<div class="col-4">
 										<h2 style="text-align: center"><br><br><%= rooms[x].roomName %></h2>
 									</div>
-									<div class="col-6" style="text-align: center; font-size: 17pt">
+									<div class="col-4" style="text-align: center; font-size: 17pt">
 										<p>Room: <%= rooms[x].roomNum %></p>
 										<p>Beds: <%= rooms[x].numBeds %></p>
 										<p>Occupancy: <%= rooms[x].maxOccupancy %></p>
-										<p>Amenities:</p>
+									</div>
+									<div class="col-4">
+										<p style="font-size: 15pt"><%= rooms[x].description %></p>
 									</div>
 								</div>
 						<% } %>
@@ -117,7 +119,7 @@
 										<p>Room: <%= rooms[x].roomNum %></p>
 										<p>Beds: <%= rooms[x].numBeds %></p>
 										<p>Occupancy: <%= rooms[x].maxOccupancy %></p>
-										<p>Amenities:</p>
+										<p style="font-size: 15pt"><%= rooms[x].description %></p>
 									</div>
 									<div class="col-2">
 										<br><h2 style="text-align: center">$<%= rooms[x].price %></h2><p style="text-align: center">(per night)</p>

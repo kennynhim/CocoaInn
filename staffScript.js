@@ -109,7 +109,7 @@ function displayHomePage(userID, db, response, bManager){
 			else if (isCurrentGuest(reservations[x].checkIn, reservations[x].checkOut))
 				currentGuests.push(reservations[x]);
 			let checkOutDate = new Date(getYear(reservations[x].checkOut), getMonth(reservations[x].checkOut)-1, getDay(reservations[x].checkOut));
-			if (checkOutDate.getTime() < local.getTime())
+			if (checkOutDate.getTime() < local.getTime() && checkOutDate.getDate() != local.getDate())
 				numOpenReservations++;
 		}
 		dbo.collection("notifications").find({}).toArray(function (err2, notifications){
@@ -1630,6 +1630,7 @@ app.post("/viewOpenReservations.html", function(req, response){
 			throw err1;
 		var dbo = db.db("CocoaInn");
 		const today = new Date();
+		const local = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 		dbo.collection("reservation").find({}).toArray(function(err2, reservations){
 			if (err2)
 				throw err2;
@@ -1637,7 +1638,7 @@ app.post("/viewOpenReservations.html", function(req, response){
 			let openReservations = [];
 			for (let x = 0; x < reservations.length; x++){
 				let checkOut = new Date(getYear(reservations[x].checkOut), getMonth(reservations[x].checkOut)-1, getDay(reservations[x].checkOut));
-				if (checkOut.getTime() < today.getTime()){
+				if (checkOut.getTime() < today.getTime() && checkOut.getDate() != today.getDate()){
 					openReservations.push(reservations[x]);
 				}
 				if (x+1 == reservations.length){

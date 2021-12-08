@@ -1,12 +1,10 @@
 To Do:
-- Fix/Improve room listings on Check In/Check Out page for staff
 - Change cursor of all buttons to pointer
 - Add a sort function on lists
 	* Sort by price, max occupancy when displaying a list of available rooms to reserve/add to to an existing reservation
 	* Sort by first name, last name, check in, check out
 - Realistic descriptions and images for rooms
 - Add amentities attribute to rooms, display on reservations page and details page
-- Remove Export button from business report
 - Change Room Service/Dine/Spa buttons on guest reservation details page so there is no POST/GET
 - Create reservations for class presentation (a few reservations with current check ins/check outs, open reservations, open messages)
 

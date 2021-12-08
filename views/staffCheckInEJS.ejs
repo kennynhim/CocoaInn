@@ -57,7 +57,7 @@
 						<br>
 						<h3 style="text-align: center; font-size: 20pt">Check Out: <%= reservation.checkOut %></h3>
 						<br>
-						<h3 style="text-align: center; font-size: 20pt">Rooms: <% for(let x = 0; x < reservation.assignedRoom.length; x++) { %><%= reservation.assignedRoom[x] %> .. <% } %> </h3>
+						<h3 style="text-align: center; font-size: 20pt">Room Number(s): <% for(let x = 0; x < reservation.assignedRoom.length; x++) { %><br><%= reservation.assignedRoom[x] %><% if (x+1 != reservation.assignedRoom.length){ %><br><% } %> <% } %> </h3>
 						<br>
 						<h3 style="text-align: center; font-size: 20pt">Adults: <%= reservation.adults %></h3>
 						<br>
