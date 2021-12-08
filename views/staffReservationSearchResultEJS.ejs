@@ -50,7 +50,16 @@
 			
 			<div class="row3">
 				<div class="col-12">
-					<h1 style="text-align: center; font-size: 30pt">Search Results</h1>
+					<div class="col-2">
+						<form method="post" action="staffSearchGuests.html">
+							<input type="hidden" name="userID" class="userID" value="<%= userID %>">
+							<button type="submit" style="width: 100%; padding:10px">Back</button>
+						</form>
+					</div>
+					<div class="col-8">
+						<h1 style="text-align: center; font-size: 30pt">Search Results</h1>
+					</div>
+					<div class="col-2"></div>
 				</div>
 			</div>
 			

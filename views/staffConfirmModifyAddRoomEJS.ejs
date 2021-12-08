@@ -109,25 +109,19 @@
 						<br>
 						<h2 style="text-align: center; font-size:30pt">Continue with adding the room?</h2>
 						<div class="col-12">
+							<div class="col-4"></div>
 							<div class="col-4">
-								<form method="post" action="staffModifyReservation.html">
-									<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
+								<form method="post" action="confirmAddRoom.html">
+									<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
+									<input name="checkIn" class="checkIn" type="hidden" value="<%= reservation.checkIn %>">
+									<input name="checkOut" class="checkOut" type="hidden" value="<%= reservation.checkOut %>">
+									<input name="priceChange" class="priceChange" type="hidden" value="<%= priceChange %>">
+									<input name="roomNum" class="roomNum" type="hidden" value="<%= roomNum %>">
 									<input name="userID" class="userID" type="hidden" value="<%= userID %>">
-									<button type="submit" style="background-color: #AFA5A5; width:100%; padding: 16px 32px; text-align: center; font-size: 15pt">Cancel</button>
+									<button type="submit" style="width:100%; padding: 16px 32px; text-align: center; font-size: 15pt">Add Room</button>
 								</form>							
 							</div>
 							<div class="col-4"></div>
-							<div class="col-4">
-							<form method="post" action="confirmAddRoom.html">
-								<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
-								<input name="checkIn" class="checkIn" type="hidden" value="<%= reservation.checkIn %>">
-								<input name="checkOut" class="checkOut" type="hidden" value="<%= reservation.checkOut %>">
-								<input name="priceChange" class="priceChange" type="hidden" value="<%= priceChange %>">
-								<input name="roomNum" class="roomNum" type="hidden" value="<%= roomNum %>">
-								<input name="userID" class="userID" type="hidden" value="<%= userID %>">
-								<button type="submit" style="background-color: wheat; width:100%; padding: 16px 32px; text-align: center; font-size: 15pt">Add Room</button>
-							</form>							
-							</div>
 						</div>
 					</div>
 				</div>

@@ -213,18 +213,30 @@ app.post("/booking.html", function(req, res){
 			priceSum += getStayDuration(checkIn, checkOut)*totalPrices[x];
 		}
 		
-		res.render("bookingEJS", {checkIn : checkIn,
-								  checkOut : checkOut,
-								  numRooms : numRooms,
-								  numAdults : numAdults,
-								  numChildren: numChildren,
-								  roomNums: reservedRoomNums,
-								  roomNames: roomNames,
-								  occupancies: occupancies,
-								  numBeds: beds,
-								  descriptions: descriptions,
-								  images: images,
-								  price : priceSum});
+		//Get the policy
+		MongoClient.connect(dbURL, function(err1, db){
+			if (err1)
+				throw err1;
+			var dbo = db.db("CocoaInn");
+			
+			dbo.collection("policy").findOne({}, function (err2, policy){
+				if (err2)
+					throw err2;
+				res.render("bookingEJS", {checkIn : checkIn,
+										  checkOut : checkOut,
+										  numRooms : numRooms,
+										  numAdults : numAdults,
+										  numChildren: numChildren,
+										  roomNums: reservedRoomNums,
+										  roomNames: roomNames,
+										  occupancies: occupancies,
+										  numBeds: beds,
+										  descriptions: descriptions,
+										  images: images,
+										  price : priceSum,
+										  policy: policy});
+			})
+		})
 	}
 	//Otherwise, if the user selects a room with an occupancy that cannot serve all of the guests
 	//Then prompt the user if they would like to reserve multiple rooms

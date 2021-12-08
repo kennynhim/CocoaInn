@@ -110,9 +110,12 @@
 							<% } else { %>
 								<div class="col-12" style="background-color: #E1DFC6; border: 1px solid black">
 							<% } %>		
-								<div class="col-10">
+								<div class="col-4">
 									<h1 style="text-align: center"><%= rooms[x].roomName %></h1>
 									<p style = "text-align:center">Beds: <%= rooms[x].numBeds %><br>Occupancy: <%= rooms[x].maxOccupancy %><br><%= rooms[x].description %></p>
+								</div>
+								<div class="col-6">
+									<img src="<%= rooms[x].image %>" style="width: 100%; height: auto; margin-left: auto; margin-right: auto; display: block">
 								</div>
 								<div class="col-2">
 									<div class="col-12">
@@ -122,8 +125,8 @@
 									<div class="col-12">
 										<form action="modifyRemoveRoomRequested.html" method="post">
 												<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
-												<input name="userID" class="userID" type="hidden" value=" <%= userID %>">
-												<input name="roomNum" class="roomNum" type="hidden" value=" <%= rooms[x].roomNum %>">
+												<input name="userID" class="userID" type="hidden" value="<%= userID %>">
+												<input name="roomNum" class="roomNum" type="hidden" value="<%= rooms[x].roomNum %>">
 												<button class="bookButton" type="submit" style="width:100%; padding:16px">Remove</button>											
 										</form>									
 									</div>

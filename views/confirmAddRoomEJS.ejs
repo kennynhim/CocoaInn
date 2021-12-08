@@ -105,13 +105,8 @@
 						<br>
 						<h2 style="text-align: center; font-size:30pt">Continue with adding the room?</h2>
 						<div class="col-12">
-							<div class="col-4">
-								<form method="post" action="reservationDetails.html">
-									<input type="hidden" name="confirmationNumber" class="confirmationNumber" value="<%= reservation.confirmationNumber %>">
-									<button type="submit" style="background-color: #AFA5A5; width:100%; padding: 16px 32px; text-align: center; font-size: 15pt">Back</button>
-								</form>							
+							<div class="col-4">						
 							</div>
-							<div class="col-4"></div>
 							<div class="col-4">
 								<form method="post" action="confirmAddRoom.html">
 									<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
@@ -120,7 +115,9 @@
 									<input name="roomNum" class="roomNum" type="hidden" value="<%= roomNum %>">
 									<input name="priceChange" class="priceChange" type="hidden" value="<%= priceChange %>">
 									<button type="submit" style="background-color: wheat; width:100%; padding: 16px 32px; text-align: center; font-size: 15pt">Add Room</button>
-								</form>							
+								</form>									
+							</div>
+							<div class="col-4">						
 							</div>
 						</div>
 					</div>

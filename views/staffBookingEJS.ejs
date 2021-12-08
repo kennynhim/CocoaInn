@@ -84,33 +84,33 @@
 						<p style="text-align: center; font-size: 30pt">Booking Form</p>
 						<form method="post" action="staffConfirm.html">
 							<div class="col-6">
-								<input name="firstName" class="firstName" type="text" placeholder="First Name" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+								<input name="firstName" class="firstName" type="text" placeholder="First Name" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="off" required>
 							</div>
 							<div class="col-6">
-								<input name="lastName" class="lastName" type="text" placeholder="Last Name" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+								<input name="lastName" class="lastName" type="text" placeholder="Last Name" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="off" required>
 							</div>
 							<div class="col-12"></div>
 							<div class="col-6">
-								<input name="email" class="email" type="email" placeholder="Email" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+								<input name="email" class="email" type="email" placeholder="Email" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="off" required>
 							</div>
 							<div class="col-6">
-								<input name="phone" class="phone" type="tel" placeholder="Phone" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" required>
+								<input name="phone" class="phone" type="tel" placeholder="Phone" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="off" required>
 							</div>
 							<div class="col-12"><p style="text-align: center; font-size: 30pt">Payment</p></div>
 							<div class="col-12">
-								<input name="ccNum" class="ccNum" type="text" placeholder="CC Number" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on">
+								<input name="ccNum" class="ccNum" type="text" placeholder="CC Number" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="off">
 							</div>
 							<div class="col-4">
-								<input name="ccv" class="ccv" type="text" placeholder="CCV" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on">
+								<input name="ccv" class="ccv" type="text" placeholder="CCV" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="off">
 							</div>
 							<div class="col-4">
-								<input name="ccMonth" class="ccMonth" type="number" placeholder="Exp. Month" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" min="1" max="12">
+								<input name="ccMonth" class="ccMonth" type="number" placeholder="Exp. Month" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="off" min="1" max="12">
 							</div>
 							<div class="col-4">
-								<input name="ccYear" class="ccYear" type="number" placeholder="Exp. Year" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="on" min="2021" max="2026">
+								<input name="ccYear" class="ccYear" type="number" placeholder="Exp. Year" style="width: 100%; padding: 12px 20px; text-align: center" autocomplete="off" min="2021" max="2026">
 							</div>
 							<div class="col-12">
-								<p style="text-align: center; font-size: 15pt">Guests are required to show a photo identification and the credit card used for payment upon check-in. You may cancel free of charge until 48 hours before check-in. You will be charged 100 percent of the first night if you cancel within 48 hours of check-in. Pets are not allowed. Smoking is not allowed.</p>
+								<p style="text-align: center; font-size: 15pt">Guests are required to show a photo identification and the credit card used for payment upon check-in. You may cancel free of charge until <%= policy.cancelTime*24 %> hours before check-in. The guest will be charged a $<%= policy.cancelFee %> fee if they cancel within <%= policy.cancelTime*24 %> hours of check-in. Pets are not allowed. Smoking is not allowed.</p>
 							</div>
 							<div class="col-4"></div>
 							<div class="col-4">
