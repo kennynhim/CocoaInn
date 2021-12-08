@@ -462,12 +462,11 @@ function searchReservation(request, response, confirmationNumber, firstName, las
 	})
 }
 
+
 function searchReservationRoomDate(request, response, date, roomNum){
 	const targetDate = new Date(getYear(date), getMonth(date)-1, getDay(date));
 	const targetDateTime = targetDate.getTime();
 	const userID = request.body.userID;
-	
-	console.log(date);
 	
 	MongoClient.connect(dbURL, function(err1, db){
 		if (err1)
@@ -716,8 +715,74 @@ app.post("/searchPhone.html", function(req, response){
 	searchReservation(req, response, null, null, null, null, phone);
 })
 
-//When employee/manager searches for a reservation by room and date and then clicks "Submit"
+//When employee/manager searches for a reservation by date range
+app.post("/searchDateRange.html", function(req, response){
+	const start = req.body.start;
+	const end = req.body.end;
+	if (!validateDate(start, end)){
+		alert("Start date must come before end date");
+		return;
+	}
+	const userID = req.body.userID;	
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("reservation").find({}).toArray(function (err2, reservations){
+			if (err2)
+				throw err2;
+			let foundReservations = [];
+			for (let x = 0; x < reservations.length; x++){
+				if (!validateReservationConflict(start, end, reservations[x].checkIn, reservations[x].checkOut)){
+					foundReservations.push(reservations[x]);
+				}
+				if (x+1 === reservations.length){
+					response.render("staffReservationSearchResultEJS", {reservations: foundReservations, userID: userID});
+				}
+			}
+		})
+	})
+})
+
+//When employee/manager searches for a reservation by room number
 app.post("/searchRoom.html", function(req, response){
+	const userID = req.body.userID;
+	const roomNum = Number(req.body.roomNum);
+	
+	MongoClient.connect(dbURL, function(err1, db){
+		if (err1)
+			throw err1;
+		var dbo = db.db("CocoaInn");
+		dbo.collection("room").findOne({roomNum: roomNum}, function(err2, room){
+			if (err2)
+				throw err2;
+			if (room == null){
+				alert("This room does not exist");
+				return;
+			}
+			dbo.collection("reservation").find({}).toArray(function (err2, reservations){
+				if (err2)
+					throw err2;
+				let foundReservations = [];
+				for (let x = 0; x < reservations.length; x++){
+					for (let y = 0; y < reservations[x].assignedRoom.length; y++){
+						if (roomNum == reservations[x].assignedRoom[y]){
+							foundReservations.push(reservations[x]);
+							break;
+						}
+					}
+					if (x+1 === reservations.length){
+						response.render("staffReservationSearchResultEJS", {reservations: foundReservations, userID: userID});
+					}
+				}
+			})			
+		})
+	})
+})
+
+//When employee/manager searches for a reservation by room and date and then clicks "Submit"
+app.post("/searchRoomDate.html", function(req, response){
 	const date = req.body.date;
 	const roomNum = req.body.roomNum;
 	searchReservationRoomDate(req, response, date, roomNum);

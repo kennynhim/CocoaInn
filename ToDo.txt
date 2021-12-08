@@ -7,7 +7,6 @@ To Do:
 - Add amentities attribute to rooms, display on reservations page and details page
 - Change Room Service/Dine/Spa buttons on guest reservation details page so there is no POST/GET
 - Create reservations for class presentation (a few reservations with current check ins/check outs, open reservations, open messages)
-- Fix decimals on business report
 - Inputs: required, autofill
 
 
