@@ -1358,10 +1358,15 @@ app.post("/displayReport.html", function(req, response){
 						cancelCount++;
 				}
 				if (x+1 === results.length){
-					if (count > 0)
-						response.render("staffBusinessReportEJS", {userID: userID, revenue: Number(revenue)/1000, numReservations: Number(count), guests: Number(guests), avgDuration: duration/count, cancelCount: cancelCount});
+					revenue /= 1000;
+					revenue = Number(revenue.toFixed(2));
+					if (count > 0){
+						let avgDuration = duration/count;
+						avgDuration = Number(avgDuration.toFixed(2));
+						response.render("staffBusinessReportEJS", {userID: userID, revenue: revenue, numReservations: Number(count), guests: Number(guests), avgDuration: avgDuration, cancelCount: cancelCount});						
+					}
 					else
-						response.render("staffBusinessReportEJS", {userID: userID, revenue: Number(revenue)/1000, numReservations: 0, guests: 0, avgDuration: 0, cancelCount: cancelCount});
+						response.render("staffBusinessReportEJS", {userID: userID, revenue: revenue, numReservations: 0, guests: 0, avgDuration: 0, cancelCount: cancelCount});
 				}
 			}
 		})

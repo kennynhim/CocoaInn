@@ -121,7 +121,7 @@
 								<p><b>Total Revenue</b></p>
 							</div>
 							<div class="col-3">
-								<p style="text-align: center"><b><%= revenue + 1 +1.5 +2.5 %></b></p>
+								<p style="text-align: center"><b><%= Number(revenue + 1 +1.5 +2.5).toFixed(2) %></b></p>
 							</div>
 						</div>
 						
@@ -175,7 +175,7 @@
 								<p style="font-size: 22pt"><b>Earnings Before Interest and Taxes</b></p>
 							</div>
 							<div class="col-3">
-								<p style="font-size: 22pt; text-align: center"><b><%= revenue + 1 + 1.5 + 2.5 - 9 %></b></p>
+								<p style="font-size: 22pt; text-align: center"><b><%= Number(revenue + 1 + 1.5 + 2.5 - 9).toFixed(2) %></b></p>
 							</div>							
 						</div>
 						
@@ -204,7 +204,7 @@
 								<p style="font-size: 22pt"><b>Net Income</b></p>
 							</div>
 							<div class="col-3">
-								<p style="font-size: 22pt; text-align: center"><b><%= revenue + 1 + 1.5 + 2.5 - 9 - 1 - 1.8 %></b></p>
+								<p style="font-size: 22pt; text-align: center"><b><%= Number(revenue + 1 + 1.5 + 2.5 - 9 - 1 - 1.8).toFixed(2) %></b></p>
 							</div>							
 						</div>	
 					</div>
@@ -254,7 +254,7 @@
 								<p>Profit Margin:</p>
 							</div>
 							<div class="col-3">
-								<p>21.3%</p>
+								<p><%= Number((revenue + 1 + 1.5 + 2.5 - 9 - 1 - 1.8)/(revenue + 1 + 1.5 + 2.5)).toFixed(2) %>%</p>
 							</div>
 						</div>
 					</div>
