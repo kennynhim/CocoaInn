@@ -180,24 +180,24 @@
 						<br>
 						<p style="text-align: center; font-size: 20pt">Or send us a chat.</p>
 						<div class="col-12">
-							<div class="col-2"></div>
-							<div class="col-8" style="height: 280px; overflow-x: hidden; overflow-y: auto; background-color: ivory">
+							<div class="col-1"></div>
+							<div class="col-10" style="height: 280px; overflow-x: hidden; overflow-y: auto; background-color: ivory">
 								<% for (let x = 0; x < reservation.notes.length; x++) { %>
 									<p><%= reservation.notes[x] %></p>
 								<% } %>
 							</div>
-							<div class="col-2"></div>
+							<div class="col-1"></div>
 						</div>
 						<form method="post" action="sendChat.html">
 							<div class="col-12">
-								<div class="col-2"></div>
-								<div class="col-8">
+								<div class="col-1"></div>
+								<div class="col-10">
 									<input name="message" class="message" type="text" style="width: 100%; padding:20px">
 									<input name="firstName" class="firstName" type="hidden" value="<%= reservation.firstName %>">
 									<input name="lastName" class="lastName" type="hidden" value="<%= reservation.lastName %>">
 									<input name="confirmationNumber" class="confirmationNumber" type="hidden" value="<%= reservation.confirmationNumber %>">
 								</div>
-								<div class="col-2"></div>
+								<div class="col-1"></div>
 							</div>
 							<div class="col-12">
 								<div class="col-4"></div>
