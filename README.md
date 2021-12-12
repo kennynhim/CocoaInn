@@ -56,9 +56,8 @@ Managers can:
 - edit the Inn's policy- check in/out time, cancel time, cancel fee
 - generate a business report for a specified date range
 
-# Contribution
-Team Contribution
-Juilia - Guest front end (booking rooms, reservation details page, modifying reservations)
-Miles - Employee front end (staff home page, searching reservations, checking in/checking out, messages, open reservations)
-Nick - Manager front end (add/remove rooms, add/remove staff, business report, modifying policy)
-Kenny - Guest and staff back end
+# Team Contribution
+- Juilia - Guest front end (booking rooms, reservation details page, modifying reservations)
+- Miles - Employee front end (staff home page, searching reservations, checking in/checking out, messages, open reservations)
+- Nick - Manager front end (add/remove rooms, add/remove staff, business report, modifying policy)
+- Kenny - Guest and staff back end
