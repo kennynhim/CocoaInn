@@ -1,6 +1,6 @@
 # CocoaInn
 
-#Installation
+# Installation
 Our web application uses Node JS.
 Download Node JS: https://nodejs.org/en/
 
@@ -12,7 +12,7 @@ You will need to install some additional libraries.
 5. Mongo DB: Enter the following command to install Mongo:
   npm install mongodb
 
-#Setup
+# Setup
 There are two views- the guest view and the staff view.
 
 To execute the guest view, open a command prompt and cd to the location containing guestScript.js
@@ -31,7 +31,7 @@ password: password123
 username: manager
 password: password123
 
-#Contribution
+# Contribution
 Team Contribution
 Juilia - Guest front end (booking rooms, reservation details page, modifying reservations)
 Miles - Employee front end (staff home page, searching reservations, checking in/checking out, messages, open reservations)
