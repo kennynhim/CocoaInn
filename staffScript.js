@@ -1075,7 +1075,7 @@ app.post("/addStaffUser.html", function(req, response){
 	const userID = req.body.userID;
 	const staffUserID = req.body.employeeID;
 	const username = req.body.username;
-	const bManager = req.body.permission;
+	const bManager = Boolean(req.body.permission);
 	
 	MongoClient.connect(dbURL, function(err1, db){
 		if (err1)
