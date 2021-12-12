@@ -31,6 +31,31 @@ password: password123
 username: manager
 password: password123
 
+# Guest Features
+Guests can:
+- create a reservation
+- view the reservation details using the confirmation number
+- modify their reservation: change check in/out date, add/remove rooms, add/remove guests, cancel the reservation
+- view the invoice, which reflects the price changes from modifying the reservation
+- send a chat message to staff
+
+Once guests are checked in, they cannot move the check out date sooner, they cannot remove rooms, and they cannot cancel the reservation
+
+# Employee Features
+Employees can:
+- do most things a guest can do, but employees are not restricted when modifying guest reservations, even if the guest is checked in
+- search for reservations using name, email, phone, date range, room number, or date and room combination
+- receive message notifications if a guest chats with them
+
+Note: a reservation for a guest will continue to exist, even after check out. The only ways to remove a reservation is by 1) canceling it or 2) checking out the guest. Reservations that have been neither checked out nor canceled, but with a check out date that has already passed, will fall under the "Open Reservations" tab. These reservations must be checked out or canceled in order for the revenue to be updated.
+
+# Manager Features
+Managers can:
+- add, remove, and modify rooms
+- add and remove staff users
+- edit the Inn's policy- check in/out time, cancel time, cancel fee
+- generate a business report for a specified date range
+
 # Contribution
 Team Contribution
 Juilia - Guest front end (booking rooms, reservation details page, modifying reservations)
