@@ -47,7 +47,7 @@ Employees can:
 - search for reservations using name, email, phone, date range, room number, or date and room combination
 - receive message notifications if a guest chats with them
 
-Note: a reservation for a guest will continue to exist, even after check out. The only ways to remove a reservation is by 1) canceling it or 2) checking out the guest. Reservations that have been neither checked out nor canceled, but with a check out date that has already passed, will fall under the "Open Reservations" tab. These reservations must be checked out or canceled in order for the revenue to be updated.
+Note: a reservation for a guest will continue to exist, even after check out. The only ways to remove a reservation is by 1) canceling it or 2) checking out the guest. Reservations that have been neither checked out nor canceled, but with a check out date that has already passed, will fall under the "Open Reservations" tab. These reservations must be checked out or canceled in order for the revenue on the business report to be updated.
 
 # Manager Features
 Managers can:
