@@ -15,9 +15,11 @@ You will need to install some additional libraries.
 # Setup
 There are two views- the guest view and the staff view.
 
-To execute the guest view, open a command prompt and cd to the location containing guestScript.js
+To execute the guest view, open a command prompt and cd to the location containing guestScript.js.
+
 Enter the command:
 node guestScript
+
 Open a browser (perferably Google Chrome), and in the address bar type:
 localhost:3000
 
