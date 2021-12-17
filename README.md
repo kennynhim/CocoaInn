@@ -20,17 +20,20 @@ To execute the guest view, open a command prompt and cd to the location containi
 Enter the command:
 node guestScript
 
-Open a browser (perferably Google Chrome), and in the address bar type:
+Open a browser (perferably Google Chrome), and in the address bar, type:
 localhost:3000
 
 To execute the staff view, enter the command (terminate guestScript first, if necessary):
 nodestaffScript
 
 Credentials for staff view:
+
 username: employee
+
 password: password123
 
 username: manager
+
 password: password123
 
 # Guest Features
