@@ -9,8 +9,8 @@ You will need to install some additional libraries.
 2. EJS: https://ejs.co/
 3. Express: https://expressjs.com/
 4. Body Parser: https://www.npmjs.com/package/body-parser
-5. Mongo DB: Enter the following command to install Mongo:
-  npm install mongodb
+5. Mongo DB: Enter the following command with the Node Package Manager to install Mongo:
+  `npm install mongodb`
 
 # Setup
 There are two views- the guest view and the staff view.
