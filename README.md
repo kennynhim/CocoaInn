@@ -18,15 +18,15 @@ There are two views- the guest view and the staff view.
 To execute the guest view, open a command prompt and cd to the location containing guestScript.js.
 
 Enter the command:
-node guestScript
+`node guestScript`
 
 Open a browser (perferably Google Chrome), and in the address bar, type:
-localhost:3000
+`localhost:3000`
 
 To execute the staff view, enter the command (terminate guestScript first, if necessary):
-nodestaffScript
+`node staffScript`
 
-Credentials for staff view:
+**Credentials for staff view**:
 
 username: employee
 
@@ -52,7 +52,7 @@ Employees can:
 - search for reservations using name, email, phone, date range, room number, or date and room combination
 - receive message notifications if a guest chats with them
 
-Note: a reservation for a guest will continue to exist indefinitely. The only ways to remove a reservation is by 1) canceling it or 2) checking out the guest. Reservations that have been neither checked out nor canceled, but with a check out date that has already passed, will fall under the "Open Reservations" tab. These reservations must be checked out or canceled in order for the revenue on the business report to be updated.
+Note: a reservation for a guest will continue to exist indefinitely. The only ways to remove a reservation are by 1) canceling it or 2) checking out the guest. Reservations that have been neither checked out nor canceled, but with a check out date that has already passed, will fall under the "Open Reservations" tab. These reservations must be checked out or canceled in order for the revenue on the business report to be updated.
 
 # Manager Features
 Managers can:
