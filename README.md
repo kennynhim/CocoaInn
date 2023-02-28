@@ -1,5 +1,7 @@
 # CocoaInn
 
+### A hotel reservation system for the Penn State Harrisburg CMPSC487 (Software Engineering) class project.
+
 # Installation
 Our web application uses Node JS.
 Download Node JS: https://nodejs.org/en/
